@@ -1,0 +1,76 @@
+{
+  "demo": "09-cubic-interference",
+  "generated_utc": "2026-10-07T17:05:52Z",
+  "title_left": "random-arrow model: each S_p a mean-zero random phasor sum",
+  "title_right": "true cubic sums e(x³/p) + proved bias law (eq:rational-main)",
+  "caption": "Family 023 — An unconditional first moment for cubic Gauss sums · WITH: Σ S_p/(2√p) over p ≤ X, p ≡ 1 mod 3  ~  (2π)^(2/3)/(5Γ(2/3)) · X^(5/6)/log X  (eq:pairing, eq:rational-main) · same O(p) sums both sides, no speedup",
+  "frames": 1560,
+  "fps": 60,
+  "warmup_frames_excluded": 3,
+  "preview": false,
+  "video": "<repo>/demos/09-cubic-interference/out/09-cubic-interference.mp4",
+  "poster": "<repo>/demos/09-cubic-interference/out/poster.png",
+  "stills": [],
+  "timing_note": "compute_ms_per_frame = wall time inside the panel's measure() scopes per frame (QueryPerformanceCounter); rendering, HUD, PNG and video encoding excluded. fps = 1000 / ms.",
+  "machine": {"cpu": "AMD Ryzen 9 9900X 12-Core Processor", "hw_threads": 24, "ram_gb": 30.9, "os": "Windows", "compiler": "clang 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)"},
+  "wall_seconds": 82.98,
+  "harness_ms_per_frame": 4.65,
+  "panels": [
+    {
+      "side": "left",
+      "role": "WITHOUT",
+      "method": "random-arrow model: each S_p a mean-zero random phasor sum",
+      "compute_label": "sum phasors",
+      "steps_per_frame": 1,
+      "compute_ms_per_frame": {"n": 1557, "mean": 13.2249, "median": 9.1356, "p95": 38.2509, "min": 0.000399977, "max": 59.836, "stdev": 12.6063},
+      "ms_per_step_median": 9.1356,
+      "fps_from_median": 109.462,
+      "fps_from_mean": 75.6148,
+      "metrics": {
+        "X (primes p ≡ 1 mod 3 ≤ X)": {"last": 250000, "mean": 96270.9, "min": 61.9446, "max": 250000, "n": 1560, "display": "250000"},
+        "model prediction for M(X)": {"display": "0 ± 74.1 (1σ)"},
+        "random-arrow total": {"last": -28.9932, "mean": 3.95739, "min": -28.9932, "max": 20.5861, "n": 1560, "display": "-29.0"},
+        "actual cubic M(X) (right)": {"last": 1367.28, "mean": 631.636, "min": 2.84667, "max": 1367.28, "n": 1560, "display": "1367.3"},
+        "true M(X) in model σ": {"last": 18.4397, "mean": 12.745, "min": 1.52161, "max": 18.4476, "n": 1560, "display": "+18.4 σ"},
+        "phasors summed": {"last": 1.30932e+09, "mean": 3.22684e+08, "min": 211, "max": 1.30932e+09, "n": 1560, "display": "1.31G"}
+      },
+      "extra": {}
+    },
+    {
+      "side": "right",
+      "role": "WITH",
+      "method": "true cubic sums e(x³/p) + proved bias law (eq:rational-main)",
+      "compute_label": "sum phasors",
+      "steps_per_frame": 1,
+      "compute_ms_per_frame": {"n": 1557, "mean": 12.1571, "median": 8.6024, "p95": 34.8979, "min": 0, "max": 53.602, "stdev": 11.5437},
+      "ms_per_step_median": 8.6024,
+      "fps_from_median": 116.247,
+      "fps_from_mean": 82.2565,
+      "metrics": {
+        "X (primes p ≡ 1 mod 3 ≤ X)": {"last": 250000, "mean": 96270.9, "min": 61.9446, "max": 250000, "n": 1560, "display": "250000"},
+        "M(X) = Σ S_p/(2√p)": {"last": 1367.28, "mean": 631.636, "min": 2.84667, "max": 1367.28, "n": 1560, "display": "1367.3"},
+        "prediction K·X^(5/6)/log X": {"last": 1274.48, "mean": 581.073, "min": 3.79555, "max": 1274.48, "n": 1560, "display": "1274.5"},
+        "ratio M / prediction": {"last": 1.07281, "mean": 1.08021, "min": 0.723013, "max": 1.20466, "n": 1560, "display": "1.073"},
+        "max |Im S_p| (float error)": {"last": 4.85603e-12, "mean": 2.25428e-12, "min": 2.41474e-15, "max": 4.85603e-12, "n": 1560, "display": "4.9e-12"},
+        "phasors summed": {"last": 1.30932e+09, "mean": 3.22684e+08, "min": 211, "max": 1.30932e+09, "n": 1560, "display": "1.31G"}
+      },
+      "extra": {}
+    }
+  ],
+  "speedup_median_compute": 1.06198,
+  "extra": {
+    "X_final": 250000,
+    "primes_1mod3": 10996,
+    "M_true": 1367.28,
+    "prediction_KX56_logX": 1274.48,
+    "ratio_M_over_prediction": 1.07281,
+    "elementary_model_sum": 1424.1,
+    "random_model_sigma": 74.1485,
+    "true_M_in_model_sigma": 18.4397,
+    "random_arrow_walk_total": -28.9932,
+    "max_abs_im": 4.85603e-12,
+    "K": 0.502914,
+    "M_8191": 98.8078,
+    "prediction_8191": 101.823
+  }
+}

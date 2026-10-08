@@ -1,0 +1,66 @@
+[
+ [
+  "Snaky opponent (187)",
+  "concurrent games",
+  "4",
+  "131,072",
+  "×55k–90k per frame",
+  "Speedup, tens of thousands × per decision"
+ ],
+ [
+  "Periodic blob (354)",
+  "grid voxels",
+  "never (32³ already over)",
+  "256³",
+  "×96–157 time to target",
+  "Constant-factor speedup + never stuck"
+ ],
+ [
+  "Fractal frontier (223)",
+  "grid size",
+  "n = 8192 to hit target (107 ms/curve)",
+  "n = 32 (6.5 µs/curve)",
+  "×16,150 at equal accuracy",
+  "Run coarse, get fine-grid statistics"
+ ],
+ [
+  "Stable economy (149)",
+  "towns",
+  "1,024",
+  "65,536 (largest tested)",
+  "×53–65 per frame",
+  "Cheaper while the other side collapses"
+ ],
+ [
+  "Fluid gates (376)",
+  "particles/region",
+  "beyond 1M",
+  "64,000",
+  "WITH 6–45× slower",
+  "Guarantee costs more"
+ ],
+ [
+  "Crowd hub (374)",
+  "agents",
+  "16M (largest tested)",
+  "8.41M",
+  "WITH 2.8–4.2× slower",
+  "Guarantee costs more"
+ ],
+ [
+  "Dungeon shuffle (131)",
+  "rooms",
+  "beyond 320",
+  "40",
+  "WITH grows ~n^4.4",
+  "Certificate is offline-only past ~50 rooms"
+ ],
+ [
+  "Convex morph (091)",
+  "directions",
+  "400",
+  "1600",
+  "WITH 1.2–4.4× faster",
+  "Incidental: smaller body to clip"
+ ]
+]

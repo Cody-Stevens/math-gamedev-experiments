@@ -1,0 +1,317 @@
+{
+ "machine": "AMD Ryzen 9 9900X 12-Core Processor            ",
+ "node": "v22.16.0",
+ "scenes": {
+  "normal": {
+   "n": 20,
+   "doors": 28,
+   "deg_max": 6,
+   "certified_T": 12644,
+   "ref_mean_kept": 5.677,
+   "ref_connected": 0.99675,
+   "ref_split_half_tv": 0.022999999999999993,
+   "rows": [
+    {
+     "method": "PRIOR BEST: lazy double-edge swap",
+     "ms_per_layout": 0.001607603338019483,
+     "layouts": 1866496,
+     "attempts_per_layout": 1,
+     "reject_rate": 0,
+     "connected": 0.9966868399396516,
+     "ms_per_connected_layout": 0.0016129472905620204,
+     "mean_kept": 9.662490570566451,
+     "bias": 0.17853740852781666,
+     "hist_tv": 0.6695629929022083,
+     "hist_tv_connected": 0.669322351604631,
+     "hist_tv_noise": 0.017621875000000006
+    },
+    {
+     "method": "PRIOR BEST: configuration model",
+     "ms_per_layout": 0.0018729429976779566,
+     "layouts": 1602040,
+     "attempts_per_layout": 13.750148560585254,
+     "reject_rate": 0.9272735130392339,
+     "connected": 0.9961030935557165,
+     "ms_per_connected_layout": 0.0018802702348732286,
+     "mean_kept": 5.6481298843973935,
+     "bias": -0.001293290131371505,
+     "hist_tv": 0.025832201443159973,
+     "hist_tv_connected": 0.025272251102804778,
+     "hist_tv_noise": 0.017621875000000006
+    },
+    {
+     "method": "NEW: certified Curveball",
+     "ms_per_layout": 0.5579612423284357,
+     "layouts": 5377,
+     "attempts_per_layout": 1,
+     "reject_rate": 0,
+     "connected": 0.9947926352984936,
+     "ms_per_connected_layout": 0.5608819592447184,
+     "mean_kept": 5.731820717872419,
+     "bias": 0.0024557952726972,
+     "hist_tv": 0.03358875767156406,
+     "hist_tv_connected": 0.03331325968117639,
+     "hist_tv_noise": 0.01977544402082946
+    }
+   ]
+  },
+  "square": {
+   "n": 30,
+   "doors": 53,
+   "deg_max": 16,
+   "certified_T": 65882,
+   "ref_mean_kept": 14.58625,
+   "ref_connected": 0.991,
+   "ref_split_half_tv": 0.027999999999999997,
+   "rows": [
+    {
+     "method": "PRIOR BEST: lazy double-edge swap",
+     "ms_per_layout": 0.003114520184194852,
+     "layouts": 963328,
+     "attempts_per_layout": 1,
+     "reject_rate": 0,
+     "connected": 0.9921926903401541,
+     "ms_per_connected_layout": 0.0031390275442637044,
+     "mean_kept": 23.09462716748605,
+     "bias": 0.22149301142132827,
+     "hist_tv": 0.8938498455354771,
+     "hist_tv_connected": 0.8938345675735359,
+     "hist_tv_noise": 0.021190624999999987
+    },
+    {
+     "method": "PRIOR BEST: configuration model",
+     "ms_per_layout": 0.3684674567112829,
+     "layouts": 8143,
+     "attempts_per_layout": 2892.8031438044945,
+     "reject_rate": 0.9996543145349722,
+     "connected": 0.9934913422571534,
+     "ms_per_connected_layout": 0.3708813967861529,
+     "mean_kept": 14.542920299643866,
+     "bias": -0.0011279737166023606,
+     "hist_tv": 0.02285287977403905,
+     "hist_tv_connected": 0.023390863881235197,
+     "hist_tv_noise": 0.02715676424536411
+    },
+    {
+     "method": "NEW: certified Curveball",
+     "ms_per_layout": 3.195011927582535,
+     "layouts": 939,
+     "attempts_per_layout": 1,
+     "reject_rate": 0,
+     "connected": 0.9968051118210862,
+     "ms_per_connected_layout": 3.205252350427351,
+     "mean_kept": 14.566560170394036,
+     "bias": -0.0005125724410130225,
+     "hist_tv": 0.05431176783812565,
+     "hist_tv_connected": 0.05504670237263576,
+     "hist_tv_noise": 0.04396775159744409
+    }
+   ]
+  },
+  "hubs": {
+   "n": 30,
+   "doors": 64,
+   "deg_max": 16,
+   "certified_T": 65882,
+   "ref_mean_kept": 20.4405,
+   "ref_connected": 0.99325,
+   "ref_split_half_tv": 0.04150000000000002,
+   "rows": [
+    {
+     "method": "PRIOR BEST: lazy double-edge swap",
+     "ms_per_layout": 0.002898002248701757,
+     "layouts": 1035264,
+     "attempts_per_layout": 1,
+     "reject_rate": 0,
+     "connected": 0.995494868941642,
+     "ms_per_connected_layout": 0.0029111172132737975,
+     "mean_kept": 31.15542025995302,
+     "bias": 0.24598354572373463,
+     "hist_tv": 0.9306574323071217,
+     "hist_tv_connected": 0.9307148277556995,
+     "hist_tv_noise": 0.023931250000000008
+    },
+    {
+     "method": "PRIOR BEST: configuration model",
+     "ms_per_layout": 20.001402666667783,
+     "layouts": 150,
+     "attempts_per_layout": 165041.49333333335,
+     "reject_rate": 0.9999939409176456,
+     "connected": 0.9933333333333333,
+     "ms_per_connected_layout": 20.1356402684575,
+     "mean_kept": 20.546666666666667,
+     "bias": 0.0024372792770042525,
+     "hist_tv": 0.09308333333333332,
+     "hist_tv_connected": 0.09610677441860074,
+     "hist_tv_noise": 0.12960416666666666
+    },
+    {
+     "method": "NEW: certified Curveball",
+     "ms_per_layout": 3.5421043683589235,
+     "layouts": 847,
+     "attempts_per_layout": 1,
+     "reject_rate": 0,
+     "connected": 0.9940968122786304,
+     "ms_per_connected_layout": 3.563138242280295,
+     "mean_kept": 20.39787485242031,
+     "bias": -0.0009785499737070377,
+     "hist_tv": 0.053175619834710766,
+     "hist_tv_connected": 0.05066891541659169,
+     "hist_tv_noise": 0.05316407172373081
+    }
+   ]
+  },
+  "hubs:18": {
+   "n": 30,
+   "doors": 66,
+   "deg_max": 18,
+   "certified_T": 65882,
+   "ref_mean_kept": 22.7395,
+   "ref_connected": 0.99475,
+   "ref_split_half_tv": 0.033000000000000015,
+   "rows": [
+    {
+     "method": "PRIOR BEST: lazy double-edge swap",
+     "ms_per_layout": 0.003415596992495089,
+     "layouts": 878336,
+     "attempts_per_layout": 1,
+     "reject_rate": 0,
+     "connected": 0.9960903344505975,
+     "ms_per_connected_layout": 0.003429003248364007,
+     "mean_kept": 34.04768220817546,
+     "bias": 0.26139739966425396,
+     "hist_tv": 0.9385523535412417,
+     "hist_tv_connected": 0.9388413544466837,
+     "hist_tv_noise": 0.023543750000000002
+    },
+    {
+     "method": "PRIOR BEST: configuration model",
+     "ms_per_layout": 101.57033333331856,
+     "layouts": 30,
+     "attempts_per_layout": 814967.4666666667,
+     "reject_rate": 0.9999987729571537,
+     "connected": 1,
+     "ms_per_connected_layout": 101.57033333331856,
+     "mean_kept": 22.7,
+     "bias": -0.0009130731267553614,
+     "hist_tv": 0.2951666666666666,
+     "hist_tv_connected": 0.2962218312808913,
+     "hist_tv_noise": 0.2681145833333333
+    },
+    {
+     "method": "NEW: certified Curveball",
+     "ms_per_layout": 3.181507423117866,
+     "layouts": 943,
+     "attempts_per_layout": 1,
+     "reject_rate": 0,
+     "connected": 0.9936373276776246,
+     "ms_per_connected_layout": 3.201879935966006,
+     "mean_kept": 22.8356309650053,
+     "bias": 0.0022221417922886014,
+     "hist_tv": 0.05921155885471899,
+     "hist_tv_connected": 0.058859707165929566,
+     "hist_tv_noise": 0.04667686240721103
+    }
+   ]
+  },
+  "big": {
+   "n": 80,
+   "doors": 127,
+   "deg_max": 6,
+   "certified_T": 3462936,
+   "ref_mean_kept": 6.64725,
+   "ref_connected": 0.93675,
+   "ref_split_half_tv": 0.03400000000000001,
+   "rows": [
+    {
+     "method": "PRIOR BEST: lazy double-edge swap",
+     "ms_per_layout": 0.006214619233828598,
+     "layouts": 482816,
+     "attempts_per_layout": 1,
+     "reject_rate": 0,
+     "connected": 0.9414186770943797,
+     "ms_per_connected_layout": 0.006601334119490351,
+     "mean_kept": 24.236344694459174,
+     "bias": 0.14614618024481513,
+     "hist_tv": 0.993533072640509,
+     "hist_tv_connected": 0.9936276332087411,
+     "hist_tv_noise": 0.02298125
+    },
+    {
+     "method": "PRIOR BEST: configuration model",
+     "ms_per_layout": 0.008209302923752718,
+     "layouts": 365455,
+     "attempts_per_layout": 21.463217085550887,
+     "reject_rate": 0.9534086620838773,
+     "connected": 0.9344488377502018,
+     "ms_per_connected_layout": 0.008785181801410986,
+     "mean_kept": 6.734604807705463,
+     "bias": 0.0007258231133519074,
+     "hist_tv": 0.027764533253068095,
+     "hist_tv_connected": 0.02460460604185356,
+     "hist_tv_noise": 0.02298125
+    },
+    {
+     "method": "NEW: certified Curveball",
+     "ms_per_layout": 304.3684633333275,
+     "layouts": 30,
+     "attempts_per_layout": 1,
+     "reject_rate": 0,
+     "connected": 0.9666666666666667,
+     "ms_per_connected_layout": 314.8639275862008,
+     "mean_kept": 6.233333333333333,
+     "bias": -0.0034391957530398457,
+     "hist_tv": 0.20191666666666663,
+     "hist_tv_connected": 0.22405050477163338,
+     "hist_tv_noise": 0.25368749999999995
+    }
+   ]
+  }
+ },
+ "toys": {
+  "A n=6 d=(2,...,2)": {
+   "layouts": 70,
+   "swap_tv_at_m": 0.21491972486772487,
+   "cb_tv_at_m": 0.1079064459298935,
+   "cb_tv_at_T": 7.840950111415168e-16,
+   "T": 89
+  },
+  "B n=8 d=(5,4,3,3,2,2,2,1)": {
+   "layouts": 623,
+   "swap_tv_at_m": 0.45890374773569054,
+   "cb_tv_at_m": 0.15209494754670635,
+   "cb_tv_at_T": 1.8124824557874675e-14,
+   "T": 292
+  },
+  "config 2,2,2,2,2,2": {
+   "pairings": 10395,
+   "simple": 4480,
+   "graphs": 70,
+   "tv": 0,
+   "perGraph": [
+    64
+   ],
+   "accept": 0.43097643097643096
+  },
+  "config 4,3,2,2,2,2,1": {
+   "pairings": 2027025,
+   "simple": 313344,
+   "graphs": 136,
+   "tv": 0,
+   "perGraph": [
+    2304
+   ],
+   "accept": 0.15458319458319458
+  },
+  "config 6,5,2,2,2,1,1,1": {
+   "pairings": 654729075,
+   "simple": 2073600,
+   "graphs": 3,
+   "tv": 0,
+   "perGraph": [
+    691200
+   ],
+   "accept": 0.003167111526244653
+  }
+ }
+}

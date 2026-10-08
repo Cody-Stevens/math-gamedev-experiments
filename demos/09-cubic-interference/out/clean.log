@@ -1,0 +1,25 @@
+[09-cubic-interference] 1560 frames @ 60 fps, no video -> <repo>/demos/09-cubic-interference/out/clean
+[09-cubic-interference] frame 240/1560  L 0.827 ms  R 0.764 ms  (5.0 s)
+[09-cubic-interference] frame 387/1560  L 2.14 ms  R 1.91 ms  (10.0 s)
+[09-cubic-interference] frame 517/1560  L 4.40 ms  R 4.13 ms  (15.0 s)
+[09-cubic-interference] frame 638/1560  L 6.65 ms  R 6.17 ms  (20.0 s)
+[09-cubic-interference] frame 739/1560  L 11.6 ms  R 9.97 ms  (25.0 s)
+[09-cubic-interference] frame 831/1560  L 11.6 ms  R 10.8 ms  (30.1 s)
+[09-cubic-interference] frame 918/1560  L 14.4 ms  R 13.6 ms  (35.1 s)
+[09-cubic-interference] frame 1000/1560  L 16.1 ms  R 14.9 ms  (40.2 s)
+[09-cubic-interference] frame 1075/1560  L 19.7 ms  R 18.3 ms  (45.2 s)
+[09-cubic-interference] frame 1144/1560  L 22.6 ms  R 21.9 ms  (50.2 s)
+[09-cubic-interference] frame 1210/1560  L 24.7 ms  R 23.5 ms  (55.3 s)
+[09-cubic-interference] frame 1272/1560  L 30.6 ms  R 27.6 ms  (60.3 s)
+[09-cubic-interference] frame 1328/1560  L 32.6 ms  R 30.8 ms  (65.4 s)
+[09-cubic-interference] frame 1383/1560  L 30.8 ms  R 28.6 ms  (70.4 s)
+[09-cubic-interference] frame 1434/1560  L 34.4 ms  R 31.9 ms  (75.5 s)
+[09-cubic-interference] frame 1482/1560  L 40.9 ms  R 37.5 ms  (80.5 s)
+[09-cubic-interference] frame 1529/1560  L 41.3 ms  R 37.9 ms  (85.5 s)
+[09-cubic-interference] frame 1560/1560  L 45.0 ms  R 41.8 ms  (89.4 s)
+[09-cubic-interference] done: 1560 frames in 89.4 s
+  LEFT   random-arrow model: each S_p a mean-zero median 10.2 ms/frame  p95 41.4  (98 fps compute-only)
+  RIGHT  true cubic sums e(x³/p) + proved bias l median 9.36 ms/frame  p95 38.6  (107 fps compute-only)
+  speedup (median compute): 1.09x
+  poster:  <repo>/demos/09-cubic-interference/out/clean/poster.png
+  results: <repo>/demos/09-cubic-interference/out/clean/results.json

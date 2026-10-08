@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Wildfire Isle</title>
+<style>
+:root { --prior:#eb6834; --new:#2a78d6; --ref:#7a7873; --ink:#ece6d8; --ink2:#a8a092; --line:#3a332b; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #101418 radial-gradient(1200px 500px at 50% -100px, #2a2016, #101418); color: var(--ink);
+  font: 14px/1.45 "Segoe UI", system-ui, sans-serif; }
+.wrap { width: 1248px; margin: 0 auto; padding: 10px 0 40px; }
+header { display: flex; align-items: center; gap: 18px; height: 56px; padding: 0 14px; border: 1px solid #5a4630; border-radius: 10px;
+  background: linear-gradient(#33281c, #1d1812); box-shadow: 0 2px 0 #0008, inset 0 1px 0 #ffffff14; }
+.logo { font: 800 27px/1 Georgia, "Times New Roman", serif; letter-spacing: 4px; color: #ffb347;
+  background: linear-gradient(#ffe08a, #ff8a2a 55%, #d2401c); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.sub { color: var(--ink2); font-size: 12px; line-height: 1.2; }
+.clock { margin-left: 6px; padding: 5px 12px; border-radius: 8px; background: #0006; border: 1px solid #5a4630; font: 700 15px/1.2 Consolas, monospace; color: #ffe2a8; white-space: nowrap; }
+.clock small { display: block; font: 11px/1.2 "Segoe UI", sans-serif; color: var(--ink2); }
+.sp { flex: 1; }
+.grp { display: flex; align-items: center; gap: 4px; }
+.grp > span { color: var(--ink2); font-size: 12px; margin-right: 4px; }
+button { font: 600 12.5px "Segoe UI", sans-serif; color: var(--ink); background: linear-gradient(#3b3126, #2a231b); border: 1px solid #5a4630;
+  border-radius: 6px; padding: 5px 10px; cursor: pointer; }
+button small { font-weight: 400; color: var(--ink2); margin-left: 4px; }
+button.on { background: linear-gradient(#f0b04a, #c27420); color: #1b130a; border-color: #ffd38a; }
+button.on small { color: #3a2508; }
+.controls { display: flex; gap: 22px; align-items: center; margin: 8px 0; padding: 7px 12px; border-radius: 10px; background: #1a1f24; border: 1px solid #2c343c; }
+#scene { display: block; margin: 0 auto; }
+.status { color: var(--ink2); font-size: 12px; }
+table { border-collapse: collapse; width: 100%; margin-top: 8px; font-size: 13px; background: #161b20; border: 1px solid #2c343c; }
+th, td { padding: 4px 8px; border-bottom: 1px solid #262d34; text-align: right; white-space: nowrap; }
+th { color: var(--ink2); font-weight: 600; font-size: 12px; }
+td:first-child, th:first-child { text-align: left; }
+tr.cur td { background: #2a2418; }
+.c-prior { color: var(--prior); } .c-new { color: #5d9be8; } .c-ref { color: #a8a59e; }
+th.c-prior, th.c-new, th.c-ref { font-weight: 700; }
+.dev { font-size: 11px; margin-left: 4px; }
+.ok { color: #7fc77a; } .meh { color: #e3b448; } .bad { color: #ef6b5b; }
+.note { color: var(--ink2); font-size: 12px; margin: 6px 2px 0; }
+.explain { margin-top: 18px; padding: 16px 20px; background: #161b20; border: 1px solid #2c343c; border-radius: 10px; }
+.explain h2 { margin: 0 0 8px; font: 700 20px Georgia, serif; color: #ffd08a; }
+.explain h3 { margin: 14px 0 4px; font-size: 14px; color: #ffd08a; }
+.explain p { margin: 0; max-width: 980px; }
+.explain ul { margin: 0; padding-left: 20px; }
+.explain li { margin: 2px 0; }
+code { background: #0005; padding: 0 4px; border-radius: 4px; }
+#err { color: #ff7b6b; font: 12px monospace; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div><div class="logo">WILDFIRE ISLE</div><div class="sub">Hold the line. Save Ashford.</div></div>
+    <div class="clock" id="clock">Day 1 &middot; 06:00<small>fire burning 0.0 h</small></div>
+    <div class="sp"></div>
+    <div class="grp" id="gq"><span>Graphics quality</span>
+      <button data-q="0">Low<small>32&sup2;</small></button><button data-q="1">Medium<small>64&sup2;</small></button>
+      <button data-q="2">High<small>256&sup2;</small></button><button data-q="3">Ultra<small>1024&sup2;</small></button></div>
+  </header>
+  <div class="controls">
+    <div class="grp" id="gv"><span>View</span><button data-view="all">Side by side</button><button data-view="prior">PRIOR BEST</button><button data-view="new">NEW</button><button data-view="ref">REFERENCE</button></div>
+    <div class="grp" id="gd"><span>Terrain detail</span><button data-detail="grow">grows with quality</button><button data-detail="fixed">fixed (band-limited)</button></div>
+    <div class="grp" id="gs"><span>Speed</span><button data-speed="1">&times;1</button><button data-speed="4">&times;4</button><button data-speed="16">&times;16</button></div>
+    <button id="newfire">New fire</button>
+    <div class="sp"></div>
+    <div class="status" id="perf"></div>
+  </div>
+  <canvas id="scene"></canvas>
+  <div id="err"></div>
+  <div id="table"></div>
+  <div class="explain">
+    <h2>Same fire, same coast, at every graphics setting</h2>
+    <p>In Wildfire Isle the graphics setting also sets the gameplay grid size. That hides a trap. On a finer grid the
+    fire's edge wiggles more, so it takes more steps to cross the forest, and the coast is more jagged, so there are more
+    shore tiles to spawn things on. If you tune speeds and spawn rates in metres at Medium, Ultra players get a fire that takes
+    about six days instead of eighteen hours, and more fishing spots. The new rule scales each step and each shore tile by a power of the tile size
+    that matches how wiggly the shape is. One set of knobs then plays the same on every grid, and the cheap grids stay cheap.</p>
+    <h3>What's measured here</h3>
+    <ul>
+      <li><b>Fire arrival:</b> median hours for the fire edge to reach Ashford over many fire edges traced in this page per grid
+        (4000 on 32&times;32, 2000 on 64&times;64, 400 on 256&times;256, 160 on 1024&times;1024). The animated fire is one typical edge, and its own time is shown under each map.</li>
+      <li><b>Coastal spawns:</b> fishing spots and beach finds that each technique places on each grid. Design target: 40.</li>
+      <li><b>Compute:</b> milliseconds to trace one fire edge and to build the coastline on the gameplay grid, timed in batches with <code>performance.now()</code> in this browser. REFERENCE always pays the Ultra cost.</li>
+      <li><b>From the C++ runs</b> (<code>demos\L3-fractal-ladder\out\ladder.json</code>): with the new fire rule, a 32&times;32 grid lands within +3.2% (95% CI up to +5.0%) of an 8192&times;8192 reference, and 64&times;64 within +0.9%.</li>
+    </ul>
+    <h3>Where the prior technique still wins, and the limits</h3>
+    <ul>
+      <li>At the setting it was tuned at (Medium, preset <code>medium</code>), PRIOR BEST gives the same results as NEW at the same cost. NEW only pays off when players change the setting.</li>
+      <li>REFERENCE is exact at every setting. NEW drifts slightly with grid size (a few percent for the fire at 32&times;32, a few spawns on the coast).</li>
+      <li><b>Proved:</b> the fire rule (step time proportional to cell size<sup>7/4</sup>, one constant) is proved by the paper (Family 223) for this exact model only: the critical percolation front, with no rate of convergence. A fire model with wind or fuel types would need its exponent measured.</li>
+      <li><b>Measured, not proved:</b> the coastline exponent. It was fitted offline at 64, 256 and 1024 cells (1.18 for this island; the textbook value for unbounded rough terrain is 1.25). With band-limited terrain (preset <code>bandlimited</code>) the coast is smooth at fine scales, the exponent falls toward 1, and the plain per-metre rule closes most of the gap (PRIOR BEST within 15% of the target, NEW within 7%).</li>
+      <li>Only counts and timings match across grids. Where each spawn lands still differs. Rendering detail still costs per pixel. This fixes gameplay numbers, not frame time.</li>
+    </ul>
+    <h3>Presets</h3>
+    <ul>
+      <li><code>?scene=compare</code> (default): High, side by side. <code>?scene=low</code>, <code>?scene=medium</code> (tie: PRIOR is tuned here), <code>?scene=ultra</code>.</li>
+      <li><code>?scene=bandlimited</code>: Ultra with fixed-detail terrain, where the prior coast rule nearly ties. <code>?scene=play</code>: NEW only, Ultra, at night.</li>
+      <li>Extra parameters: <code>frames=N</code> stops after N frames, <code>q=0..3</code>, <code>view=all|prior|new|ref</code>, <code>t=hours</code> since ignition.</li>
+    </ul>
+  </div>
+</div>
+<script>
+/*CORE*/
+</script>
+<script>
+(function () {
+'use strict';
+const errBox = document.getElementById('err');
+window.onerror = (m, s, l, c, e) => { errBox.textContent += 'Error: ' + m + ' (line ' + l + ')\n' + (e && e.stack || '') + '\n'; };
+
+// ------------------------------------------------------------------ settings, presets
+const params = new URLSearchParams(location.search);
+const FRAMES = +params.get('frames') || 0;
+const PRESETS = {
+  compare: { q: 2, view: 'all', detail: 'grow', t: 5 },
+  low: { q: 0, view: 'all', detail: 'grow', t: 4 },
+  medium: { q: 1, view: 'all', detail: 'grow', t: 4 },
+  ultra: { q: 3, view: 'all', detail: 'grow', t: 4 },
+  bandlimited: { q: 3, view: 'all', detail: 'fixed', t: 4 },
+  play: { q: 3, view: 'new', detail: 'grow', t: 8 },
+};
+const P0 = PRESETS[params.get('scene')] || PRESETS.compare;
+const S = { q: P0.q, view: P0.view, detail: P0.detail, speed: 1, G: P0.t, G0: 0, fireNo: 0, ready: false, msg: 'Surveying the island', prog: 0, fronts: {}, renderMs: 0 };
+if (params.has('q')) S.q = Math.max(0, Math.min(3, +params.get('q') | 0));
+if (['all', 'prior', 'new', 'ref'].includes(params.get('view'))) S.view = params.get('view');
+if (params.has('t')) S.G = +params.get('t');
+const COL = { prior: '#eb6834', new: '#2a78d6', ref: '#7a7873' };
+const LABEL = { prior: 'PRIOR BEST: per-tile constants in metres, tuned at Medium', new: 'NEW: coarse grid + exponent weighting',
+  ref: 'REFERENCE: always simulate gameplay at Ultra (1024²)' };
+const HOURS_PER_SEC = 2;
+const DPR = Math.min(2, window.devicePixelRatio || 1);
+const W = 1248, HEAD = 28, FOOT = 64;
+const cv = document.getElementById('scene'), g = cv.getContext('2d');
+const mk = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+
+// ------------------------------------------------------------------ precompute (chunked so the page stays live)
+const DATA = { fronts: {}, coast: { grow: [], fixed: [] }, K: null };
+function* precompute() {
+  const stages = QUALITY.length + 2; let st = 0;
+  for (const q of QUALITY) { // sample many fire fronts per grid, timed in batches
+    const n = q.n, M = SAMPLES[n], Ns = [], seeds = []; let s = 0, ms = 0;
+    while (s < M) {
+      const t = performance.now();
+      do { const seed = frontSeed(n, s); const r = fkTrace(n, seed, false); if (r.N > 0) { Ns.push(r.N); seeds.push(seed); } s++; } while (s < M && performance.now() - t < 12);
+      ms += performance.now() - t;
+      yield [`Sampling fire fronts on the ${n}×${n} grid (${s}/${M})`, (st + s / M) / stages];
+    }
+    DATA.fronts[n] = { Ns, seeds, ms: ms / M, med: median(Ns) }; st++;
+  }
+  for (const detail of ['grow', 'fixed']) { // build the gameplay coastline per grid, timed over a batch of rebuilds
+    for (let L = 0; L < QUALITY.length; L++) {
+      const n = QUALITY[L].n, oct = octavesFor(n, detail); let reps = 0, c, ms = 0;
+      const maxReps = n >= 1024 ? 3 : n >= 256 ? 8 : 60;
+      while (reps < 2 || (ms < 40 && reps < maxReps)) { const t = performance.now(); c = coastEdges(n, oct); spawnCoast(c, 0.01); ms += performance.now() - t; reps++;
+        if (n >= 256) yield [`Building the ${n}×${n} coastline (${detail === 'grow' ? 'detail grows' : 'fixed detail'})`, (st + L / 4) / stages]; }
+      DATA.coast[detail][L] = { c, ms: ms / reps };
+    }
+    st++;
+  }
+}
+const gen = precompute();
+function pump() {
+  const t = performance.now(); let r;
+  do { r = gen.next(); if (!r.done) { S.msg = r.value[0]; S.prog = r.value[1]; } } while (!r.done && performance.now() - t < 16);
+  if (r.done) onReady(); else setTimeout(pump, 0);
+}
+function onReady() {
+  DATA.K = fireConstants(QUALITY.map(q => DATA.fronts[q.n].med));
+  // Headless Chrome with --virtual-time-budget freezes performance.now() during tasks. Then every batch reads 0 ms, and we
+  // show the Node numbers from bench.js (same core code) instead, labelled as such. In a normal browser this never triggers.
+  DATA.msSource = 'measured in this browser';
+  if (DATA.fronts[1024].ms < 0.05 && BENCH) {
+    DATA.msSource = 'browser timer frozen (headless virtual time), so ms are from bench.js in Node ' + BENCH.node;
+    for (const q of QUALITY) DATA.fronts[q.n].ms = BENCH.fireMs[q.n];
+    for (const det of ['grow', 'fixed']) DATA.coast[det].forEach((c, L) => c.ms = BENCH.coastMs[det][L]);
+  }
+  S.ready = true; startFire(true); buildTable();
+}
+
+// ------------------------------------------------------------------ gameplay numbers
+const fireMedianH = (mode, L) => mode === 'ref' ? DATA.fronts[1024].med * stepHours(DATA.K, 'ref', 1024) : DATA.fronts[QUALITY[L].n].med * stepHours(DATA.K, mode, QUALITY[L].n);
+function spawnK(detail) { return spawnConstants(DATA.coast[detail].map(x => x.c.E), D_COAST[detail]); }
+function spawnN(mode, L, detail) {
+  const K = spawnK(detail), E = DATA.coast[detail].map(x => x.c.E);
+  return mode === 'ref' ? spawnCount(E[ULTRA], K.ref) : spawnCount(E[L], spawnWeight(K, mode, QUALITY[L].n, D_COAST[detail]));
+}
+const spawnCache = new Map();
+function spawnsFor(mode, L, detail) {
+  const key = mode + '|' + L + '|' + detail; if (spawnCache.has(key)) return spawnCache.get(key);
+  const K = spawnK(detail), LL = mode === 'ref' ? ULTRA : L, c = DATA.coast[detail][LL].c;
+  const w = mode === 'ref' ? K.ref : spawnWeight(K, mode, QUALITY[L].n, D_COAST[detail]);
+  const sp = spawnCoast(c, w); spawnCache.set(key, sp); return sp;
+}
+
+// ------------------------------------------------------------------ fire fronts
+function rng(seed) { let s = seed >>> 0 || 1; return () => (s = Math.imul(s ^ (s >>> 15), 0x2c1b3c6d) + 0x6D2B79F5 >>> 0) / 4294967296; }
+function pickFront(L, fireNo) { // a typical front: random pick from the middle 40% of this grid's sampled distribution
+  const n = QUALITY[L].n, F = DATA.fronts[n], R = rng(fireNo * 7919 + L * 104729 + 17);
+  const order = F.Ns.map((N, k) => k).sort((a, b) => F.Ns[a] - F.Ns[b]);
+  const k = order[Math.floor(order.length * 0.3 + R() * order.length * 0.4)], seed = F.seeds[k];
+  const r = fkTrace(n, seed, true);
+  return { n, seed, N: r.N, path: Float32Array.from(r.path), key: n + '|' + seed };
+}
+function startFire(keepT) {
+  S.fireNo++; if (!keepT) S.G0 = S.G;
+  S.fronts = {}; burnCache.clear();
+  for (const L of new Set([S.q, ULTRA])) S.fronts[L] = pickFront(L, S.fireNo);
+  for (const p of panels) { p.smoke = []; p.lastCur = -1; }
+}
+
+// burn raster: pixels on the burnt (north-west) side of the front get the step index at which they catch fire
+const burnCache = new Map();
+function burnData(fr, Psq) {
+  const key = fr.key + '|' + Psq; if (burnCache.has(key)) return burnCache.get(key);
+  const p = fr.path, np = p.length / 2, A = Psq * Psq, lbl = new Int32Array(A).fill(-1);
+  const PX = k => Math.min(Psq - 1, Math.max(0, Math.floor(p[2 * k] * Psq))), PY = k => Math.min(Psq - 1, Math.max(0, Math.floor((1 - p[2 * k + 1]) * Psq)));
+  let x0 = PX(0), y0 = PY(0); lbl[y0 * Psq + x0] = 0;
+  for (let k = 1; k < np; k++) { // 8-connected raster of the front
+    const x1 = PX(k), y1 = PY(k), dx = x1 - x0, dy = y1 - y0, st = Math.max(Math.abs(dx), Math.abs(dy));
+    for (let s = 1; s <= st; s++) { const c = Math.round(y0 + dy * s / st) * Psq + Math.round(x0 + dx * s / st); if (lbl[c] < 0) lbl[c] = k; }
+    x0 = x1; y0 = y1;
+  }
+  const reg = new Uint8Array(A), Q = new Int32Array(A); let qh = 0, qt = 0;
+  for (let i = 0; i < Psq; i++) for (const c of [i, i * Psq]) if (lbl[c] < 0 && !reg[c]) { reg[c] = 1; Q[qt++] = c; } // wired (burnt) top + left sides
+  while (qh < qt) { const c = Q[qh++], x = c % Psq;
+    if (x > 0 && lbl[c - 1] < 0 && !reg[c - 1]) { reg[c - 1] = 1; Q[qt++] = c - 1; }
+    if (x < Psq - 1 && lbl[c + 1] < 0 && !reg[c + 1]) { reg[c + 1] = 1; Q[qt++] = c + 1; }
+    if (c >= Psq && lbl[c - Psq] < 0 && !reg[c - Psq]) { reg[c - Psq] = 1; Q[qt++] = c - Psq; }
+    if (c < A - Psq && lbl[c + Psq] < 0 && !reg[c + Psq]) { reg[c + Psq] = 1; Q[qt++] = c + Psq; } }
+  const bt = new Float32Array(A).fill(Infinity), src = Int32Array.from(lbl), dist = new Int32Array(A), kd = fr.N / (Psq * 6);
+  qh = qt = 0; for (let c = 0; c < A; c++) if (lbl[c] >= 0) { bt[c] = lbl[c]; Q[qt++] = c; }
+  while (qh < qt) { const c = Q[qh++], x = c % Psq;
+    for (const nb of [x > 0 ? c - 1 : -1, x < Psq - 1 ? c + 1 : -1, c - Psq, c + Psq]) {
+      if (nb < 0 || nb >= A || !reg[nb] || src[nb] >= 0) continue;
+      src[nb] = src[c]; dist[nb] = dist[c] + 1; bt[nb] = src[nb] + dist[nb] * kd; Q[qt++] = nb; } }
+  const nz = new Uint8Array(A); for (let c = 0; c < A; c++) nz[c] = (hash(c % Psq, (c / Psq) | 0, 77) * 255) | 0;
+  const out = { key, Psq, bt, nz }; burnCache.set(key, out); return out;
+}
+const rgba32 = (r, gg, b, a) => ((a & 255) << 24 | (b & 255) << 16 | (gg & 255) << 8 | (r & 255)) >>> 0;
+const EMBER = new Uint32Array(256), CHAR = new Uint32Array(256);
+(function () {
+  const st = [[0, 255, 226, 130, 255], [0.2, 255, 140, 40, 245], [0.55, 170, 46, 22, 235], [1, 46, 38, 33, 228]];
+  for (let i = 0; i < 256; i++) { const a = i / 255; let k = 0; while (k < st.length - 2 && a > st[k + 1][0]) k++;
+    const A = st[k], B = st[k + 1], f = (a - A[0]) / (B[0] - A[0]);
+    EMBER[i] = rgba32(A[1] + (B[1] - A[1]) * f, A[2] + (B[2] - A[2]) * f, A[3] + (B[3] - A[3]) * f, A[4] + (B[4] - A[4]) * f); }
+  for (let i = 0; i < 256; i++) { const v = i / 255;
+    CHAR[i] = v > 0.93 ? rgba32(104, 98, 90, 225) : v < 0.05 ? rgba32(120, 40, 18, 220) : rgba32(30 + 26 * v, 26 + 22 * v, 23 + 18 * v, 200 + 40 * v); }
+})();
+
+// ------------------------------------------------------------------ sprites
+const FLAME = mk(32, 48); { const f = FLAME.getContext('2d'), gr = f.createRadialGradient(16, 36, 1, 16, 30, 24);
+  gr.addColorStop(0, 'rgba(255,252,220,1)'); gr.addColorStop(0.25, 'rgba(255,205,90,.95)'); gr.addColorStop(0.6, 'rgba(240,96,24,.65)'); gr.addColorStop(1, 'rgba(150,24,0,0)');
+  f.fillStyle = gr; f.beginPath(); f.moveTo(16, 1); f.quadraticCurveTo(31, 30, 16, 47); f.quadraticCurveTo(1, 30, 16, 1); f.fill(); }
+const GLOW = mk(64, 64); { const f = GLOW.getContext('2d'), gr = f.createRadialGradient(32, 32, 0, 32, 32, 32);
+  gr.addColorStop(0, 'rgba(255,170,60,.9)'); gr.addColorStop(0.4, 'rgba(255,100,20,.35)'); gr.addColorStop(1, 'rgba(255,60,0,0)'); f.fillStyle = gr; f.fillRect(0, 0, 64, 64); }
+const SMOKE = mk(64, 64); { const f = SMOKE.getContext('2d'), gr = f.createRadialGradient(32, 32, 0, 32, 32, 32);
+  gr.addColorStop(0, 'rgba(92,90,92,.85)'); gr.addColorStop(0.6, 'rgba(80,78,80,.4)'); gr.addColorStop(1, 'rgba(70,70,72,0)'); f.fillStyle = gr; f.fillRect(0, 0, 64, 64); }
+
+// ------------------------------------------------------------------ terrain rendering (graphics only; same height function as gameplay)
+const terrCache = new Map();
+function terrain(oct, P) {
+  const key = oct + '|' + P; if (terrCache.has(key)) return terrCache.get(key);
+  const c = mk(P, P), t = c.getContext('2d'), img = t.createImageData(P, P), d = img.data, W2 = P + 2, H = new Float32Array(W2 * W2), cls = new Uint8Array(P * P);
+  for (let j = -1; j <= P; j++) for (let i = -1; i <= P; i++) H[(j + 1) * W2 + i + 1] = heightAt((i + .5) / P, (j + .5) / P, oct);
+  const q = FIRE_SQ;
+  for (let j = 0; j < P; j++) for (let i = 0; i < P; i++) {
+    const h = H[(j + 1) * W2 + i + 1], x = (i + .5) / P, y = (j + .5) / P, o = (j * P + i) * 4; let r, gg, b, k = 0;
+    if (h <= 0) {
+      const tt = Math.min(1, Math.sqrt(-h / 0.5)); r = 66 + (14 - 66) * tt; gg = 160 + (52 - 160) * tt; b = 178 + (98 - 178) * tt;
+      if (-h < 0.03) { const f = (1 - (-h) / 0.03) * 0.5; r += (175 - r) * f; gg += (222 - gg) * f; b += (214 - b) * f; }
+      const w = vnoise(x * 70, y * 20, 50) * 12; r += w; gg += w; b += w;
+    } else {
+      const hx = (H[(j + 1) * W2 + i + 2] - H[(j + 1) * W2 + i]) * P / 2, hy = (H[(j + 2) * W2 + i + 1] - H[j * W2 + i + 1]) * P / 2;
+      const sh = clamp(1 + (hx + hy) * 0.035, 0.62, 1.38);
+      const m = vnoise(x * 7 + 3.1, y * 7 + 8.7, 40) + 0.5 * vnoise(x * 17, y * 17, 41);
+      const gm = greenwoodMask(x, y), forest = m + 0.7 * gm + 0.18 * vnoise(x * 30, y * 30, 42) > 0.12;
+      if (h < 0.035 && gm < 0.5) { r = 224; gg = 205; b = 148; k = 1; }
+      else if (h > 0.8 && gm < 0.95) { r = 152; gg = 146; b = 134; k = 5; }
+      else if (forest) { const hf = clamp((h - 0.4) * 1.5, 0, 0.5); r = 56 + m * 20 + hf * 40; gg = 100 + m * 20 + hf * 20; b = 50 + hf * 30; k = 3; }
+      else if (h > 0.58) { r = 128; gg = 142; b = 92; k = 4; }
+      else { r = 118 + m * 40; gg = 166 + m * 20; b = 78; k = 2; }
+      r *= sh; gg *= sh; b *= sh;
+      const dOut = Math.max(q.x0 - x, q.y0 - y); // charred north-west ridge (the fire came from there)
+      if (dOut > 0 && x < q.x0 + q.s && y < q.y0 + q.s && x > q.x0 - 0.09 && y > q.y0 - 0.09) {
+        const f = clamp(1 - dOut / 0.075 + (vnoise(x * 40, y * 40, 60)) * 0.9, 0, 1) * 0.88;
+        r += (44 - r) * f; gg += (38 - gg) * f; b += (34 - b) * f; if (f > 0.4) k = 6;
+      }
+    }
+    d[o] = r; d[o + 1] = gg; d[o + 2] = b; d[o + 3] = 255; cls[j * P + i] = k;
+  }
+  t.putImageData(img, 0, 0);
+  const sc = P / 404, stp = 5.2 * sc;
+  for (let ty = 0, a = 0; ty < P; ty += stp, a++) for (let tx = 0, bb = 0; tx < P; tx += stp, bb++) { // trees
+    const jx = tx + hash(a, bb, 90) * stp, jy = ty + hash(a, bb, 91) * stp, ix = jx | 0, iy = jy | 0; if (ix >= P || iy >= P) continue;
+    const k = cls[iy * P + ix], u = hash(a, bb, 92);
+    if (k === 3 || (k === 2 && u < 0.07) || (k === 4 && u < 0.18)) {
+      const rr = (1.9 + hash(a, bb, 93) * 1.2) * sc, dk = hash(a, bb, 94) * 18;
+      t.fillStyle = 'rgba(0,0,0,.28)'; t.beginPath(); t.arc(jx + rr * .5, jy + rr * .5, rr, 0, 7); t.fill();
+      t.fillStyle = `rgb(${30 + dk},${72 + dk},${36})`; t.beginPath(); t.arc(jx, jy, rr, 0, 7); t.fill();
+      t.fillStyle = `rgba(120,170,90,.45)`; t.beginPath(); t.arc(jx - rr * .35, jy - rr * .35, rr * .45, 0, 7); t.fill();
+    }
+  }
+  const feat = { houses: [] }, coastAt = (ang, pull) => {
+    for (let r = 0.49; r > 0.1; r -= 0.002) { const x = .5 + Math.cos(ang) * r, y = .5 + Math.sin(ang) * r;
+      if (heightAt(x, y, oct) > 0.03 && heightAt(.5 + Math.cos(ang) * (r - 0.03), .5 + Math.sin(ang) * (r - 0.03), oct) > 0.03)
+        return { x: .5 + Math.cos(ang) * (r - pull), y: .5 + Math.sin(ang) * (r - pull), cx: x + Math.cos(ang) * 0.004, cy: y + Math.sin(ang) * 0.004 }; }
+    return { x: .5, y: .5, cx: .5, cy: .5 }; };
+  const house = (x, y, s2, roof) => { const X = x * P, Y = y * P, w = 5.2 * sc * s2, h = 4.2 * sc * s2;
+    t.fillStyle = 'rgba(0,0,0,.35)'; t.fillRect(X - w / 2 + 1.2 * sc, Y - h / 2 + 1.2 * sc, w, h);
+    t.fillStyle = '#e6d6b4'; t.fillRect(X - w / 2, Y - h / 2, w, h); t.fillStyle = roof; t.fillRect(X - w / 2, Y - h / 2, w, h * 0.55);
+    feat.houses.push({ x, y }); };
+  const village = (cx, cy, nH, spread, seed) => { for (let k = 0; k < nH; k++) { const a = hash(k, seed, 95) * 6.283, r = Math.sqrt(hash(k, seed, 96)) * spread;
+      house(cx + Math.cos(a) * r, cy + Math.sin(a) * r * 0.8, 1 + hash(k, seed, 97) * 0.4, ['#a8452f', '#8a3b2a', '#6f5a3a', '#b5643a'][k % 4]); } };
+  feat.ashford = { x: q.x0 + q.s + 0.024, y: q.y0 - 0.02 }; village(feat.ashford.x, feat.ashford.y, 9, 0.026, 3);
+  const sm = coastAt(2.05, 0.03); feat.saltmere = sm; // fishing village with a pier
+  t.strokeStyle = '#7a5a36'; t.lineWidth = 2.2 * sc; t.beginPath(); t.moveTo(sm.cx * P, sm.cy * P);
+  t.lineTo((sm.cx + Math.cos(2.05) * 0.035) * P, (sm.cy + Math.sin(2.05) * 0.035) * P); t.stroke();
+  t.fillStyle = '#6b4a2a'; t.beginPath(); t.ellipse((sm.cx + Math.cos(2.05) * 0.03 + 0.012) * P, (sm.cy + Math.sin(2.05) * 0.03) * P, 4 * sc, 1.6 * sc, 0.4, 0, 7); t.fill();
+  village(sm.x, sm.y, 6, 0.02, 11);
+  feat.light = coastAt(0.38, 0.008); // lighthouse
+  { const X = feat.light.x * P, Y = feat.light.y * P; t.fillStyle = 'rgba(0,0,0,.35)'; t.beginPath(); t.ellipse(X + 3 * sc, Y + 2 * sc, 4 * sc, 2 * sc, 0, 0, 7); t.fill();
+    t.fillStyle = '#f4f1ea'; t.beginPath(); t.moveTo(X - 3 * sc, Y + 2 * sc); t.lineTo(X + 3 * sc, Y + 2 * sc); t.lineTo(X + 2 * sc, Y - 11 * sc); t.lineTo(X - 2 * sc, Y - 11 * sc); t.fill();
+    t.fillStyle = '#c23a2a'; t.fillRect(X - 2.6 * sc, Y - 3.5 * sc, 5.2 * sc, 2.2 * sc); t.fillRect(X - 2.2 * sc, Y - 8 * sc, 4.4 * sc, 2 * sc);
+    t.fillStyle = '#333'; t.fillRect(X - 2.6 * sc, Y - 14 * sc, 5.2 * sc, 3 * sc); }
+  feat.tower = { x: q.x0 - 0.008, y: q.y0 + q.s + 0.01 }; // old watchtower at the fire's south-west end
+  { const X = feat.tower.x * P, Y = feat.tower.y * P; t.strokeStyle = '#4a3220'; t.lineWidth = 1.4 * sc; t.beginPath();
+    t.moveTo(X - 3 * sc, Y + 3 * sc); t.lineTo(X - 1.5 * sc, Y - 7 * sc); t.moveTo(X + 3 * sc, Y + 3 * sc); t.lineTo(X + 1.5 * sc, Y - 7 * sc); t.stroke();
+    t.fillStyle = '#6a4a2c'; t.fillRect(X - 3.2 * sc, Y - 10 * sc, 6.4 * sc, 3.5 * sc); }
+  const out = { c, feat }; terrCache.set(key, out); return out;
+}
+
+// ------------------------------------------------------------------ layout
+let panels = [];
+function layout() {
+  const modes = S.view === 'all' ? ['prior', 'new', 'ref'] : [S.view], single = modes.length === 1, s = single ? 560 : 404, gap = 18;
+  const H = HEAD + s + FOOT;
+  cv.width = W * DPR; cv.height = H * DPR; cv.style.width = W + 'px'; cv.style.height = H + 'px';
+  panels = modes.map((mode, i) => { const L = mode === 'ref' ? ULTRA : S.q, n = QUALITY[L].n;
+    return { mode, L, n, oct: octavesFor(n, S.detail), x: single ? 0 : i * (s + gap), y: HEAD, s, smoke: [], lastCur: -1 }; });
+  S.single = single; S.H = H;
+}
+
+// ------------------------------------------------------------------ drawing
+const nightF = hod => hod >= 7 && hod <= 17.5 ? 0 : hod > 17.5 && hod < 20 ? (hod - 17.5) / 2.5 : hod >= 20 || hod < 4.5 ? 1 : 1 - (hod - 4.5) / 2.5;
+const fmtDay = G => { const a = 6 + G, day = 1 + Math.floor(a / 24), hod = ((a % 24) + 24) % 24, hh = Math.floor(hod), mm = Math.floor((hod - hh) * 60);
+  return `Day ${day} · ${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`; };
+const fmtMs = v => v >= 10 ? v.toFixed(0) : v >= 1 ? v.toFixed(1) : v >= 0.1 ? v.toFixed(2) : v.toFixed(3);
+function label(text, x, y, size, col) { g.font = `700 ${size}px "Segoe UI", sans-serif`; g.textAlign = 'center'; g.lineWidth = 3; g.strokeStyle = 'rgba(10,10,10,.75)';
+  g.strokeText(text, x, y); g.fillStyle = col || '#fff6e0'; g.fillText(text, x, y); g.textAlign = 'left'; }
+
+function drawPanel(pn, time, dtReal) {
+  const { x, y, s } = pn, sc = s / 404, P = Math.round(s * DPR), T = terrain(pn.oct, P), q = FIRE_SQ;
+  const hod = (((6 + S.G) % 24) + 24) % 24, nf = nightF(hod);
+  g.save(); g.beginPath(); g.rect(x, y, s, s); g.clip();
+  g.drawImage(T.c, x, y, s, s);
+  const MX = u => x + u * s, MY = v => y + v * s;
+  // coastal spawns
+  if (S.ready) for (const [k, sp] of spawnsFor(pn.mode, S.q, S.detail).entries()) {
+    const X = MX(sp.x), Y = MY(sp.y), ph = hash(k, 1, 99);
+    if (sp.fish) { for (let r = 0; r < 2; r++) { const f = (time * 0.55 + ph + r * 0.5) % 1; g.strokeStyle = `rgba(235,250,255,${(1 - f) * 0.85})`; g.lineWidth = 1.2;
+        g.beginPath(); g.arc(X, Y, (1.5 + f * 6) * sc, 0, 7); g.stroke(); }
+      g.fillStyle = '#16384a'; g.beginPath(); g.ellipse(X + Math.sin(time * 2 + ph * 9) * 1.5 * sc, Y, 2.4 * sc, 1.1 * sc, 0.3, 0, 7); g.fill();
+    } else { g.fillStyle = '#ffd56a'; g.strokeStyle = '#5a3810'; g.lineWidth = 1; g.beginPath();
+      for (let a = 0; a < 10; a++) { const rr = (a % 2 ? 1.3 : 3.2) * sc, an = a * Math.PI / 5 - Math.PI / 2; g.lineTo(X + Math.cos(an) * rr, Y + Math.sin(an) * rr); }
+      g.closePath(); g.fill(); g.stroke(); }
+  }
+  let nightDone = false; const night = () => { if (!nightDone && nf > 0) { g.fillStyle = `rgba(6,12,38,${0.55 * nf})`; g.fillRect(x, y, s, s); } nightDone = true; };
+  // fire
+  const fr = S.ready ? S.fronts[pn.L] : null; let arrived = false, dur = 0, cur = 0;
+  if (fr) {
+    const dt = pn.mode === 'ref' ? stepHours(DATA.K, 'ref', 1024) : stepHours(DATA.K, pn.mode, pn.n), Tf = S.G - S.G0;
+    dur = fr.N * dt; cur = Math.min(fr.N + 1, Math.max(0, Tf / dt)); arrived = Tf >= dur; pn.dur = dur; pn.arrived = arrived; pn.frac = Math.min(1, Tf / dur);
+    const Psq = Math.round(q.s * s * DPR), bd = burnData(fr, Psq);
+    if (!pn.ov || pn.ov.width !== Psq) { pn.ov = mk(Psq, Psq); pn.ovg = pn.ov.getContext('2d'); pn.img = pn.ovg.createImageData(Psq, Psq); pn.u32 = new Uint32Array(pn.img.data.buffer); pn.lastCur = -1; }
+    if (Math.abs(cur - pn.lastCur) > 1e-9 || pn.lastKey !== bd.key) {
+      const u = pn.u32, bt = bd.bt, nz = bd.nz, ak = 1 / (fr.N * 0.06), A = Psq * Psq;
+      for (let c = 0; c < A; c++) { const t0 = bt[c]; if (t0 > cur) { u[c] = 0; continue; } const a = (cur - t0) * ak; u[c] = a < 1 ? EMBER[(a * 255) | 0] : CHAR[nz[c]]; }
+      pn.ovg.putImageData(pn.img, 0, 0); pn.lastCur = cur; pn.lastKey = bd.key;
+    }
+    g.drawImage(pn.ov, MX(q.x0), MY(q.y0), q.s * s, q.s * s);
+    const P2 = fr.path, FX = k => MX(q.x0 + P2[2 * k] * q.s), FY = k => MY(q.y0 + (1 - P2[2 * k + 1]) * q.s);
+    // smoke
+    if (!arrived && cur > 0) { const Wf = Math.max(20, fr.N * 0.03), emit = dtReal * 14 * (S.single ? 1.5 : 1);
+      for (let e = 0, nE = Math.floor(emit) + (Math.random() < emit % 1 ? 1 : 0); e < nE; e++) { const k = Math.max(0, Math.floor(cur - Math.random() * Wf));
+        pn.smoke.push({ x: FX(k), y: FY(k), vx: (10 + Math.random() * 8) * sc, vy: (-9 - Math.random() * 6) * sc, r: 3 * sc, age: 0, life: 3 + Math.random() * 1.5 }); } }
+    if (arrived) { const ax = MX(T.feat.ashford.x), ay = MY(T.feat.ashford.y); if (Math.random() < dtReal * 14) pn.smoke.push({ x: ax + (Math.random() - .5) * 20 * sc, y: ay, vx: 12 * sc, vy: -10 * sc, r: 4 * sc, age: 0, life: 3.5 }); }
+    g.globalCompositeOperation = 'source-over';
+    for (const p of pn.smoke) { p.age += dtReal; p.x += p.vx * dtReal; p.y += p.vy * dtReal; p.r += 7 * sc * dtReal;
+      const a = (1 - p.age / p.life) * Math.min(1, p.age / 0.4) * (0.26 - 0.08 * nf); if (a > 0) { g.globalAlpha = a; g.drawImage(SMOKE, p.x - p.r, p.y - p.r, 2 * p.r, 2 * p.r); } }
+    g.globalAlpha = 1; pn.smoke = pn.smoke.filter(p => p.age < p.life).slice(-260);
+    night();
+    // embers keep glowing at night; flames along the active front
+    g.globalCompositeOperation = 'lighter';
+    if (nf > 0) { g.globalAlpha = 0.6 * nf; g.drawImage(pn.ov, MX(q.x0), MY(q.y0), q.s * s, q.s * s); g.globalAlpha = 1; }
+    if (!arrived && cur > 0) {
+      const Wf = Math.max(20, fr.N * 0.03), nFl = 34, hk = Math.floor(cur);
+      const gw = (28 + 10 * nf) * sc; g.globalAlpha = 0.55 + 0.35 * nf; g.drawImage(GLOW, FX(hk) - gw, FY(hk) - gw, 2 * gw, 2 * gw); g.globalAlpha = 1;
+      for (let i = 0; i < nFl; i++) { const k = Math.max(0, Math.floor(cur - Wf * i / nFl)), heat = 1 - i / nFl;
+        const fl = 0.7 + 0.3 * Math.sin(time * 15 + i * 2.3) * Math.sin(time * 7.3 + i), w = (3.2 + 3.6 * heat) * sc * fl, h = w * 1.7;
+        g.globalAlpha = 0.45 + 0.55 * heat; g.drawImage(FLAME, FX(k) - w / 2, FY(k) - h * 0.85, w, h); }
+      g.globalAlpha = 1;
+    }
+    if (arrived) for (const [k, hs] of T.feat.houses.slice(0, 9).entries()) { const X = MX(hs.x), Y = MY(hs.y), fl = 0.75 + 0.25 * Math.sin(time * 13 + k * 3), w = 6 * sc * fl;
+      g.drawImage(FLAME, X - w / 2, Y - w * 1.5, w, w * 1.7); g.globalAlpha = 0.5; g.drawImage(GLOW, X - 16 * sc, Y - 16 * sc, 32 * sc, 32 * sc); g.globalAlpha = 1; }
+    g.globalCompositeOperation = 'source-over';
+  }
+  night();
+  // lighthouse beam and village lights
+  g.globalCompositeOperation = 'lighter';
+  { const L = T.feat.light, X = MX(L.x), Y = MY(L.y) - 12.5 * sc, an = time * 1.4, len = 0.32 * s, al = 0.05 + 0.32 * nf;
+    const gr = g.createRadialGradient(X, Y, 0, X, Y, len); gr.addColorStop(0, `rgba(255,240,180,${al})`); gr.addColorStop(1, 'rgba(255,240,180,0)');
+    g.fillStyle = gr; g.beginPath(); g.moveTo(X, Y); g.arc(X, Y, len, an - 0.14, an + 0.14); g.closePath(); g.fill();
+    g.globalAlpha = 0.5 + 0.5 * nf; g.drawImage(GLOW, X - 7 * sc, Y - 7 * sc, 14 * sc, 14 * sc); g.globalAlpha = 1;
+    if (nf > 0.05) { g.fillStyle = `rgba(255,214,120,${0.9 * nf})`; for (const hs of T.feat.houses) g.fillRect(MX(hs.x) - 0.8 * sc, MY(hs.y) - 0.3 * sc, 1.6 * sc, 1.6 * sc); } }
+  g.globalCompositeOperation = 'source-over';
+  // names
+  const ls = Math.round(10.5 * Math.max(1, sc * 0.9));
+  label('Ashford', MX(T.feat.ashford.x), MY(T.feat.ashford.y) - 11 * sc, ls, arrived ? '#ff9a7a' : undefined);
+  label('Saltmere', MX(T.feat.saltmere.x), MY(T.feat.saltmere.y) + 15 * sc, ls);
+  label('Lighthouse', MX(T.feat.light.x), MY(T.feat.light.y) + 12 * sc, ls);
+  label('Watchtower', MX(T.feat.tower.x), MY(T.feat.tower.y) + 14 * sc, ls);
+  label('G R E E N W O O D', MX(q.x0 + q.s * 0.5), MY(q.y0 + q.s * 0.94), Math.round(ls * 0.9), 'rgba(230,240,210,.75)');
+  // in-map banners
+  if (fr && arrived) { g.fillStyle = 'rgba(120,20,10,.82)'; g.fillRect(x, y + 8, s, 24 * Math.max(1, sc));
+    label(`FIRE REACHED ASHFORD — ${fmtDay(S.G0 + pn.dur)}`, x + s / 2, y + 8 + 17 * Math.max(1, sc), Math.round(13 * Math.max(1, sc)), '#ffe0c0'); }
+  if (!S.ready) { g.fillStyle = 'rgba(10,12,16,.72)'; g.fillRect(x + 30, y + s / 2 - 34, s - 60, 64); g.fillStyle = '#ffe2a8'; g.font = '600 13px "Segoe UI"';
+    g.fillText('Surveying the island…', x + 44, y + s / 2 - 12); g.fillStyle = '#a8a092'; g.font = '12px "Segoe UI"'; g.fillText(S.msg, x + 44, y + s / 2 + 6);
+    g.fillStyle = '#3a332b'; g.fillRect(x + 44, y + s / 2 + 14, s - 88, 6); g.fillStyle = '#f0b04a'; g.fillRect(x + 44, y + s / 2 + 14, (s - 88) * S.prog, 6); }
+  g.restore();
+  g.strokeStyle = COL[pn.mode]; g.lineWidth = 2; g.strokeRect(x + 1, y + 1, s - 2, s - 2);
+  // header
+  g.fillStyle = COL[pn.mode]; g.fillRect(x, 0, s, HEAD - 3); g.fillStyle = '#fff'; g.font = `700 ${S.single ? 14 : 12}px "Segoe UI", sans-serif`; g.textBaseline = 'middle';
+  g.fillText(LABEL[pn.mode], x + 8, (HEAD - 3) / 2 + 1); g.textBaseline = 'alphabetic';
+  // footer HUD
+  const fy = y + s + 4; g.fillStyle = '#1a1f24'; g.fillRect(x, fy, s, FOOT - 6); g.strokeStyle = '#2c343c'; g.lineWidth = 1; g.strokeRect(x + .5, fy + .5, s - 1, FOOT - 7);
+  if (S.ready && fr) {
+    const med = fireMedianH(pn.mode, pn.L), dev = med / FIRE_TARGET_H - 1;
+    g.font = '600 12.5px "Segoe UI", sans-serif'; g.fillStyle = '#ece6d8'; g.fillText('Fire reaches Ashford:', x + 8, fy + 17);
+    let tx = x + 8 + g.measureText('Fire reaches Ashford: ').width;
+    g.font = '800 14px "Segoe UI", sans-serif'; g.fillStyle = Math.abs(dev) <= 0.05 ? '#8fd88a' : Math.abs(dev) <= 0.15 ? '#e3b448' : '#ff7b6b';
+    const mt = `${med.toFixed(1)} h`; g.fillText(mt, tx, fy + 17); tx += g.measureText(mt + ' ').width;
+    g.font = '12px "Segoe UI", sans-serif'; g.fillStyle = '#a8a092';
+    g.fillText(`median of ${DATA.fronts[pn.n].Ns.length} fronts · this fire ${dur.toFixed(1)} h`, tx, fy + 17);
+    const bw = s - 16; g.fillStyle = '#2c343c'; g.fillRect(x + 8, fy + 23, bw, 6); g.fillStyle = arrived ? '#c8361b' : COL[pn.mode]; g.fillRect(x + 8, fy + 23, bw * pn.frac, 6);
+    const tgt = Math.min(1, FIRE_TARGET_H / dur); g.fillStyle = '#fff'; g.fillRect(x + 8 + bw * tgt - 1, fy + 21, 2, 10);
+    const ns = spawnsFor(pn.mode, S.q, S.detail).length, cms = DATA.fronts[pn.n].ms, coms = DATA.coast[S.detail][pn.L].ms;
+    g.fillStyle = '#ece6d8'; g.font = '600 12.5px "Segoe UI", sans-serif'; g.fillText(`Coastal spawns: ${ns}`, x + 8, fy + 46);
+    g.fillStyle = '#a8a092'; g.font = '12px "Segoe UI", sans-serif';
+    g.fillText(`grid ${pn.n}² · compute ${fmtMs(cms)} ms/fire + ${fmtMs(coms)} ms/coast`, x + 128, fy + 46);
+  } else { g.fillStyle = '#a8a092'; g.font = '12px "Segoe UI", sans-serif'; g.fillText(S.msg, x + 8, fy + 20); }
+}
+
+function drawSideChart() { // single view: all four settings at a glance
+  const x0 = 584, w = W - x0, top = HEAD + 6; g.fillStyle = '#161b20'; g.fillRect(x0, HEAD, w, S.H - HEAD - 2);
+  g.fillStyle = '#ffd08a'; g.font = '700 16px Georgia, serif'; g.fillText('All four graphics settings, same island', x0 + 16, top + 22);
+  if (!S.ready) return;
+  const charts = [{ t: 'Hours until the fire reaches Ashford (median)', v: (m, L) => fireMedianH(m, L), tgt: FIRE_TARGET_H, max: 60, u: ' h' },
+    { t: 'Coastal spawns (fishing spots + beach finds)', v: (m, L) => spawnN(m, L, S.detail), tgt: SPAWN_TARGET, max: 80, u: '' }];
+  let yy = top + 52; const L0 = x0 + 110, bwMax = w - 110 - 70;
+  for (const ch of charts) {
+    g.fillStyle = '#ece6d8'; g.font = '600 13px "Segoe UI", sans-serif'; g.fillText(ch.t, x0 + 16, yy); yy += 10;
+    const y1 = yy;
+    QUALITY.forEach((q, L) => {
+      g.fillStyle = L === S.q ? '#ffd08a' : '#a8a092'; g.font = `${L === S.q ? 700 : 400} 12px "Segoe UI", sans-serif`; g.fillText(`${q.name} ${q.n}²`, x0 + 16, yy + 22);
+      ['prior', 'new', 'ref'].forEach((m, i) => { const v = ch.v(m, L), bw = bwMax * Math.min(1, v / ch.max);
+        g.fillStyle = COL[m]; g.fillRect(L0, yy + 4 + i * 11, bw, 9); g.fillStyle = '#ece6d8'; g.font = '11px "Segoe UI", sans-serif';
+        g.fillText((ch.u ? v.toFixed(1) : v) + ch.u + (v > ch.max ? ' ▸' : ''), L0 + bw + 4, yy + 12 + i * 11); });
+      yy += 44; });
+    const tx = L0 + bwMax * ch.tgt / ch.max; g.strokeStyle = '#ffffffaa'; g.setLineDash([4, 3]); g.beginPath(); g.moveTo(tx, y1); g.lineTo(tx, yy); g.stroke(); g.setLineDash([]);
+    g.fillStyle = '#ffffffcc'; g.font = '11px "Segoe UI", sans-serif'; g.fillText('design target ' + ch.tgt + ch.u, tx + 3, y1 + 2); yy += 34;
+  }
+  g.font = '11.5px "Segoe UI", sans-serif'; [['prior', 'PRIOR BEST (per metre, tuned at Medium)', 16], ['new', 'NEW (exponent weighting)', 272], ['ref', 'REFERENCE (always Ultra)', 450]].forEach(([m, t, ox]) => {
+    g.fillStyle = COL[m]; g.fillRect(x0 + ox, yy - 10, 10, 10); g.fillStyle = '#ece6d8'; g.fillText(t, x0 + ox + 14, yy); });
+}
+
+function draw(time, dtReal) {
+  const t0 = performance.now();
+  g.setTransform(DPR, 0, 0, DPR, 0, 0); g.clearRect(0, 0, W, S.H);
+  for (const pn of panels) drawPanel(pn, time, dtReal);
+  if (S.single) drawSideChart();
+  S.renderMs = S.renderMs * 0.9 + (performance.now() - t0) * 0.1;
+  const Tf = S.G - S.G0;
+  document.getElementById('clock').innerHTML = `${fmtDay(S.G)}<small>${S.ready ? `fire burning ${Tf.toFixed(1)} h · fire #${S.fireNo}` : 'surveying…'}</small>`;
+  document.getElementById('perf').textContent = S.renderMs > 0.05 ? `render ${S.renderMs.toFixed(1)} ms/frame (drawing only, not gameplay)` : 'render ms: timer frozen (headless)';
+}
+
+// ------------------------------------------------------------------ HUD table
+function buildTable() {
+  if (!S.ready) return;
+  const det = S.detail, d = D_COAST[det], cell = (v, tgt, digits, cls) => { const a = Math.round(Math.abs(v / tgt - 1) * 100) / 100, dev = a === 0 ? 0 : v / tgt - 1;
+    return `<td class="${cls}">${digits === null ? v : v.toFixed(digits)}<span class="dev ${a <= 0.05 ? 'ok' : a <= 0.15 ? 'meh' : 'bad'}">${dev >= 0 ? '+' : '−'}${(100 * a).toFixed(0)}%</span></td>`; };
+  let h = `<table><tr><th rowspan="2">Graphics quality (sim grid)</th><th colspan="3">Fire reaches Ashford, median hours (target ${FIRE_TARGET_H} h)</th>
+    <th colspan="3">Coastal spawns (target ${SPAWN_TARGET})</th><th colspan="2">Gameplay compute: ms per fire front + ms per coastline build</th></tr>
+    <tr><th class="c-prior">PRIOR BEST</th><th class="c-new">NEW</th><th class="c-ref">REFERENCE</th><th class="c-prior">PRIOR BEST</th><th class="c-new">NEW</th><th class="c-ref">REFERENCE</th>
+    <th class="c-prior">PRIOR BEST = <span class="c-new">NEW</span></th><th class="c-ref">REFERENCE</th></tr>`;
+  QUALITY.forEach((q, L) => {
+    const ms = l => `${fmtMs(DATA.fronts[QUALITY[l].n].ms)} + ${fmtMs(DATA.coast[det][l].ms)}`;
+    h += `<tr class="${L === S.q ? 'cur' : ''}"><td>${q.name} (${q.n}×${q.n})</td>` +
+      cell(fireMedianH('prior', L), FIRE_TARGET_H, 1, 'c-prior') + cell(fireMedianH('new', L), FIRE_TARGET_H, 1, 'c-new') + cell(fireMedianH('ref', L), FIRE_TARGET_H, 1, 'c-ref') +
+      cell(spawnN('prior', L, det), SPAWN_TARGET, null, 'c-prior') + cell(spawnN('new', L, det), SPAWN_TARGET, null, 'c-new') + cell(spawnN('ref', L, det), SPAWN_TARGET, null, 'c-ref') +
+      `<td>${ms(L)}</td><td class="c-ref">${ms(ULTRA)}</td></tr>`;
+  });
+  h += `</table><div class="note">PRIOR BEST and NEW are both tuned at Medium; REFERENCE is tuned at Ultra and runs Ultra at every setting (so it hits the targets by construction). ` +
+    `Fire medians from ${QUALITY.map(q => DATA.fronts[q.n].Ns.length).join(' / ')} fronts traced in this page. Spawn exponent d = ${d} (terrain detail ${det === 'grow' ? 'grows with quality' : 'fixed, band-limited'}), fitted offline by bench.js. ` +
+    `Compute ms: ${DATA.msSource}.</div>`;
+  document.getElementById('table').innerHTML = h;
+}
+
+// ------------------------------------------------------------------ controls
+function syncButtons() {
+  document.querySelectorAll('#gq button').forEach(b => b.classList.toggle('on', +b.dataset.q === S.q));
+  document.querySelectorAll('#gv button').forEach(b => b.classList.toggle('on', b.dataset.view === S.view));
+  document.querySelectorAll('#gd button').forEach(b => b.classList.toggle('on', b.dataset.detail === S.detail));
+  document.querySelectorAll('#gs button').forEach(b => b.classList.toggle('on', +b.dataset.speed === S.speed));
+}
+function changed(restart) { layout(); if (S.ready && restart) startFire(false); buildTable(); syncButtons(); }
+document.querySelectorAll('#gq button').forEach(b => b.onclick = () => { S.q = +b.dataset.q; changed(true); });
+document.querySelectorAll('#gv button').forEach(b => b.onclick = () => { S.view = b.dataset.view; changed(false); });
+document.querySelectorAll('#gd button').forEach(b => b.onclick = () => { S.detail = b.dataset.detail; changed(false); });
+document.querySelectorAll('#gs button').forEach(b => b.onclick = () => { S.speed = +b.dataset.speed; syncButtons(); });
+document.getElementById('newfire').onclick = () => { if (S.ready) startFire(false); };
+
+// ------------------------------------------------------------------ main loop
+layout(); syncButtons();
+let frame = 0, last = performance.now(), time = 0;
+function tick(now) {
+  const dtReal = FRAMES ? 1 / 60 : Math.min(0.1, Math.max(0, (now - last) / 1000)); last = now; time += dtReal;
+  if (S.ready) {
+    S.G += dtReal * HOURS_PER_SEC * S.speed;
+    if (panels.every(p => p.arrived) && S.G - S.G0 > Math.max(...panels.map(p => p.dur)) + 6) startFire(false);
+  }
+  draw(time, dtReal);
+  if (S.ready) frame++;
+  if (FRAMES && frame >= FRAMES) { document.title = 'Wildfire Isle (stopped after ' + FRAMES + ' frames)'; return; }
+  if (FRAMES) setTimeout(() => tick(performance.now()), 16); else requestAnimationFrame(tick); // timers advance headless virtual time reliably
+}
+if (FRAMES) setTimeout(() => tick(performance.now()), 16); else requestAnimationFrame(tick);
+setTimeout(pump, 30);
+})();
+</script>
+</body>
+</html>

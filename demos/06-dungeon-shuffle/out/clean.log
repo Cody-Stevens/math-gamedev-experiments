@@ -1,0 +1,13 @@
+[06-dungeon-shuffle] 1560 frames @ 60 fps, no video -> <repo>/demos/06-dungeon-shuffle/out/clean
+[06-dungeon-shuffle] frame 348/1560  L 0.003 ms  R 0.314 ms  (5.0 s)
+[06-dungeon-shuffle] frame 656/1560  L 0.002 ms  R 0.314 ms  (10.0 s)
+[06-dungeon-shuffle] frame 958/1560  L 0.003 ms  R 0.308 ms  (15.0 s)
+[06-dungeon-shuffle] frame 1270/1560  L 0.002 ms  R 0.308 ms  (20.0 s)
+[06-dungeon-shuffle] frame 1560/1560  L 0.002 ms  R 0.312 ms  (24.8 s)
+[06-dungeon-shuffle] done: 1560 frames in 24.8 s
+  LEFT   double-edge swaps, ad hoc burn-in (1 per median 0.002 ms/frame  p95 0.003  (476,186 fps compute-only)
+  RIGHT  Curveball trades, certified burn-in      median 0.316 ms/frame  p95 0.346  (3,161 fps compute-only)
+  speedup (median compute): 0.01x
+  poster:  <repo>/demos/06-dungeon-shuffle/out/clean/poster.png
+  results: <repo>/demos/06-dungeon-shuffle/out/clean/results.json
+n=20 m=28 B=190 T_cert=12644 |OmegaA|=70 |OmegaB|=623 TV A sw@6=0.215 cb@89=4.51e-16  B sw@11=0.459 cb@292=1.85e-14 ref 5.641/5.640 conn 0.996

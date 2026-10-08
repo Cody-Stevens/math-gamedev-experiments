@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Load ladders: where the new math pays off as the load grows</title>
+<link rel="stylesheet" href="https://tacksheet.com/kit/1.1.2/tacksheet.css">
+<script src="https://tacksheet.com/kit/1.1.2/tacksheet.js" defer></script>
+<style>
+{{CSS}}
+.vid{margin:1rem 0 1.2rem}
+.vid video{width:100%;height:auto;display:block;border-radius:6px;background:#0b0d12}
+.vid figcaption{font-size:.86rem;color:var(--tk-muted);margin-top:.35rem}
+.verdict{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem 1.4rem;margin:.6rem 0 1rem}
+.verdict p{margin:0;flex:1 1 16rem}
+.where{font-size:.86rem;color:var(--tk-muted);overflow-wrap:anywhere}
+.where code{font-size:.84rem}
+tk-stat .tk-value{font-size:clamp(1.15rem,.85rem + 2vw,1.9rem);white-space:nowrap}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,30rem),1fr));gap:0 1.2rem}
+.two p{font-size:.92rem;margin:.2rem 0 1rem}
+table.mini{border-collapse:collapse;font-size:.88rem;margin:.6rem 0 1rem}
+table.mini th,table.mini td{border-bottom:1px solid #ddd5c2;padding:.25rem .7rem;text-align:right}
+table.mini th:first-child,table.mini td:first-child{text-align:left}
+</style>
+</head>
+<body data-tk-theme="riso">
+<tk-page>
+<tk-hero>
+<tk-tape-title level="1" tape="kraft" pattern="grid">Load ladders: where the new math pays off as the load grows</tk-tape-title>
+<p class="tk-dek">The first nine demos each ran at one fixed size. Here the same problems run at graduated loads, from 1× up to thousands of times larger, with both methods timed at every stage. The question at each step: which side still fits a 60 fps frame, and is the gap growing?</p>
+<p class="tk-byline">7 October 2026 · Ryzen 9 9900X, compute only, every sweep re-run one at a time on a quiet machine · code in <code>Documents\math-scan\demos\L1…L5</code> · companion to the nine-demo sheet (iP9Q753RmKk-4BEur8im50G1)</p>
+</tk-hero>
+
+<tk-section id="summary">
+<h2>Summary</h2>
+<tk-stats>
+<tk-stat><div class="tk-value">{{f"{S['snaky']['wi']/1000:.0f}k vs {S['snaky']['wo']}"}}</div><div class="tk-label">Snaky games per 60 fps frame: certificate vs α-β search</div></tk-stat>
+<tk-stat><div class="tk-value">×{{f"{S['fractal']['ct']['cost_ratio_ms']:,.0f}"}}</div><div class="tk-label">Less compute for the same timing accuracy, fractal frontier</div></tk-stat>
+<tk-stat><div class="tk-value">×{{f"{S['blob']['rmin']:.0f}–{S['blob']['rmax']:.0f}"}}</div><div class="tk-label">Faster to the optimal blob, at every grid size</div></tk-stat>
+</tk-stats>
+<tk-table data="#summary-rows"></tk-table>
+<script type="application/json" id="summary-rows">{{summary}}</script>
+<tk-callout kind="note"><p>Scaling up separates the results into three kinds. <strong>Snaky</strong> is the only one where the gap itself is enormous: ×{{f"{S['snaky']['rmin']/1e3:.0f}"}}k–{{f"{S['snaky']['rmax']/1e3:.0f}"}}k per decision at every load. <strong>Fractal frontier, periodic blob and the economy</strong> win by a large but constant factor; their curves run parallel, so the win shows up as many more elements per frame, not a gap that keeps widening. <strong>The other four</strong> buy a guarantee that costs the same or more at every load, and the certified dungeon shuffle grows so fast it leaves real-time use at about 50 rooms. None of the galactic algorithms from the first scan would cross over at any size a computer can reach, so they are not here.</p></tk-callout>
+<p class="where"><strong>How to read the charts:</strong> both axes are logarithmic, so a straight line is a power law and parallel lines mean a constant ratio. The dashed black line is 16.7 ms, one 60 fps frame. A ring marks the first stage where a side goes over it. Coral is WITHOUT the new math, teal is WITH.</p>
+</tk-section>
+
+<tk-torn></tk-torn>
+
+<tk-section id="snaky">
+<tk-tape-title level="2" tape="cobalt" pattern="dots">1. Snaky: from 4 games per frame to {{n(S['snaky']['wi'])}}</tk-tape-title>
+<div class="verdict"><tk-stamp ink="cobalt" tilt="-5">Speedup</tk-stamp><p>Each frame, every running game needs one Maker move. WITHOUT is the α-β game AI from the first demo, made faster for this test (transposition table and incremental evaluation, still 6000 nodes per move). WITH looks the move up in the paper's certificate. One thread each.</p></div>
+{{V['snaky']}}<figcaption>Ten stages from 1 to 16,384 games. Over-budget stages update the search side only every k-th frame, and the screen says so.</figcaption></figure>
+{{S['snaky']['c']}}
+<p>The search side goes over budget at {{S['snaky']['wo_over']}} games; the certificate stays under it up to {{n(S['snaky']['wi'])}} games and crosses at {{n(S['snaky']['wi_over'])}}. Where both are above the timer floor the cost ratio is ×{{f"{S['snaky']['rmin']/1e3:.0f}"}}k to ×{{f"{S['snaky']['rmax']/1e3:.0f}"}}k. Both curves are close to linear (slopes {{S['snaky']['fit']['without_exponent']}} and {{S['snaky']['fit']['with_exponent']}}), so this is a huge constant per decision rather than a better exponent. The certificate creeps slightly above linear once the games no longer fit in cache.</p>
+{{S['snaky']['cq']}}
+<p><strong>What 60 fps buys.</strong> Give the search AI a hard 16.7 ms per frame shared by all games and its strength collapses as the load grows: its win rate against the α-β Breaker drops below 50% at {{S['snaky']['q50']}} games and reaches about zero by a thousand. The certificate wins every game at every load, because its moves do not depend on the budget. That is the paper's proved win in at most 21 moves; the costs and win rates are measured (60 games per stage).</p>
+<p class="where"><strong>Code:</strong> <code>demos\L1-snaky-ladder</code> · <strong>Paper:</strong> family 187, Snaky in 21 Maker moves</p>
+</tk-section>
+
+<tk-section id="fractal">
+<tk-tape-title level="2" tape="frost" pattern="grid">2. Fractal frontier: a 32² grid that answers like an 8192² one</tk-tape-title>
+<div class="verdict"><tk-stamp ink="plum" tilt="4">Same answer, far less work</tk-stamp><p>Both sides trace the same random fractal interface, so their cost at a given grid size is identical. They differ in the clock that turns the curve into time. The question is how fine a grid each clock needs before its timing statistics match a fine-grid reference (6,000 curves at 8192²).</p></div>
+{{V['fractal']}}<figcaption>Ten stages from n = 16 to 8192. The bottom chart builds up error against cost as the grid grows.</figcaption></figure>
+{{S['fractal']['c']}}
+<p>The δ^(7/4) clock is within 5% from n = {{S['fractal']['ct']['with']['n']}} ({{ms(S['fractal']['ct']['with']['median_ms_per_curve'])}} per curve). The length clock, tuned to the reference, only matches at the reference grid itself: n = {{S['fractal']['ct']['without']['n']}}, {{ms(S['fractal']['ct']['without']['median_ms_per_curve'])}} per curve, far over one frame. That is ×{{f"{S['fractal']['ct']['cost_ratio_ms']:,.0f}"}} less compute for the same accuracy. The gain is not a faster algorithm; it is permission to run on a tiny grid.</p>
+{{S['fractal']['cc']}}
+<p class="where"><strong>Caveats:</strong> the ratio grows with whichever reference grid you pick. A length clock re-tuned at every n using the classical 7/4 exponent would match as well. What the paper adds is the proof that one constant is right in the limit, with no correction; the finite-size drift (+6.7% at n = 16, a few % at 32) is measured, not proved. <strong>Code:</strong> <code>demos\L3-fractal-ladder</code> · family 223</p>
+</tk-section>
+
+<tk-section id="blob">
+<tk-tape-title level="2" tape="blush" pattern="dots">3. Periodic blob: skip the solver at every resolution</tk-tape-title>
+<div class="verdict"><tk-stamp ink="vermilion" tilt="-3">Constant-factor speedup</tk-stamp><p>Find the minimum-area region of a given volume in a wrap-around cube. WITHOUT runs a volume-preserving relaxation solver (MBO) until it is within 2% of the optimal area. WITH builds the shape the paper proves optimal (ball, tube or slab) directly. Both use 24 threads, from 32³ up to {{S['blob']['big']['grid']}} voxels.</p></div>
+{{V['blob']}}<figcaption>Seven stages from 32³ to 256³: the solver converging on the left, the exact shape on the right.</figcaption></figure>
+{{S['blob']['c']}}
+<p>The closed form is ×{{f"{S['blob']['rmin']:.0f}"}}–{{f"{S['blob']['rmax']:.0f}"}} faster than solving from noise at every grid, and still about ×{{f"{S['blob']['ctf'][-1][1]:.0f}"}} faster than a smarter coarse-to-fine solver at {{S['blob']['ctf'][-1][0]}}. It fits a 60 fps frame up to {{S['blob']['st'] and [s for s in S['blob']['st'].values() if s['n']==S['blob']['wi']][0]['grid']}}; no solver variant fits a frame at any grid. Above 128³ both sides grow about linearly in voxel count (slopes {{S['blob']['fit']['without_exponent']}} and {{S['blob']['fit']['with_exponent']}}), because the solver needs roughly the same 50–60 iterations at every resolution.</p>
+<table class="mini"><tr><th>grid</th>{{''.join(f'<th>{g}</th>' for g,_,_ in S['blob']['fails'])}}</tr><tr><td>solver runs stuck above 2% (of 9)</td>{{''.join(f'<td>{f}</td>' for _,f,_ in S['blob']['fails'])}}</tr><tr><td>closed form failures</td>{{''.join('<td>0</td>' for _ in S['blob']['fails'])}}</tr></table>
+<p class="where"><strong>Caveats:</strong> the solver's stop test ("within 2% of the optimum") needs the paper's exact optimal area, so the baseline is flattered: without the paper it could not know when to stop. The shapes were conjectured optimal before; the paper certifies them. <strong>Code:</strong> <code>demos\L2-blob-ladder</code> · family 354</p>
+</tk-section>
+
+<tk-section id="econ">
+<tk-tape-title level="2" tape="kraft" pattern="grid">4. Economy: stable towns are cheaper to simulate, until the unstable ones are dead</tk-tape-title>
+<div class="verdict"><tk-stamp ink="cobalt" tilt="3">Cheaper, with a catch</tk-stamp><p>N independent towns run the five-resource recipe network from the first demo, each from its own start. WITHOUT has two return recipes removed; WITH is weakly reversible, which the paper proves keeps every resource bounded away from 0 and ∞. Same adaptive integrator, one thread each.</p></div>
+{{V['econ']}}<figcaption>Seven stages from 1 to 4,096 towns. Grey marks a dead resource and red a runaway one.</figcaption></figure>
+{{S['econ']['c']}}
+<p>At every load the unstable economy costs ×{{f"{S['econ']['rmin']:.0f}"}}–{{f"{S['econ']['rmax']:.0f}"}} more per frame, because its collapse into near-zero and huge quantities forces the integrator into tiny steps. It leaves the 60 fps budget at {{n(S['econ']['wo_over'])}} towns; the stable one still fits at {{n(S['econ']['wi'])}}, the largest load tested (only the stable side was run there). Both scale linearly in N.</p>
+<p><strong>Over simulated time</strong> (256 towns), the gap is a transient, not something that keeps growing:</p>
+<table class="mini"><tr><th>simulated time</th>{{''.join(f'<th>{w["t_window"][0]:g}–{w["t_window"][1]:g}</th>' for w in S['econ']['hz'])}}</tr>
+<tr><td>cost ratio, collapsed towns halted</td>{{''.join(f'<td>{rx(w["ratio"])}</td>' for w in S['econ']['hz'])}}</tr>
+<tr><td>cost ratio, never halted</td>{{''.join(f'<td>{rx(w["ratio"])}</td>' for w in S['econ']['hzn'])}}</tr></table>
+<p><strong>With a fixed-step solver</strong> (what a game would ship), the guarantee is the story: share of towns that go negative or non-finite after t = 10.</p>
+<table class="mini"><tr><th>step h</th>{{''.join(f'<th>{x["h"]:g}</th>' for x in S['econ']['fx'])}}</tr>
+<tr><td>WITHOUT</td>{{''.join(f'<td>{pct(x["without"]["frac_broken_after_t10"])}</td>' for x in S['econ']['fx'])}}</tr>
+<tr><td>WITH</td>{{''.join(f'<td>{pct(x["with"]["frac_broken_after_t10"],1)}</td>' for x in S['econ']['fx'])}}</tr></table>
+<p class="where"><strong>Proved vs measured:</strong> the paper proves only that WITH stays within some positive bounds. The WITHOUT collapse, every cost and the fixed-step behaviour are measured for this network, these seeds and these rates. <strong>Code:</strong> <code>demos\L4-economy-ladder</code> · family 149</p>
+</tk-section>
+
+<tk-section id="guarantees">
+<tk-tape-title level="2" tape="sunflower" pattern="stripes">5. Guarantees that do not get cheaper with scale</tk-tape-title>
+<p>These four were swept without videos. In each, the new math's benefit is a property (no overlap, optimal routing, fair layouts, a volume floor) that holds at every load; the chart shows what it costs as the load grows.</p>
+<div class="two">
+<div>{{S['sweeps']['ca']}}<p><strong>Fluid gates (376).</strong> The shear flow keeps regions apart (overlap 0% vs {{f"{S['sweeps']['a']['q']['without']:.0f}"}}%) at every load but costs far more than a tween, and leaves the frame budget after {{n(S['sweeps']['a']['wi'][0])}} particles per region.</p></div>
+<div>{{S['sweeps']['cb']}}<p><strong>Crowd hub (374).</strong> Both are linear scans; recomputing the optimal labels costs {{f"{1/max(S['sweeps']['rb']):.1f}–{1/min(S['sweeps']['rb']):.1f}"}}× as much, and the frozen labels' 11.25% mis-routing does not shrink with crowd size.</p></div>
+<div>{{S['sweeps']['cc']}}<p><strong>Dungeon shuffle (131).</strong> The certified burn-in grows about as rooms⁴, so the provably fair shuffle fits a frame only up to {{S['sweeps']['c']['wi'][0]}} rooms. Both cheap shortcuts stay measurably biased toward the template at every size.</p></div>
+<div>{{S['sweeps']['cd']}}<p><strong>Convex morph (091).</strong> The log morph gets relatively faster with more directions ({{f"{min(S['sweeps']['r8']):.1f}"}}× → {{f"{max(S['sweeps']['r8']):.1f}"}}×), but only because its body is smaller and fewer planes cut it. A better clipper would speed both up alike.</p></div>
+</div>
+<p class="where"><strong>Code:</strong> <code>demos\L5-sweeps</code> · each subfolder has its README and <code>ladder.json</code>.</p>
+</tk-section>
+
+<tk-section id="method">
+<h2>Method</h2>
+<ul>
+<li>Every number is compute-only time measured with QueryPerformanceCounter. Drawing and video encoding are never timed. Each side uses the same thread count, seeds and scene; thread counts are on each chart's section.</li>
+<li>Stages are timed until the median is stable (at least 15 frames or 1.5 s; very slow stages fewer, recorded in <code>ladder.json</code>). Nothing is extrapolated: when a side was too slow to time, the stage is left blank.</li>
+<li>Agents built the ladders in parallel; then every sweep and every video was re-run one at a time on an otherwise idle machine, and the charts come from that run.</li>
+<li>Several baselines were made stronger than in the first demos (faster α-β search, recursive Gaussian and parallel selection for the solver, hoisted tween factors). Where a baseline is flattered or a classical method would match the new math, the section says so.</li>
+</ul>
+</tk-section>
+</tk-page>
+</body>
+</html>

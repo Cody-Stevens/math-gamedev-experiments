@@ -1,0 +1,524 @@
+[
+ {
+  "id": "G1.1",
+  "title": "A cheap proxy for prime-factor fragmentation",
+  "fam": "011",
+  "kind": "visualization | performance | gameplay",
+  "verdict": "SOLID",
+  "pitch": "Generate cheap random fragment sizes that reproduce the limiting logarithmic factor sizes of prime predecessors.",
+  "demo": "high"
+ },
+ {
+  "id": "G1.2",
+  "title": "A threshold for rare resonance bursts",
+  "fam": "017",
+  "kind": "sim-design-rule | visualization",
+  "verdict": "SOLID",
+  "pitch": "Choose decay and resonance strengths so an exact integer-radian impulse stream has a finite lifetime total.",
+  "demo": "med"
+ },
+ {
+  "id": "G1.3",
+  "title": "Cubic interference with a persistent hidden bias",
+  "fam": "023",
+  "kind": "visualization | gameplay",
+  "verdict": "SOLID",
+  "pitch": "Show a visible cumulative bias hiding inside seemingly irregular cubic interference patterns.",
+  "demo": "high"
+ },
+ {
+  "id": "G1.4",
+  "title": "Periodic arithmetic islands with a connectivity certificate",
+  "fam": "028",
+  "kind": "visualization | gameplay | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Build a repeating arithmetic terrain and certify whether its traversable regions wind forever or form finite islands.",
+  "demo": "med"
+ },
+ {
+  "id": "G1.5",
+  "title": "Arithmetic textures with fixed-shift decorrelation",
+  "fam": "007",
+  "kind": "visualization | gameplay",
+  "verdict": "STRETCH",
+  "pitch": "Inspect a deterministic binary texture with arithmetic structure and asymptotically vanishing fixed-shift correlations.",
+  "demo": "low"
+ },
+ {
+  "id": "G2.1",
+  "title": "An extra dimension straightens a polynomial world",
+  "fam": "049",
+  "kind": "gameplay | visualization",
+  "verdict": "SOLID",
+  "pitch": "Sample a warped polynomial surface exactly, then expose the extra variable that makes its coordinate system polynomially straight.",
+  "demo": "high"
+ },
+ {
+  "id": "G2.2",
+  "title": "Fit a procedural field one row at a time",
+  "fam": "039",
+  "kind": "gameplay | performance | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Fit row-arranged control points with a small polynomial solver that preserves every row already fitted.",
+  "demo": "med"
+ },
+ {
+  "id": "G2.3",
+  "title": "Irregular fractal worlds with a guaranteed supply of distances",
+  "fam": "073",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Explore how multiscale fractal density affects a map's all-pairs distance histogram.",
+  "demo": "low"
+ },
+ {
+  "id": "G2.4",
+  "title": "Binary probes with almost perfectly flat spectra",
+  "fam": "076",
+  "kind": "visualization | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "A binary probe could deliver nearly equal spectral power at every frequency if a practical theorem-derived sign sequence can be produced.",
+  "demo": "low"
+ },
+ {
+  "id": "G3.1",
+  "title": "Fair local odds, only three possible worlds",
+  "fam": "113",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "A generator can give every pairing equal local odds while producing only three whole-map outcomes.",
+  "demo": "med"
+ },
+ {
+  "id": "G3.2",
+  "title": "Morph convex rooms without collapsing their volume",
+  "fam": "091",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Morph symmetric convex rooms with multiplicative support bounds and a guaranteed volume floor.",
+  "demo": "high"
+ },
+ {
+  "id": "G3.3",
+  "title": "A crystal seed certified for an entire class of repulsions",
+  "fam": "090",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Start a repulsive-particle simulation in a triangular crystal whose infinite-volume energy is optimal across many potentials.",
+  "demo": "med"
+ },
+ {
+  "id": "G3.4",
+  "title": "An exact noise budget for an NPC choosing its best action",
+  "fam": "096",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Put an exact ceiling on an NPC's average best Gaussian action score under a fixed total noise budget.",
+  "demo": "high"
+ },
+ {
+  "id": "G3.5",
+  "title": "XOR interactions with a fixed budget across scales",
+  "fam": "082",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Combine three cyclic interaction fields across dyadic scales with a certified total contribution budget.",
+  "demo": "med"
+ },
+ {
+  "id": "G3.6",
+  "title": "Signed texture filtering with a turning-scale knob",
+  "fam": "083",
+  "kind": "visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Explore directional signed filtering when its sampling length tracks the field's turning rate.",
+  "demo": "low"
+ },
+ {
+  "id": "G4.1",
+  "title": "Randomize dungeon graphs without changing room degrees",
+  "fam": "131",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Shuffle a labeled network while preserving every room's link count, with a worst-case bound on how long to randomize it.",
+  "demo": "high"
+ },
+ {
+  "id": "G4.2",
+  "title": "An oscillator that wakes only after an amplitude kick",
+  "fam": "143",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Make a resting object begin sustained motion only after a sufficiently large kick.",
+  "demo": "med"
+ },
+ {
+  "id": "G4.3",
+  "title": "Fractal density that counts overlapping maps correctly",
+  "fam": "148",
+  "kind": "visualization | gameplay | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Show how overlapping fractal addresses reduce spatial information instead of counting every address as distinct.",
+  "demo": "med"
+ },
+ {
+  "id": "G4.4",
+  "title": "A graph rule that keeps reaction economies alive and bounded",
+  "fam": "149",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Reject continuous reaction economies whose recipe graph lacks a structural guarantee against eventual extinction or runaway growth.",
+  "demo": "med"
+ },
+ {
+  "id": "G4.5",
+  "title": "A sharp ceiling for one-bit clues in a noisy world",
+  "fam": "119",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Put an exact information ceiling on a one-bit clue when independent world bits are corrupted by independent noise.",
+  "demo": "med"
+ },
+ {
+  "id": "G4.6",
+  "title": "Polynomial degree as a bound on decision flicker",
+  "fam": "127",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Give a degree-limited NPC decision rule a statistical ceiling on how often random sensor noise changes its answer.",
+  "demo": "med"
+ },
+ {
+  "id": "G5.1",
+  "title": "A guaranteed Snaky opponent from a 39 KB certificate",
+  "fam": "187",
+  "kind": "gameplay | performance",
+  "verdict": "SOLID",
+  "pitch": "Ship a small Snaky opponent with a certified win within 21 Maker moves.",
+  "demo": "high"
+ },
+ {
+  "id": "G5.2",
+  "title": "A network puzzle with a certified crossing target",
+  "fam": "165",
+  "kind": "gameplay | visualization | performance",
+  "verdict": "STRETCH",
+  "pitch": "Give a complete-graph routing puzzle an exact crossing target.",
+  "demo": "med"
+ },
+ {
+  "id": "G5.3",
+  "title": "Overlapping random branches with singular limiting mass",
+  "fam": "153",
+  "kind": "visualization | gameplay",
+  "verdict": "STRETCH",
+  "pitch": "Examine a random branching distribution whose support fills an interval while its limiting mass is singular.",
+  "demo": "low"
+ },
+ {
+  "id": "G5.4",
+  "title": "Predict the debris left by random triangle destruction",
+  "fam": "188",
+  "kind": "visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Predict the typical number of links left after uniformly deleting surviving triangles.",
+  "demo": "med"
+ },
+ {
+  "id": "G5.5",
+  "title": "Choose a start with at least as many fresh two-hop options",
+  "fam": "173",
+  "kind": "gameplay | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Select a map start whose fresh two-hop destinations carry at least as much reward as its immediate destinations.",
+  "demo": "med"
+ },
+ {
+  "id": "G5.6",
+  "title": "An exact board-size dial for cycle-or-clique puzzles",
+  "fam": "189",
+  "kind": "gameplay | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Set the exact completed-board size at which a cycle-or-clique avoidance puzzle becomes impossible.",
+  "demo": "med"
+ },
+ {
+  "id": "G6.1",
+  "title": "An exact roughness knob for constrained random surfaces",
+  "fam": "225",
+  "kind": "visualization | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Calibrate the large-scale roughness of an arrow-constrained random surface with a known formula instead of fitting its amplitude separately at every setting.",
+  "demo": "med"
+ },
+ {
+  "id": "G6.2",
+  "title": "A fractal frontier whose animation clock survives refinement",
+  "fam": "223",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Animate a critical square-lattice frontier with a traversal clock whose distribution stays consistent as the grid gets finer.",
+  "demo": "high"
+ },
+ {
+  "id": "G6.3",
+  "title": "Keep random-map connectivity difficulty consistent across resolutions",
+  "fam": "224",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Give random Voronoi terrain a connectivity slider calibrated across resolutions and comparable with a regular triangular board.",
+  "demo": "med"
+ },
+ {
+  "id": "G6.4",
+  "title": "Terrain noise with exact covariance bands",
+  "fam": "216",
+  "kind": "visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Split Gaussian terrain into independent scale bands with an exact total covariance and finite-range band covariances.",
+  "demo": "med"
+ },
+ {
+  "id": "G6.5",
+  "title": "A spin toy that exposes the cost of collective memory",
+  "fam": "?",
+  "kind": "visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Visualize how a dense critical spin system remembers earlier states, and compare that memory across system sizes and coupling distributions.",
+  "demo": "med"
+ },
+ {
+  "id": "G6.6",
+  "title": "A procedural world that becomes tree-like above q = 4",
+  "fam": "211",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Generate cycle-containing planar worlds whose large-scale distances approach a random tree when the FK weight is above four.",
+  "demo": "med"
+ },
+ {
+  "id": "G6.7",
+  "title": "An exploratory constraint-jamming toy with certified target exponents",
+  "fam": "222",
+  "kind": "visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Explore a high-dimensional constraint system near jamming, with reference slopes for small gaps and weak normalized forces.",
+  "demo": "low"
+ },
+ {
+  "id": "G7.1",
+  "title": "A precise noise knob for hidden-faction clues",
+  "fam": "229",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Choose when distant, noisy clues can still reveal a hidden three-way faction, accounting for both branching and contrary rumors.",
+  "demo": "high"
+ },
+ {
+  "id": "G7.2",
+  "title": "Wave traps that spend their binding budget optimally",
+  "fam": "262",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Build the most efficient two-channel wave wells, and show why rotating their channels with position wastes binding budget.",
+  "demo": "med"
+ },
+ {
+  "id": "G7.3",
+  "title": "Rough terrain with a hard slope limit and Gaussian large-scale statistics",
+  "fam": "232",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Generate integer terraces with a hard one-step slope limit and study whether their large-scale averages look Gaussian.",
+  "demo": "med"
+ },
+ {
+  "id": "G7.4",
+  "title": "Show why individually random cards can still form an unfair deck",
+  "fam": "238",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Show that every card can have a fair position while the deck order remains extremely biased.",
+  "demo": "med"
+ },
+ {
+  "id": "G7.5",
+  "title": "A disorder slider for lattice-wave interference",
+  "fam": "261",
+  "kind": "visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Explore how random site energies change wave spreading on a lattice.",
+  "demo": "low"
+ },
+ {
+  "id": "G7.6",
+  "title": "Size-aware difficulty bands for random logic puzzles",
+  "fam": "235",
+  "kind": "gameplay | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Scale a random logic puzzle's satisfiability band with its size instead of keeping a fixed clause-density offset.",
+  "demo": "med"
+ },
+ {
+  "id": "G7.7",
+  "title": "Noncrossing paths with a calibrated fractal footprint",
+  "fam": "237",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Measure the footprint and multiscale density of uniformly sampled noncrossing tendrils.",
+  "demo": "med"
+ },
+ {
+  "id": "G7.8",
+  "title": "Percolation in a world of binary-tree transformations",
+  "fam": "248",
+  "kind": "visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Explore randomly open connections between binary-tree transformations, with several large regions that need not join.",
+  "demo": "low"
+ },
+ {
+  "id": "G8.1",
+  "title": "A quantum momentum cloud with a proved density knob",
+  "fam": "267",
+  "kind": "visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Draw a dilute quantum gas's condensate and momentum halo using a physically motivated density rule.",
+  "demo": "med"
+ },
+ {
+  "id": "G8.2",
+  "title": "Entanglement survives two applications of explicit PPT noise",
+  "fam": "272",
+  "kind": "gameplay | visualization",
+  "verdict": "SOLID",
+  "pitch": "Show a concrete quantum noise channel whose repeated use leaves some entanglement intact.",
+  "demo": "med"
+ },
+ {
+  "id": "G8.3",
+  "title": "Exact noisy-qubit capacity from one scalar search",
+  "fam": "276",
+  "kind": "gameplay | visualization | performance",
+  "verdict": "STRETCH",
+  "pitch": "Give a noisy-qubit communication puzzle a capacity meter computed by a one-variable search.",
+  "demo": "med"
+ },
+ {
+  "id": "G8.4",
+  "title": "Temperature-sensitive magnetism with the first lattice correction",
+  "fam": "271",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Replace an arbitrary temperature-strength curve with a low-temperature spin-wave magnetization curve.",
+  "demo": "med"
+ },
+ {
+  "id": "G8.5",
+  "title": "A six-symbol puzzle with exactly three neutral measurement modes",
+  "fam": "266",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Build three six-outcome measurement modes that erase knowledge when the player switches modes.",
+  "demo": "med"
+ },
+ {
+  "id": "G8.6",
+  "title": "A classical optimizer for random, conflicting faction affinities",
+  "fam": "281",
+  "kind": "gameplay | performance | visualization",
+  "verdict": "STRETCH",
+  "pitch": "Optimize two factions with random, conflicting pair affinities using a message-passing method with an asymptotic guarantee.",
+  "demo": "low"
+ },
+ {
+  "id": "G9.1",
+  "title": "Median-of-three diffusion for graph-driven game attributes",
+  "fam": "332",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Smooth many graph-node attributes with an explicit nonlinear rule and a dimension-independent bound on how far values move versus how rough they remain.",
+  "demo": "high"
+ },
+ {
+  "id": "G9.2",
+  "title": "A factor-two error certificate for coupled simulation filters",
+  "fam": "325",
+  "kind": "performance | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Tighten a numerical-range error certificate for polynomial linear filters from about 2.414 times scalar error to twice scalar error.",
+  "demo": "med"
+ },
+ {
+  "id": "G9.3",
+  "title": "Hierarchical ability budgets from two recursive fields",
+  "fam": "331",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Build a hierarchy-aware signed budget whose cost depends on where demands sit and how the two recursive capacity fields interact.",
+  "demo": "med"
+ },
+ {
+  "id": "G10.1",
+  "title": "A periodic blob switches from ball to tube to slab",
+  "fam": "354",
+  "kind": "visualization | performance | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Generate a minimum-area object in a periodic cube and give a surface-relaxation solver an exact global target.",
+  "demo": "high"
+ },
+ {
+  "id": "G10.2",
+  "title": "Fluid gates that move whole regions without compressing them",
+  "fam": "376",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Route and reshape separate fluid regions through overlapping destinations while preserving volume throughout the motion.",
+  "demo": "high"
+ },
+ {
+  "id": "G10.3",
+  "title": "A tiny moving hub can reassign a much larger crowd",
+  "fam": "374",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Show why a slightly moved destination can make an optimal crowd allocator reassign many agents.",
+  "demo": "high"
+ },
+ {
+  "id": "G10.4",
+  "title": "A positive shrinking geometry with exploding curvature",
+  "fam": "352",
+  "kind": "visualization | sim-design-rule",
+  "verdict": "SOLID",
+  "pitch": "Animate an explicit shrinking radial core whose metric remains positive while its center curvature diverges.",
+  "demo": "med"
+ },
+ {
+  "id": "G10.5",
+  "title": "Correct a dilute gas's particle count at the noise scale",
+  "fam": "364",
+  "kind": "visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Center a dilute excluded-volume gas's particle-count histogram correctly rather than shifting it by one noise scale.",
+  "demo": "med"
+ },
+ {
+  "id": "G10.6",
+  "title": "A spectral steering field with no interior dead ends",
+  "fam": "369",
+  "kind": "gameplay | visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Use a room's lowest nonconstant heat mode as a steering field with no continuum interior equilibrium.",
+  "demo": "med"
+ },
+ {
+  "id": "G10.7",
+  "title": "Volumetric interpolation that controls the steepest slope",
+  "fam": "377",
+  "kind": "visualization | sim-design-rule",
+  "verdict": "STRETCH",
+  "pitch": "Interpolate a volumetric control field using a maximum-slope objective and inspect its interior gradient.",
+  "demo": "low"
+ }
+]

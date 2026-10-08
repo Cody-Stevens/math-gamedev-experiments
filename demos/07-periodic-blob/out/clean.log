@@ -1,0 +1,41 @@
+[07-periodic-blob] 1500 frames @ 60 fps, no video -> <repo>/demos/07-periodic-blob/out/clean
+[07-periodic-blob] frame 99/1500  L 4.06 ms  R 1.46 ms  (5.0 s)
+[07-periodic-blob] frame 182/1500  L 3.98 ms  R 1.42 ms  (10.1 s)
+[07-periodic-blob] frame 250/1500  L 5.14 ms  R 1.49 ms  (15.1 s)
+[07-periodic-blob] frame 305/1500  L 6.13 ms  R 4.08 ms  (20.1 s)
+[07-periodic-blob] frame 356/1500  L 6.43 ms  R 4.12 ms  (25.1 s)
+[07-periodic-blob] frame 406/1500  L 5.66 ms  R 3.84 ms  (30.2 s)
+[07-periodic-blob] frame 457/1500  L 5.27 ms  R 3.98 ms  (35.3 s)
+[07-periodic-blob] frame 505/1500  L 5.25 ms  R 2.30 ms  (40.4 s)
+[07-periodic-blob] frame 558/1500  L 5.51 ms  R 1.56 ms  (45.5 s)
+[07-periodic-blob] frame 607/1500  L 5.21 ms  R 1.33 ms  (50.5 s)
+[07-periodic-blob] frame 653/1500  L 5.78 ms  R 1.65 ms  (55.6 s)
+[07-periodic-blob] frame 700/1500  L 5.12 ms  R 1.47 ms  (60.6 s)
+[07-periodic-blob] frame 744/1500  L 5.43 ms  R 0.972 ms  (65.7 s)
+[07-periodic-blob] frame 788/1500  L 6.01 ms  R 3.71 ms  (70.8 s)
+[07-periodic-blob] frame 831/1500  L 5.83 ms  R 2.26 ms  (75.9 s)
+[07-periodic-blob] frame 874/1500  L 5.30 ms  R 3.55 ms  (81.0 s)
+[07-periodic-blob] frame 912/1500  L 6.23 ms  R 4.12 ms  (86.0 s)
+[07-periodic-blob] frame 948/1500  L 5.80 ms  R 3.79 ms  (91.1 s)
+[07-periodic-blob] frame 987/1500  L 6.31 ms  R 3.69 ms  (96.1 s)
+[07-periodic-blob] frame 1031/1500  L 5.88 ms  R 3.95 ms  (101.2 s)
+[07-periodic-blob] frame 1077/1500  L 5.54 ms  R 4.01 ms  (106.2 s)
+[07-periodic-blob] frame 1124/1500  L 5.61 ms  R 4.08 ms  (111.2 s)
+[07-periodic-blob] frame 1175/1500  L 5.27 ms  R 3.94 ms  (116.3 s)
+[07-periodic-blob] frame 1224/1500  L 4.91 ms  R 3.95 ms  (121.3 s)
+[07-periodic-blob] frame 1277/1500  L 5.07 ms  R 1.65 ms  (126.4 s)
+[07-periodic-blob] frame 1331/1500  L 4.97 ms  R 1.57 ms  (131.4 s)
+[07-periodic-blob] frame 1400/1500  L 3.97 ms  R 1.64 ms  (136.4 s)
+[07-periodic-blob] frame 1489/1500  L 4.55 ms  R 1.55 ms  (141.5 s)
+[07-periodic-blob] frame 1500/1500  L 4.40 ms  R 1.46 ms  (142.1 s)
+[07-periodic-blob] done: 1500 frames in 142.1 s
+  LEFT   volume-preserving MBO relaxation (random median 5.17 ms/frame  p95 6.74  (193 fps compute-only)
+  RIGHT  certified minimizer, closed form (Thm in median 1.86 ms/frame  p95 4.27  (538 fps compute-only)
+  speedup (median compute): 2.78x
+  poster:  <repo>/demos/07-periodic-blob/out/clean/poster.png
+  results: <repo>/demos/07-periodic-blob/out/clean/results.json
+[refine] N= 32   V=0.03 bias -2.850%   V=0.10 bias -1.153%   V=0.25 bias -0.587%   V=0.45 bias +0.839%
+[refine] N= 48   V=0.03 bias -1.132%   V=0.10 bias -0.354%   V=0.25 bias +0.243%   V=0.45 bias +0.559%
+[refine] N= 64   V=0.03 bias -0.493%   V=0.10 bias -0.082%   V=0.25 bias +0.131%   V=0.45 bias +0.419%
+[refine] N= 96   V=0.03 bias -0.030%   V=0.10 bias +0.151%   V=0.25 bias +0.347%   V=0.45 bias +0.279%
+[refine] N=128   V=0.03 bias +0.107%   V=0.10 bias +0.210%   V=0.25 bias +0.492%   V=0.45 bias +0.209%

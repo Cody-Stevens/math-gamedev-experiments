@@ -1,0 +1,17 @@
+[04-fractal-frontier] 1560 frames @ 60 fps, no video -> <repo>/demos/04-fractal-frontier/out/clean
+[04-fractal-frontier] frame 173/1560  L 6.95 ms  R 6.96 ms  (5.0 s)
+[04-fractal-frontier] frame 339/1560  L 6.74 ms  R 6.66 ms  (10.0 s)
+[04-fractal-frontier] frame 505/1560  L 6.45 ms  R 6.49 ms  (15.1 s)
+[04-fractal-frontier] frame 672/1560  L 6.06 ms  R 5.94 ms  (20.1 s)
+[04-fractal-frontier] frame 838/1560  L 6.32 ms  R 6.56 ms  (25.1 s)
+[04-fractal-frontier] frame 1004/1560  L 5.63 ms  R 5.79 ms  (30.1 s)
+[04-fractal-frontier] frame 1157/1560  L 6.94 ms  R 6.70 ms  (35.1 s)
+[04-fractal-frontier] frame 1306/1560  L 6.47 ms  R 6.51 ms  (40.1 s)
+[04-fractal-frontier] frame 1455/1560  L 7.01 ms  R 7.02 ms  (45.2 s)
+[04-fractal-frontier] frame 1560/1560  L 7.34 ms  R 7.23 ms  (49.0 s)
+[04-fractal-frontier] done: 1560 frames in 49.0 s
+  LEFT   constant-speed clock · time ∝ length  median 6.48 ms/frame  p95 9.76  (154 fps compute-only)
+  RIGHT  natural clock · each step costs 1 s ×  median 6.58 ms/frame  p95 9.90  (152 fps compute-only)
+  speedup (median compute): 0.98x
+  poster:  <repo>/demos/04-fractal-frontier/out/clean/poster.png
+  results: <repo>/demos/04-fractal-frontier/out/clean/results.json

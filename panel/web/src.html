@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>From pure math to game wins: five practical methods</title>
+<style>
+:root {
+  color-scheme: light;
+  --surface: #fcfcfb; --surface-2: #f3f2ee; --line: #e2e0d8; --grid: #ecebe5;
+  --ink: #0b0b0b; --ink-2: #52514e; --ink-3: #7a7873;
+  --old: #eb6834; --new: #2a78d6; --new-soft: rgba(42,120,214,.16); --old-soft: rgba(235,104,52,.16);
+  --stone: #2b2a28;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --surface: #1a1a19; --surface-2: #232321; --line: #3a3936; --grid: #2c2b29;
+    --ink: #ffffff; --ink-2: #c3c2b7; --ink-3: #8f8e86;
+    --old: #d95926; --new: #3987e5; --new-soft: rgba(57,135,229,.22); --old-soft: rgba(217,89,38,.22);
+    --stone: #e8e6df;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--surface); color: var(--ink); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 1040px; margin: 0 auto; padding: 28px 20px 60px; }
+h1 { font-size: 30px; line-height: 1.2; margin: 0 0 6px; letter-spacing: -.01em; }
+h2 { font-size: 22px; margin: 0; line-height: 1.25; }
+h3 { font-size: 16px; margin: 22px 0 8px; }
+.sub { color: var(--ink-2); margin: 0 0 18px; }
+.lead { font-size: 17px; max-width: 760px; }
+.k-old { color: var(--old); font-weight: 600; } .k-new { color: var(--new); font-weight: 600; }
+.patterns { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin: 18px 0 8px; }
+.pat { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: var(--surface-2); }
+.pat b { display: block; font-size: 15px; margin-bottom: 3px; }
+.pat .ex { color: var(--ink-2); font-size: 14px; }
+.pat .arrow { font: 600 13px ui-monospace, Consolas, monospace; color: var(--new); margin-top: 6px; }
+.pat.warn .arrow { color: var(--ink-3); }
+table.votes { border-collapse: collapse; width: 100%; font-size: 14px; margin: 10px 0 4px; }
+table.votes th, table.votes td { border-bottom: 1px solid var(--line); padding: 7px 8px; text-align: left; }
+table.votes th { color: var(--ink-2); font-weight: 600; }
+table.votes td.r { text-align: center; font-variant-numeric: tabular-nums; }
+table.votes td.r.top { font-weight: 700; }
+.m { border-top: 2px solid var(--line); margin-top: 40px; padding-top: 22px; }
+.mh { display: flex; gap: 14px; align-items: baseline; }
+.rank { font: 700 28px/1 ui-monospace, Consolas, monospace; color: var(--new); min-width: 30px; }
+.who { color: var(--ink-3); font-size: 13px; margin: 4px 0 12px 44px; }
+.para { font-size: 17px; max-width: 800px; margin: 0 0 16px; }
+.viz { display: grid; gap: 18px; grid-template-columns: 1fr 1fr; align-items: start; }
+.viz.one { grid-template-columns: 1fr; }
+@media (max-width: 820px) { .viz { grid-template-columns: 1fr; } }
+.panel { border: 1px solid var(--line); border-radius: 10px; padding: 12px; background: var(--surface); position: relative; }
+.panel h4 { margin: 0 0 8px; font-size: 14px; color: var(--ink-2); font-weight: 600; }
+canvas { display: block; width: 100%; touch-action: manipulation; }
+.ctl { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; font-size: 14px; }
+button { font: 600 13px system-ui, sans-serif; padding: 6px 11px; border-radius: 7px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); cursor: pointer; }
+button:hover { border-color: var(--ink-3); }
+button.on { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+input[type=range] { width: 200px; accent-color: var(--new); vertical-align: middle; }
+.read { font: 13px/1.5 ui-monospace, Consolas, monospace; color: var(--ink-2); margin-top: 8px; min-height: 2.9em; }
+.read b { color: var(--ink); }
+.real { font-size: 13px; color: var(--ink-3); margin: 10px 0 0; max-width: 900px; }
+details { margin-top: 10px; font-size: 14px; color: var(--ink-2); max-width: 900px; }
+details summary { cursor: pointer; color: var(--ink); font-weight: 600; }
+details ul { margin: 6px 0; padding-left: 20px; }
+.tip { position: fixed; pointer-events: none; background: var(--ink); color: var(--surface); font: 12px/1.45 ui-monospace, Consolas, monospace; padding: 6px 8px; border-radius: 6px; z-index: 9; display: none; max-width: 280px; }
+.legend { display: flex; gap: 14px; font-size: 13px; color: var(--ink-2); margin: 2px 0 6px; flex-wrap: wrap; }
+.legend i { display: inline-block; width: 18px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 5px; }
+.extras { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+.extras div { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; font-size: 14px; color: var(--ink-2); }
+.extras b { color: var(--ink); }
+ul.skip li { margin: 4px 0; font-size: 15px; }
+footer { margin-top: 44px; font-size: 13px; color: var(--ink-3); border-top: 1px solid var(--line); padding-top: 14px; }
+code { font: 13px ui-monospace, Consolas, monospace; background: var(--surface-2); padding: 1px 4px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<main>
+<h1>From pure math to game wins</h1>
+<p class="sub">Four AI models reviewed everything we measured: Grok 4.7, Opus 5.5, GPT-6 Astra and SWE-2. This page collects the methods they agreed you could actually build. Every demo below runs the real algorithm live in your browser.</p>
+
+<p class="lead">These theorems don't make your computer faster in general. Each one hands you something you would otherwise have to <b>compute, guess or playtest</b>: a finished answer, a rule you can check, or a number you can trust. The practical work is noticing which of these five shapes a result has. Each shape then plugs into a game in a standard way.</p>
+
+<div class="patterns">
+  <div class="pat"><b>1 · A proof that is a playbook</b><span class="ex">Someone proved how to win a game, move by move. The proof itself is the strategy.</span><div class="arrow">→ compile once, look up each move</div></div>
+  <div class="pat"><b>2 · A rule you can check in the editor</b><span class="ex">A theorem says "if your design has property X, nothing breaks." X is cheap to test.</span><div class="arrow">→ a lint that runs when you save</div></div>
+  <div class="pat"><b>3 · A scaling law</b><span class="ex">A proof of exactly how something changes with detail level.</span><div class="arrow">→ simulate small, get the big result</div></div>
+  <div class="pat"><b>4 · A certified amount of work</b><span class="ex">A proof of how many steps a random process needs before it is fair.</span><div class="arrow">→ a loop count you can trust</div></div>
+  <div class="pat"><b>5 · A known answer</b><span class="ex">A proof of what the best possible shape is.</span><div class="arrow">→ draw it instead of solving for it</div></div>
+  <div class="pat warn"><b>· Warnings and costly guarantees</b><span class="ex">Crowd re-routing, fluid gates, cubic sums: true results that cost more than they save, or that only tell you what not to rely on.</span><div class="arrow">→ read, don't build</div></div>
+</div>
+
+<h3>How the panel ranked them (1 = most practical)</h3>
+<table class="votes">
+  <thead><tr><th>Method</th><th>Shape</th><th style="text-align:center">Grok 4.7</th><th style="text-align:center">Opus 5.5</th><th style="text-align:center">GPT-6 Astra</th><th style="text-align:center">SWE-2</th></tr></thead>
+  <tbody>
+    <tr><td>Compiled playbook opponent (Snaky)</td><td>1</td><td class="r">4</td><td class="r">2</td><td class="r top">1</td><td class="r top">1</td></tr>
+    <tr><td>"Every recipe needs a way back" lint</td><td>2</td><td class="r top">1</td><td class="r top">1</td><td class="r">2</td><td class="r">3</td></tr>
+    <tr><td>Detail-proof clock for fractal fronts</td><td>3</td><td class="r">3</td><td class="r">4</td><td class="r">3</td><td class="r">4</td></tr>
+    <tr><td>Fair dungeon shuffle with a proven step count</td><td>4</td><td class="r">5</td><td class="r">3</td><td class="r">–</td><td class="r">5</td></tr>
+    <tr><td>Draw the best shape instead of solving for it</td><td>5</td><td class="r">2</td><td class="r">–</td><td class="r">–</td><td class="r">2</td></tr>
+  </tbody>
+</table>
+<p class="real">"–" means that panelist left it out of its top five. Opus and Astra called the shape result too narrow to build a feature on, though still useful as a test answer for a solver. Opus's fifth pick (sticky crowd assignment) and Astra's fourth and fifth picks are listed near the end.</p>
+
+<!-- ============================================================ 1 SNAKY -->
+<section class="m" id="snaky">
+  <div class="mh"><span class="rank">1</span><h2>A compiled playbook instead of a thinking AI</h2></div>
+  <p class="who">Proof as playbook · paper: <i>Snaky in 21 Maker moves</i></p>
+  <p class="para">A normal game AI thinks before every move: it imagines thousands of possible futures and picks the best-looking one. For one board game, Snaky, mathematicians have already done all of that thinking. Their proof is a set of 728 cards that say "if the blocker plays here, play there", and following them wins in at most 21 moves against <i>anyone</i>. So the proof is a ready-made playbook. You load it once, and each move becomes a lookup instead of a search: about a microsecond, never a loss, and no slowdown when thousands of games share one frame. The catch is that this playbook exists only for this one game.</p>
+  <div class="viz">
+    <div class="panel">
+      <h4>You are the blocker. Click any empty cell. The playbook answers instantly.</h4>
+      <canvas id="sk-board" style="height:auto;aspect-ratio:1/1"></canvas>
+      <div class="ctl"><button id="sk-new">New game</button><button id="sk-auto">Let a greedy blocker play for me</button></div>
+      <div class="read" id="sk-read"></div>
+    </div>
+    <div class="panel">
+      <h4>Many games sharing one 60 fps frame (measured in C++, 1 thread)</h4>
+      <div class="legend"><span><i style="background:var(--old)"></i>search AI (α-β, upgraded)</span><span><i style="background:var(--new)"></i>compiled playbook</span></div>
+      <canvas id="sk-chart" style="height:340px"></canvas>
+      <div class="ctl">Games at once <input type="range" id="sk-n" min="0" max="18" value="6"> <b id="sk-nv"></b></div>
+      <div class="read" id="sk-bench">measuring the playbook in your browser…</div>
+    </div>
+  </div>
+  <p class="real">Live here: the real certificate from the paper (all 728 cards, rebuilt and hash-checked by our C++ port, exported to JSON), walked by a 60-line JavaScript port. The blue tint is the region the playbook still "owns". The proof guarantees you can never get a stone inside it. The chart replays our C++ load-ladder measurements. Below the chart, a 1,000-game benchmark runs in your browser.</p>
+  <details><summary>For a developer: what you'd actually build</summary><ul>
+    <li><b>Runtime:</b> store the cards as a table (about 94 KB). Each turn, play the current card's cell. After the opponent replies, step to the first child card whose region doesn't contain that reply. That's the whole AI.</li>
+    <li><b>Design:</b> an unbeatable opponent isn't fun on its own. Make the player the blocker and score how many moves they survive (21 is the best possible), or use it as a coach. The panel's untested suggestion is to mix in random moves as a difficulty dial.</li>
+    <li><b>Reuse:</b> the general move (precompute a strategy offline, ship a table) is how chess endgame tablebases and opening books work. A new game needs its own proof or solver run, which is a research project.</li>
+  </ul></details>
+</section>
+
+<!-- ============================================================ 2 ECONOMY -->
+<section class="m" id="econ">
+  <div class="mh"><span class="rank">2</span><h2>"Every recipe needs a way back": a lint for game economies</h2></div>
+  <p class="who">Editor rule · paper: weakly reversible reaction networks are permanent (family 149)</p>
+  <p class="para">Think of every recipe as a one-way road between bundles of goods, such as "ore + wood → tools". The rule is that every road needs some route of other roads leading back to where it started. If your recipe map passes, the paper proves that no good can ever die out or pile up forever, however fast or slow you set each recipe and however the towns start. If a road has no way back, the promise is gone, and in our tests those towns starved or flooded almost every time. Checking the rule is a map-reading job a tool does instantly when the designer saves, so the guarantee costs nothing while the game runs.</p>
+  <div class="viz">
+    <div class="panel">
+      <h4>The recipe map. Click any arrow to delete or restore that recipe.</h4>
+      <canvas id="ec-graph" style="height:330px"></canvas>
+      <div class="ctl"><button id="ec-full">All 9 recipes</button><button id="ec-broken">Remove the 2 return recipes (demo 01)</button><button id="ec-roll">Re-roll all rates</button></div>
+      <div class="read" id="ec-lint"></div>
+    </div>
+    <div class="panel">
+      <h4>Six towns with very different starting stock, 5 goods each</h4>
+      <canvas id="ec-chart" style="height:330px"></canvas>
+      <div class="read" id="ec-read"></div>
+    </div>
+  </div>
+  <p class="real">Live here: the nine recipes and the six starting towns from demo 01, simulated with mass-action rates (each recipe runs at its rate × the amounts of its inputs). The lint finds every recipe whose output bundle can't lead back to its input bundle. Goods: O ore, W wood, T tools, F food, P workers. Measured in C++ across 16,384 towns: with the return recipes, 0 towns died or ran away; without them, 99.4–100% did.</p>
+  <details><summary>For a developer: what you'd actually build</summary><ul>
+    <li><b>The check:</b> make one node per distinct bundle ("F+P" and "2P" are different nodes) and one arrow per recipe. A recipe passes if its output node can reach its input node. That's about 100 lines in your content validator, with zero runtime cost.</li>
+    <li><b>Limits:</b> the proof covers continuous amounts with fixed positive rates. Integer stockpiles, random small-number effects, player-set rates, caps and markets fall outside it. Failing the lint means "no guarantee", not "certain collapse".</li>
+    <li><b>Beyond economies (speculative):</b> plague, ecosystem and influence models use the same "rate × amounts" rule. A plain SIRS plague fails the check. Adding return routes makes it pass, which gives a designer a switch between a plague that burns out and one that never goes away.</li>
+  </ul></details>
+</section>
+
+<!-- ============================================================ 3 FRACTAL CLOCK -->
+<section class="m" id="frac">
+  <div class="mh"><span class="rank">3</span><h2>A clock that makes a tiny grid act like a huge one</h2></div>
+  <p class="who">Scaling law · paper: natural parametrization of the critical FK interface (family 223)</p>
+  <p class="para">A fractal edge, like a wildfire creeping through dry brush, gets more wiggly the finer you draw it. Draw it on a finer grid and the path gets much longer, so if every step takes the same time, the detailed fire takes far longer to cross the map. The paper proves the exact fix: each step's time should shrink with the cell size raised to the power 1.75. With that rule and one tuning number, a tiny 32×32 grid crosses the map in the same typical time, and lingers in the same places, as an 8192×8192 grid. You simulate small and still get the big grid's timing.</p>
+  <div class="viz one">
+    <div class="panel">
+      <h4>The same kind of front on three grids, raced with one shared clock (tuned once, on the 64×64 grid)</h4>
+      <canvas id="fk-lanes" style="height:auto;aspect-ratio:3/1.18"></canvas>
+      <div class="ctl">Each step's time = cell size to the power p: <input type="range" id="fk-p" min="100" max="200" value="100"> <b id="fk-pv"></b>
+        <button id="fk-p1">p = 1 (time per step ∝ length)</button><button id="fk-p175">p = 1.75 (the paper)</button></div>
+    </div>
+    <div class="panel">
+      <h4>Typical crossing time on each grid (median of 300 fronts per grid)</h4>
+      <canvas id="fk-bars" style="height:170px"></canvas>
+      <div class="read" id="fk-read"></div>
+    </div>
+  </div>
+  <p class="real">Live here: critical bond percolation on the square lattice (the paper's exact model), traced by a JavaScript port of our C++ sampler. The race animates typical fronts from the middle of each grid's distribution, and the bars use all 300. Measured in C++ against an 8192² reference: with p = 1.75, a 32² grid is within 5% on median crossing time at 6.5 µs per front. The length clock only matches at 8192² itself, at 107 ms per front (×16,000).</p>
+  <details><summary>For a developer: what you'd actually build</summary><ul>
+    <li><b>The change:</b> one line in the front's tick, <code>step_time = C * cell_size^1.75</code>, with C set once by an artist. Keep grids at 32 or larger: at 16 the error is about 7%.</li>
+    <li><b>What's new vs classical:</b> the 1.75 exponent was known. The paper proves that one constant times this pure power is the whole story, with no hidden correction, and that the time spent in each region also comes out right. A clock re-tuned by hand at every grid size would match too. The win is never having to re-tune.</li>
+    <li><b>Limits:</b> it's proven only for critical-percolation fronts on the square grid. Other spread rules have other exponents, which you would have to look up or fit.</li>
+  </ul></details>
+</section>
+
+<!-- ============================================================ 4 DUNGEON -->
+<section class="m" id="dung">
+  <div class="mh"><span class="rank">4</span><h2>A fair dungeon shuffle with a proven step count</h2></div>
+  <p class="who">Certified amount of work · paper: polynomial mixing of the switch chain for every degree sequence (family 131)</p>
+  <p class="para">Say a designer's dungeon fixes each room's door count: the boss room has one door, the hub has six. To make a new level you rewire the corridors but keep every room's door count. A few quick swaps look scrambled but still remember the original, so players keep meeting the same corridors. The paper gives a number of trades that is proven to be enough for <i>any</i> door-count list. After that many, every possible layout is about equally likely. It's like knowing how many riffles fully mix a deck of cards. The count grows fast with dungeon size, so it suits level generation for small and medium dungeons, not big live rewiring.</p>
+  <div class="viz">
+    <div class="panel">
+      <h4>The latest generated layout. Grey = kept from the template, blue = new door.</h4>
+      <canvas id="dg-map" style="height:300px"></canvas>
+      <div class="ctl"><button id="dg-q" class="on">Show quick shuffle (28 swaps)</button><button id="dg-c">Show certified shuffle (12,644 trades)</button></div>
+    </div>
+    <div class="panel">
+      <h4>How many of the template's 28 doors each new layout kept</h4>
+      <div class="legend"><span><i style="background:var(--old)"></i>quick shuffle</span><span><i style="background:var(--new)"></i>certified shuffle</span><span><i style="background:var(--ink-3)"></i>perfectly fair (reference)</span></div>
+      <canvas id="dg-hist" style="height:260px"></canvas>
+      <div class="read" id="dg-read"></div>
+    </div>
+  </div>
+  <p class="real">Live here: demo 06's 20-room template with door counts 1–6, and both shuffles from the C++ demo ported to JavaScript. Both generate layouts continuously. The fair reference comes from a very long shuffle run when the page loads. Measured in C++: the certified count costs 0.33 ms at 20 rooms, 6.3 ms at 40, 200 ms at 80 and 5 s at 160, growing roughly as rooms<sup>4.4</sup>.</p>
+  <details><summary>For a developer: what you'd actually build</summary><ul>
+    <li><b>The shuffle:</b> pick two rooms, pool the neighbours they don't share, shuffle the pool and deal it back so each room keeps its count. Repeat T = ⌈B(1+B/2)·ln 2⌉ times, where B = rooms×(rooms−1)/2. That's about 60 lines, run at level load.</li>
+    <li><b>Filtering:</b> throw away disconnected or unbuildable layouts <i>after</i> shuffling and draw again. That keeps the result fair. Rejecting steps <i>during</i> the shuffle voids the guarantee.</li>
+    <li><b>Classical alternative:</b> for large dungeons, dealing door slots into random pairs and rejecting bad results is also exactly fair. It's probably cheap with 1–6 doors per room, but we didn't measure it. The certificate earns its keep when you want a provable fairness claim for any template, including ones players build.</li>
+  </ul></details>
+</section>
+
+<!-- ============================================================ 5 BLOB -->
+<section class="m" id="blob">
+  <div class="mh"><span class="rank">5</span><h2>Draw the best shape instead of solving for it</h2></div>
+  <p class="who">Known answer · paper: isoperimetric sets of the flat 3-torus (family 354)</p>
+  <p class="para">Suppose you want the blob with the least surface for a given amount of goo, in a world whose edges wrap around like Pac-Man's. The usual approach is to "melt" a random blob over and over and hope it settles. That's slow, and sometimes it gets stuck on a lumpy shape. The paper proves the answer is always one of three simple shapes: a ball when there's little goo, a tube that wraps around the world in the middle range, and a flat slab when there's a lot (then the same shapes again as holes). So you skip the melting and just draw the right one. It's like knowing the crossword answer instead of guessing letters.</p>
+  <div class="viz">
+    <div class="panel">
+      <h4>2D stand-in: melting solver vs drawing the known answer (wrap-around square)</h4>
+      <canvas id="bl-sim" style="height:auto;aspect-ratio:2/1.08"></canvas>
+      <div class="ctl">Amount of goo <input type="range" id="bl-v" min="5" max="95" value="22"> <b id="bl-vv"></b><button id="bl-seed">Re-melt from noise</button></div>
+      <div class="read" id="bl-read"></div>
+    </div>
+    <div class="panel">
+      <h4>The paper's 3D answer: surface of each candidate shape</h4>
+      <canvas id="bl-chart" style="height:300px"></canvas>
+      <div class="read" id="bl-read2"></div>
+    </div>
+  </div>
+  <p class="real">Live here, as a 2D stand-in: the left panel runs the same "blur and keep the fullest cells" solver as demo 07, on a 128×128 wrap-around square, next to the drawn answer (a disk or a band). On a flat 2D square that answer was already known. The paper's new result is the 3D version in the right-hand chart. In this 2D toy, 3 to 7 of every 10 melts (depending on the amount) ended stuck in several pieces with 20% or more extra edge. Measured in C++ in 3D: drawing the answer reached 2% of the best surface 96–157× faster than the solver, and the solver got stuck in about 1 run out of 9.</p>
+  <details><summary>For a developer: what you'd actually build</summary><ul>
+    <li><b>The formula:</b> given the fill fraction V, choose ball (V &lt; 4π/81 ≈ 0.155), tube (V &lt; 1/π ≈ 0.318), slab, then the same shapes as holes past V = ½. Rank voxels by wrap-around distance to that shape and keep the right count. One pass, no iterations.</li>
+    <li><b>Where it really helps:</b> as a correct answer for unit-testing any surface-tension or goo solver you write. As a gameplay feature it's narrow, which is why two panelists left it out.</li>
+    <li><b>Limits:</b> obstacles, open boundaries and the motion toward the shape are different problems. The theorem only says which shape wins.</li>
+  </ul></details>
+</section>
+
+<section class="m">
+  <h2>Also suggested, and what to skip</h2>
+  <div class="extras" style="margin-top:14px">
+    <div><b>Sticky crowd assignment</b> (Opus #5). Nudge a small exit slightly and the <i>best</i> plan re-routes a large share of the crowd. We measured 11% switching that shrinks only like the cube root of the nudge. Don't re-plan every frame: re-plan on a timer or when the plan has gotten noticeably worse.</div>
+    <div><b>Pick a start with fresh nearby options</b> (Astra #4). In a one-way portal map there is always a room whose second ring of destinations offers at least as much as its first. Use it as a level-generation rule. Unmeasured.</div>
+    <div><b>Tighter crystal morphs</b> (Astra #5). Blend two symmetric convex shapes so they never drop below a known volume and bloat less than the usual blend (1.38× the floor vs 1.65×). This is niche: the usual blend already has a floor.</div>
+  </div>
+  <h3>All four agreed these aren't worth building</h3>
+  <ul class="skip">
+    <li><b>Fluid gates for speed.</b> They are 6–45× <i>slower</i> than a normal animation. Use them only if "regions must never overlap" is a puzzle rule.</li>
+    <li><b>Cubic interference.</b> It's a real, certified drift in number theory, with no game knob and no speedup.</li>
+    <li><b>Crowd re-routing as a new allocator.</b> The optimal labels are the standard formula, and recomputing them costs 3–4× more. The useful part is the warning above.</li>
+    <li><b>The certified dungeon shuffle past about 50 rooms in real time.</b> At 320 rooms one layout takes about a minute.</li>
+    <li><b>Results with astronomically large constants or no explicit construction</b> (several leads in the scan). There's nothing to implement.</li>
+  </ul>
+</section>
+
+<footer>
+  Panel: Grok 4.7 Extra High (Cursor CLI, <code>grok-4.7-xhigh</code>), Opus 5.5 xhigh (Claude Code CLI, <code>claude-opus-5-5</code>), GPT-6 Astra Ultra (Codex CLI, <code>gpt-6-astra</code>, reasoning effort ultra), SWE-2 Max (Devin CLI, <code>swe-2-max</code>). Each read the measured results (load ladders, the nine demos, 58 verified leads) independently and read-only. Measurements: Ryzen 9 9900X, sequential quiet run. Earlier sheets: load ladders owd9Iwwfa6pOo2YvjJoJule8, demos iP9Q753RmKk-4BEur8im50G1.
+</footer>
+</main>
+<div class="tip" id="tip"></div>
+<script>
+/*CORE_JS*/
+</script>
+<script>
+/*APP_JS*/
+</script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tavern of a Thousand Tables</title>
+<style>
+  :root { --prior: #eb6834; --new: #2a78d6; --ref: #7a7873; --ink: #2b1d12; --parch: #efe0bd; --wood: #3a2616; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #1b120b; color: #eadcc0; font: 14px/1.45 Georgia, 'Palatino Linotype', 'Book Antiqua', serif; }
+  header { display: flex; align-items: baseline; gap: 18px; padding: 8px 18px 6px; background: linear-gradient(#3b2414, #24160c); border-bottom: 3px solid #5c3b20; }
+  header h1 { margin: 0; font-size: 26px; letter-spacing: 1px; color: #f6d48a; text-shadow: 0 2px 0 #000, 0 0 12px rgba(246, 180, 80, .35); font-variant: small-caps; }
+  header .sub { color: #c9b28a; font-size: 14px; }
+  header .tag { margin-left: auto; font-size: 12px; color: #a68e68; }
+  #wrap { max-width: 1280px; margin: 0 auto; }
+  canvas#scene { display: block; width: 100%; max-width: 1280px; aspect-ratio: 1280 / 640; background: #2a1a0e; cursor: default; }
+  #controls { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; padding: 9px 14px; background: #2c1c10; border-top: 2px solid #5c3b20; border-bottom: 2px solid #5c3b20; font-size: 13px; }
+  #controls label { display: flex; align-items: center; gap: 6px; color: #e3cfa6; }
+  #controls input[type=range] { width: 210px; accent-color: #d9a441; }
+  #controls select, #controls button { font: inherit; font-size: 13px; background: #4a2f19; color: #f3e2bd; border: 1px solid #8a6136; border-radius: 4px; padding: 3px 8px; }
+  #controls button { cursor: pointer; }
+  #controls button.on { background: #7a4f22; border-color: #f6d48a; }
+  #ntab { display: inline-block; min-width: 46px; font: bold 16px Consolas, monospace; color: #f6d48a; }
+  #warn { color: #f0a070; font-size: 12px; }
+  main { padding: 6px 18px 30px; }
+  h2 { font-size: 19px; color: #f6d48a; margin: 14px 0 6px; font-variant: small-caps; }
+  h3 { font-size: 15px; color: #e8c886; margin: 12px 0 4px; }
+  p.plain { max-width: 860px; font-size: 15px; }
+  ul { margin: 4px 0; padding-left: 22px; }
+  li { margin: 2px 0; }
+  .cols { display: flex; flex-wrap: wrap; gap: 26px; }
+  .cols > div { flex: 1 1 380px; min-width: 340px; }
+  table.ref { border-collapse: collapse; font: 12px/1.3 Consolas, monospace; margin-top: 4px; }
+  table.ref th, table.ref td { border-bottom: 1px solid #4a3220; padding: 3px 7px; text-align: right; }
+  table.ref th { color: #d8c39a; font-weight: normal; text-align: center; }
+  table.ref tr.hl td { background: #3d2814; color: #fff1cf; }
+  .p { color: var(--prior); } .n { color: var(--new); } .r { color: #a9a69f; }
+  .src { font-size: 12px; color: #a68e68; }
+  code { font: 12px Consolas, monospace; color: #f3dca8; }
+</style>
+</head>
+<body>
+<div id="wrap">
+<header>
+  <h1>Tavern of a Thousand Tables</h1>
+  <span class="sub">Snaky night: every table plays Maker vs Breaker on a 17&times;17 board</span>
+  <span class="tag">left hall: <b class="p">PRIOR BEST</b> &middot; right hall: <b class="n">NEW</b></span>
+</header>
+<canvas id="scene" width="1280" height="640"></canvas>
+<div id="controls">
+  <label>Tables open tonight <input id="nslider" type="range" min="0" max="12" step="1" value="4"> <span id="ntab">16</span></label>
+  <label>Breakers <select id="brk">
+    <option value="1">greedy ES blocker</option><option value="0">random-local</option><option value="2">&alpha;-&beta; Breaker (slow, &le; 256 tables)</option></select></label>
+  <label>Each table moves every <select id="pace">
+    <option value="1">1 frame (as the C++ ladder)</option><option value="4">4 frames</option><option value="15">15 frames</option><option value="60">60 frames</option></select></label>
+  <label>Prior AI <select id="pmode">
+    <option value="budget">shares the 16.7 ms frame</option><option value="fixed">6000 nodes/move, no budget (&le; 64 tables)</option></select></label>
+  <label>Watch <select id="speed">
+    <option value="10">slow motion</option><option value="4">faster</option><option value="1">real time</option></select></label>
+  <button id="play">Sit down as Breaker</button>
+  <button id="reset">Reset tally</button>
+  <span id="warn"></span>
+</div>
+<main>
+  <h2>What is going on in the tavern</h2>
+  <p class="plain">Every table plays the same little board game. One player, the Maker, tries to claim six squares in a crooked snake shape; the other, the Breaker, blocks one square per turn. In the left hall each Maker is a classic game AI that looks several moves ahead, and all the tables share one frame's worth of thinking time, so the more tables are open, the less each Maker can think. In the right hall each Maker follows a playbook that was proved to win within 21 moves against any blocker. It only looks up its next move, which costs almost nothing. Open more tables and watch the left hall run out of time while the right hall keeps winning.</p>
+  <div class="cols">
+    <div>
+      <h3>What's measured here</h3>
+      <ul>
+        <li>Maker AI milliseconds per frame in each hall: <code>performance.now()</code> around the Maker decisions only. Breaker moves, the referee and drawing are not counted on either side.</li>
+        <li>Win rate and moves-to-win of finished games. Table <i>i</i> in both halls faces the same seeded Breaker.</li>
+        <li>How many tables fit in one 16.7 ms frame: a full-strength search move (6000 nodes) is timed at start-up; the playbook's microseconds per move are timed in batches by replaying tonight's games.</li>
+        <li>For the left hall: the time each Maker gets, how deep it searched, and how often it was cut short ("out of time").</li>
+      </ul>
+      <h3>Proved vs measured</h3>
+      <ul>
+        <li><b>Proved</b> (Snaky in 21 Maker moves, Thm <code>thm:main</code>, Cor. <code>cor:finite-board</code>): the playbook Maker wins within 21 of its moves against every possible Breaker on this board.</li>
+        <li><b>Measured here:</b> every time, win rate and move count on screen. <b>Not claimed:</b> anything about other games.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Where the prior technique still wins / limits</h3>
+      <ul>
+        <li>With one table, or a few, the search fits the frame and wins every game too (<code>?scene=one</code>).</li>
+        <li>Against the greedy blocker the starved search still wins (it just needs more moves). It loses games to the stronger &alpha;-&beta; Breaker once each Maker gets about 1 ms or less (<code>?scene=duel</code>).</li>
+        <li>If tables move rarely (every 15 or 60 frames), each search gets more time and holds up longer.</li>
+        <li>The playbook exists only for this one game: this snake shape, this square board, the Maker's side. Change a rule and it is gone; the search plays any similar game.</li>
+        <li>Memory is not a win: the playbook ships 265 KB of data (several times that once unpacked), while the search needs only the 1,664 shape positions plus whatever transposition table you give it.</li>
+        <li>The live win rate counts finished games, which favours short games (the HUD shows how many games are still running past move 21); <code>bench.js</code> uses fixed batches.</li>
+      </ul>
+      <h3>Presets</h3>
+      <ul>
+        <li><code>?scene=one</code> 1 table &middot; <code>?scene=busy</code> 256 tables &middot; <code>?scene=crowd</code> 4,096 tables &middot; <code>?scene=duel</code> 16 tables vs the &alpha;-&beta; Breaker &middot; <code>?scene=nobudget</code> 16 tables, search ignores the budget &middot; <code>?scene=play</code> you are the Breaker at table 1 in both halls (256 tables open). Add <code>&amp;frames=N</code> to stop after N frames.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="cols">
+    <div>
+      <h3>Measured in this browser tonight</h3>
+      <div id="tonight" class="src">(fills in as games finish)</div>
+    </div>
+    <div>
+      <h3>Reference: C++ measurements</h3>
+      <div class="src">From <code>demos\L1-snaky-ladder\out\ladder.json</code> (C++, 1 thread, Ryzen 9 9900X). Every game makes one Maker move per frame. Win rates: search given 16.7 ms / N per move, 60 games per Breaker; their &alpha;-&beta; Breaker is the same 03-snaky SearchAI used here.</div>
+      <div id="ladder"></div>
+    </div>
+  </div>
+</main>
+</div>
+<script>
+window.onerror = (m, src, line) => { const w = document.getElementById('warn'); if (w) w.textContent = 'error: ' + m + ' @' + line; };
+</script>
+<script>
+/*DATA_JS*/
+/*CORE_JS*/
+/*APP_JS*/
+</script>
+</body>
+</html>

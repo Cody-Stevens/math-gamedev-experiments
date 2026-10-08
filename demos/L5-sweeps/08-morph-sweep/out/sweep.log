@@ -1,0 +1,21 @@
+08-morph-sweep: 5 keyframe segments x 5 lambdas per pass, 1 thread per side
+n=   50 (actual 50 dirs)  WITHOUT    0.3843 ms  WITH    0.3154 ms  ratio 1.22  frames 4786  | min/floor 1.0770 / 1.0484  bloat 1.686 / 1.386  cuts 49 / 44
+n=  100 (actual 100 dirs)  WITHOUT    1.2897 ms  WITH    0.7719 ms  ratio 1.67  frames 1831  | min/floor 1.0768 / 1.0487  bloat 1.665 / 1.385  cuts 96 / 75
+n=  200 (actual 200 dirs)  WITHOUT    3.5429 ms  WITH    1.7718 ms  ratio 2.00  frames 813  | min/floor 1.0763 / 1.0487  bloat 1.654 / 1.381  cuts 178 / 122
+n=  400 (actual 400 dirs)  WITHOUT    8.7727 ms  WITH    3.9369 ms  ratio 2.23  frames 355  | min/floor 1.0761 / 1.0487  bloat 1.647 / 1.379  cuts 321 / 207
+n=  800 (actual 800 dirs)  WITHOUT   20.5519 ms  WITH    8.1150 ms  ratio 2.53  frames 167  | min/floor 1.0757 / 1.0483  bloat 1.631 / 1.372  cuts 578 / 342
+n= 1600 (actual 1600 dirs)  WITHOUT   44.3134 ms  WITH   14.6495 ms  ratio 3.02  frames 87  | min/floor 1.0756 / 1.0481  bloat 1.629 / 1.368  cuts 997 / 550
+n= 3200 (actual 3200 dirs)  WITHOUT   89.1021 ms  WITH   26.9531 ms  ratio 3.31  frames 44  | min/floor 1.0752 / 1.0479  bloat 1.623 / 1.365  cuts 1709 / 891
+n= 6400 (actual 6400 dirs)  WITHOUT  226.4013 ms  WITH   50.8864 ms  ratio 4.45  frames 25  | min/floor 1.0752 / 1.0477  bloat 1.619 / 1.365  cuts 2944 / 1428
+
+n            WITHOUT ms      WITH ms     ratio  frames(wo/w)
+50               0.3843       0.3154      1.22  4786/4786
+100                1.29       0.7719      1.67  1831/1831
+200               3.543        1.772         2  813/813
+400               8.773        3.937      2.23  355/355
+800               20.55        8.115      2.53  167/167
+1600              44.31        14.65      3.02  87/87
+3200               89.1        26.95      3.31  44/44
+6400              226.4        50.89      4.45  25/25
+fit exponents: without 1.275  with 1.038
+wrote <repo>\demos\L5-sweeps\08-morph-sweep/out/ladder.json

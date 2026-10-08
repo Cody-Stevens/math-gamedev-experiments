@@ -1,0 +1,38 @@
+{
+ "01-economy": {
+  "left": 0.0167,
+  "right": 0.0027
+ },
+ "02-fluid-gates": {
+  "left": 0.8344,
+  "right": 2.7136
+ },
+ "03-snaky": {
+  "left": 32.0186,
+  "right": 0.00350001
+ },
+ "04-fractal-frontier": {
+  "left": 6.4825,
+  "right": 6.5829
+ },
+ "05-crowd-hub": {
+  "left": 0.0817,
+  "right": 0.2014
+ },
+ "06-dungeon-shuffle": {
+  "left": 0.00210002,
+  "right": 0.3164
+ },
+ "07-periodic-blob": {
+  "left": 5.169,
+  "right": 1.8584
+ },
+ "08-convex-morph": {
+  "left": 7.3317,
+  "right": 3.0781
+ },
+ "09-cubic-interference": {
+  "left": 10.1719,
+  "right": 9.3588
+ }
+}

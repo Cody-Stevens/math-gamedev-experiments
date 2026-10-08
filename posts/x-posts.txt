@@ -1,0 +1,27 @@
+One X post per clip. Attach the video named in the header. Each body is <= 280 characters as X counts them (any link = 23).
+
+POST 1 (attach videos/1-wildfire-isle.mp4)
+~400x less compute, same gameplay.
+A wildfire on a coarse 32×32 grid reaches town in 18.2 h vs 18.0 h on a 1024×1024 grid. Usual tile-size scaling: 10.8 h.
+Fix, from a new proof: scale each step's time by tile size^1.75, not tile size.
+Code + caveats: https://github.com/Cody-Stevens/math-gamedev-experiments/tree/main/games/1-wildfire-isle
+
+POST 2 (attach videos/2-tavern-tables.mp4)
+1,000x+ cheaper game AI that never loses (for one game).
+64 board games share one 60 fps frame. Vs a strong opponent, a standard search AI gets 0.26 ms/move and wins 42%. A new proof is a winning playbook: looking up moves takes 0.0002 ms and wins 100%.
+https://github.com/Cody-Stevens/math-gamedev-experiments/tree/main/games/2-tavern-tables
+
+POST 3 (attach videos/3-colony-ledger.mp4)
+1,000x+ faster economy check that catches what playtests miss.
+New proof: if every recipe can be undone by some chain of recipes, no resource can run out or explode. Checking that: 0.004 ms. A 10-year sim playtest passed a recipe list that broke later.
+https://github.com/Cody-Stevens/math-gamedev-experiments/tree/main/games/3-colony-ledger
+
+POST 4 (attach videos/4-dungeon-daily.mp4)
+5–32x faster fair random dungeons, only on maps with hub rooms.
+Rewire corridors daily, keep each room's door count. With hubs the standard method retries 165,000+ times (20–102 ms). A new proof says how long to shuffle: 3–4 ms. Normal maps: old way wins.
+https://github.com/Cody-Stevens/math-gamedev-experiments/tree/main/games/4-dungeon-daily
+
+POST 5 (attach videos/5-slime-lab.mp4)
+13–18x faster slime shapes, and exact.
+Slime takes the least-surface shape in a wrap-around room (like Pac-Man). A tuned simulation takes 2–22 ms. New proof: up to half full, it's a ball (under 15%), tube (under 32%) or sheet. Just draw it: 0.2–1.2 ms.
+https://github.com/Cody-Stevens/math-gamedev-experiments/tree/main/games/5-slime-lab

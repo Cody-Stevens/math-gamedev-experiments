@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Colony Ledger: type-check your simulation rules</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; background: #15171b; color: #e8e6df; font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 8px 40px; }
+header { display: flex; align-items: center; gap: 18px; padding: 8px 6px; border-bottom: 2px solid #3a3326; background: linear-gradient(#2a2620, #1d1b18); }
+header h1 { margin: 0; font: 700 24px/1 Georgia, "Times New Roman", serif; letter-spacing: .16em; color: #f0dca8; text-shadow: 0 2px 0 #000; }
+header .tag { color: #b9ae94; font: italic 14px Georgia, serif; }
+header .st { margin-left: auto; color: #8f8e86; font-size: 12px; }
+.bar { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; padding: 6px 4px; font-size: 12px; color: #c9c6bb; }
+.bar label { display: flex; align-items: center; gap: 5px; }
+.bar input[type=range] { width: 90px; accent-color: #c9a227; }
+button { font: 600 12px system-ui, sans-serif; padding: 4px 9px; border-radius: 5px; border: 1px solid #4a463d; background: #2b2924; color: #e8e6df; cursor: pointer; }
+button:hover { border-color: #c9a227; }
+button.on { background: #c9a227; color: #15171b; border-color: #c9a227; }
+#scenes { display: flex; gap: 4px; }
+.maps { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.side { background: #20232a; border-radius: 6px; overflow: hidden; }
+.side .lab { padding: 5px 10px; font: 700 13px system-ui, sans-serif; color: #fff; letter-spacing: .02em; }
+.side.p .lab { background: #eb6834; } .side.n .lab { background: #2a78d6; }
+.side canvas { display: block; width: 100%; aspect-ratio: 628 / 340; cursor: crosshair; }
+.chk { padding: 6px 10px 8px; min-height: 76px; font-size: 12.5px; }
+.side.p .chk { border-top: 3px solid #eb6834; } .side.n .chk { border-top: 3px solid #2a78d6; }
+.ch-h { font-weight: 700; margin-bottom: 2px; }
+.ch-r { margin: 2px 0; }
+.dim { color: #9b988e; font-weight: 400; }
+.num { color: #fff; }
+.verdict { display: inline-block; font: 800 11px system-ui; padding: 1px 6px; border-radius: 3px; margin-right: 6px; }
+.verdict.pass { background: #3d8b4a; color: #fff; } .verdict.fail { background: #c0392b; color: #fff; }
+.fixb { margin-left: 6px; background: #2a78d6; border-color: #2a78d6; color: #fff; padding: 2px 8px; }
+.low { display: grid; grid-template-columns: 1fr 392px; gap: 8px; margin-top: 8px; }
+.panel { background: #20232a; border-radius: 6px; padding: 8px 10px; }
+.panel h3 { margin: 0 0 6px; font: 700 13px Georgia, serif; letter-spacing: .08em; color: #f0dca8; text-transform: uppercase; }
+#editor { display: grid; gap: 8px; }
+.grp { background: #191b20; border-radius: 5px; padding: 5px; }
+.gh { display: flex; justify-content: space-between; font: 700 12px Georgia, serif; color: #f0dca8; padding: 0 2px 4px; }
+.gok { color: #6fb0ff; font: 600 11px system-ui; } .gbad { color: #ff7a6b; font: 600 11px system-ui; }
+.card { border: 1px solid #3a3d45; border-left: 4px solid #2a78d6; border-radius: 4px; padding: 4px 6px; margin-bottom: 4px; background: #262a32; cursor: pointer; }
+.card.bad { border-left-color: #e0453a; background: #33262a; }
+.card.off { border-style: dashed; border-left-color: #555; opacity: .5; }
+.card.added { box-shadow: 0 0 0 1px #6fb0ff inset; }
+.eq { display: flex; flex-wrap: wrap; align-items: center; gap: 2px; font-size: 11.5px; }
+.eq i { color: #888; font-style: normal; padding: 0 1px; }
+.chip { display: inline-block; padding: 0 5px; border-radius: 3px; background: color-mix(in srgb, var(--c) 30%, #20232a); border: 1px solid var(--c); color: #f2f0ea; white-space: nowrap; }
+.arr { color: #f0dca8; padding: 0 4px; font-size: 13px; }
+.meta { display: flex; gap: 8px; font-size: 10.5px; color: #9b988e; margin-top: 2px; }
+.meta .nm { color: #d9d6cc; flex: 1; } .meta em { color: #6fb0ff; font-style: normal; }
+.card.ok .bd { color: #6fb0ff; } .card.bad .bd { color: #ff7a6b; font-weight: 700; }
+#ledger { display: block; width: 100%; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11px; color: #b9b6ab; margin-top: 6px; }
+.legend span::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--c); margin-right: 4px; vertical-align: 0; }
+.explain { max-width: 900px; margin: 22px auto 0; font-size: 15px; color: #d9d6cc; }
+.explain h2 { font: 700 20px Georgia, serif; color: #f0dca8; margin: 0 0 8px; }
+.explain h3 { font-size: 15px; margin: 16px 0 4px; color: #f2f0ea; }
+.explain ul { margin: 4px 0; padding-left: 20px; } .explain li { margin: 3px 0; }
+.explain code { font: 13px ui-monospace, Consolas, monospace; color: #f0dca8; }
+.k-old { color: #eb6834; font-weight: 700; } .k-new { color: #6fb0ff; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>COLONY LEDGER</h1><span class="tag">type-check your simulation rules</span><span class="st" id="status">running</span></header>
+<div class="bar">
+  <span>Scene</span><span id="scenes"></span>
+  <label>Towns <input id="towns" type="range" min="40" max="2000" step="20"><b id="townsv"></b></label>
+  <label>Years / frame <input id="speed" type="range" min="0.25" max="4" step="0.25" value="0.5"><b id="speedv">0.5</b></label>
+  <label>Sweep seeds K <input id="kk" type="range" min="4" max="128" step="4"><b id="kv"></b></label>
+  <label>Sweep horizon <input id="hz" type="range" min="0" max="9" step="1"><b id="hzv"></b>&nbsp;yrs</label>
+  <label>Rate spread &times;<input id="jit" type="range" min="1.1" max="4" step="0.1" value="1.5"><b id="jitv">1.5</b></label>
+  <button id="roll" title="multiply every recipe rate by a random factor in [1/4, 4]">Roll rates</button>
+  <button id="reset">Reset scene</button><button id="pause">Pause</button>
+</div>
+<div class="maps">
+  <div class="side p"><div class="lab">PRIOR BEST: clamps + faucets, Monte-Carlo balance sweep</div><canvas id="mapP" width="628" height="340"></canvas><div class="chk" id="chkP"></div></div>
+  <div class="side n"><div class="lab">NEW: recipe lint at save time (weak reversibility), no clamps</div><canvas id="mapN" width="628" height="340"></canvas><div class="chk" id="chkN"></div></div>
+</div>
+<div class="low">
+  <div class="panel"><h3>Production chains &middot; recipe book (click a card to remove / restore it)</h3><div id="editor"></div></div>
+  <div class="panel"><h3>Town ledger</h3><canvas id="ledger" width="372" height="262"></canvas>
+    <div class="legend"><span style="--c:#5fd36a">healthy</span><span style="--c:#f2b233">clamp or faucet fired</span><span style="--c:#f2e033">below 1 unit</span><span style="--c:#e0453a">a good died out</span><span style="--c:#b36bff">ran away</span></div></div>
+</div>
+
+<section class="explain">
+<h2>Check the recipe book, not just the playtest</h2>
+<p>Every town runs the same recipe book. A recipe is safe when the goods it makes can be turned back into the goods it used, through other recipes. The game checks that rule each time you save, in a few microseconds, and names any recipe with no way back; the Fix button adds one. When every recipe passes, a proven result says no good can die out or pile up forever, at any recipe speeds. The usual approach caps every stockpile, sends relief when one runs dry, and plays many test towns for a set number of years. That keeps numbers on screen, but broken towns sit stuck at the caps, and a short test can miss a slow failure.</p>
+<h3>What's measured here</h3>
+<ul>
+<li><span class="k-new">NEW</span>: lint time per save (<code>performance.now()</code> over 500 calls); share of towns where a good died out (&lt; 1e-6), ran away (&gt; 1e6) or sits below 1 unit, running with no clamps.</li>
+<li><span class="k-old">PRIOR BEST</span>: sweep time and flagged seeds for K random towns &times; H years; share of towns with a clamp or faucet firing now, and share of all town-time spent pinned.</li>
+<li>Sim cost per frame for each side (median of the last 60 frames). Both sides use the same log-space RK4 step rule from <code>econ.js</code> and the same towns (rates and starts per town).</li>
+</ul>
+<h3>Where the prior technique still wins / limits</h3>
+<ul>
+<li><code>?scene=starve</code>: the lint passes, but farms are so slow that every town sits below 1 unit of food. The proof only says amounts stay above <i>some</i> level; it does not say how high. The sweep flags this at once (bench: 14 of 64 seeds within 1 year).</li>
+<li><code>?scene=tiny</code>: integer stockpiles of a few units. The proof is about smooth amounts, so it does not apply; about a third of towns have an empty stockpile at any moment, and the faucet hides that.</li>
+<li>Failing the lint means "no guarantee", not "will collapse": in the bench, removing any one of the nine colony recipes fails the lint, yet only 2 of those 9 books lost any town by year 1,000 (one lost every town, the other about 15%).</li>
+<li>The proof covers fixed positive rates; rates the player changes during a run, and how long the start-up wobble lasts, are not covered. A sweep can also test things the lint never looks at, such as pacing.</li>
+<li>A long enough sweep also catches the broken books (<code>?scene=slowrot</code> needs about 20 years instead of 5), but it costs K &times; H simulated town-years per save and only ever covers the rates it tried.</li>
+</ul>
+<h3>Presets (<code>?scene=</code>)</h3>
+<ul>
+<li><code>broken</code> (default): crowding and salvage removed. Lint fails on 4 recipes; one click on Fix restores exactly those two.</li>
+<li><code>fixed</code>: all nine recipes. Both sides stay healthy; the sweep agrees but costs far more than the lint.</li>
+<li><code>plague</code>: a sick/immune plague on workers (catch, recover, immunity fades). Lint fails; without clamps the plague burns out in some towns. Fix adds "nursing" and "traders carry plague in".</li>
+<li><code>endemic</code>: the plague after the fix. It is the same theorem applied to the plague: the plague never dies out and never takes everyone.</li>
+<li><code>slowrot</code>: the broken book with every rate &times;0.2. The default 10-year sweep passes it; the lint does not.</li>
+<li><code>starve</code>, <code>tiny</code>: the regimes above where the prior technique is the useful one.</li>
+<li>Other parameters: <code>?frames=N</code> stops after N frames, <code>?towns=N</code>, <code>?k=K</code>, <code>?h=H</code> (one of 1, 2, 5, 10, 20, 40, 80, 160, 320, 640).</li>
+</ul>
+<h3>Proved vs measured</h3>
+<ul>
+<li>Proved (Family 149, <i>Uniform Permanence in Weakly Reversible Mass-Action Systems</i>, thm:main): if the lint passes, then for any fixed positive rates every good eventually stays between &epsilon; and 1/&epsilon; for some &epsilon; &gt; 0 that the paper does not compute. The model is the continuous mass-action economy.</li>
+<li>Measured here: every timing, every percentage, and the collapse of the broken books. Nothing here says that every book that fails the lint collapses.</li>
+</ul>
+</section>
+</div>
+<script>
+/*CORE_JS*/
+</script>
+<script>
+/*APP_JS*/
+</script>
+</body>
+</html>

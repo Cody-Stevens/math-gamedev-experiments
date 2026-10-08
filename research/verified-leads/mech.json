@@ -1,0 +1,350 @@
+[
+ {
+  "id": "G1.1",
+  "title": "G1.1: A cheap proxy for prime-factor fragmentation",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G1.2",
+  "title": "G1.2: A threshold for rare resonance bursts",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G1.3",
+  "title": "G1.3: Cubic interference with a persistent hidden bias",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G1.4",
+  "title": "G1.4: Periodic arithmetic islands with a connectivity certificate",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G1.5",
+  "title": "G1.5: Arithmetic textures with fixed-shift decorrelation",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G2.1",
+  "title": "G2.1: An extra dimension straightens a polynomial world",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G2.2",
+  "title": "G2.2: Fit a procedural field one row at a time",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G2.3",
+  "title": "G2.3: Irregular fractal worlds with a guaranteed supply of distances",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G2.4",
+  "title": "G2.4: Binary probes with almost perfectly flat spectra",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G3.1",
+  "title": "G3.1: Fair local odds, only three possible worlds",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G3.2",
+  "title": "G3.2: Morph convex rooms without collapsing their volume",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G3.3",
+  "title": "G3.3: A crystal seed certified for an entire class of repulsions",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G3.4",
+  "title": "G3.4: An exact noise budget for an NPC choosing its best action",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G3.5",
+  "title": "G3.5: XOR interactions with a fixed budget across scales",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G3.6",
+  "title": "G3.6: Signed texture filtering with a turning-scale knob",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G4.1",
+  "title": "G4.1: Randomize dungeon graphs without changing room degrees",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G4.2",
+  "title": "G4.2: An oscillator that wakes only after an amplitude kick",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G4.3",
+  "title": "G4.3: Fractal density that counts overlapping maps correctly",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G4.4",
+  "title": "G4.4: A graph rule that keeps reaction economies alive and bounded",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G4.5",
+  "title": "G4.5: A sharp ceiling for one-bit clues in a noisy world",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G4.6",
+  "title": "G4.6: Polynomial degree as a bound on decision flicker",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G5.1",
+  "title": "G5.1: A guaranteed Snaky opponent from a 39 KB certificate",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G5.2",
+  "title": "G5.2: A network puzzle with a certified crossing target",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G5.3",
+  "title": "G5.3: Overlapping random branches with singular limiting mass",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G5.4",
+  "title": "G5.4: Predict the debris left by random triangle destruction",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G5.5",
+  "title": "G5.5: Choose a start with at least as many fresh two-hop options",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G5.6",
+  "title": "G5.6: An exact board-size dial for cycle-or-clique puzzles",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G6.1",
+  "title": "G6.1: An exact roughness knob for constrained random surfaces",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G6.2",
+  "title": "G6.2: A fractal frontier whose animation clock survives refinement",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G6.3",
+  "title": "G6.3: Keep random-map connectivity difficulty consistent across resolutions",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G6.4",
+  "title": "G6.4: Terrain noise with exact covariance bands",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G6.5",
+  "title": "G6.5: A spin toy that exposes the cost of collective memory",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G6.6",
+  "title": "G6.6: A procedural world that becomes tree-like above q = 4",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G6.7",
+  "title": "G6.7: An exploratory constraint-jamming toy with certified target exponents",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G7.1",
+  "title": "G7.1: A precise noise knob for hidden-faction clues",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G7.2",
+  "title": "G7.2: Wave traps that spend their binding budget optimally",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G7.3",
+  "title": "G7.3: Rough terrain with a hard slope limit and Gaussian large-scale statistics",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G7.4",
+  "title": "G7.4: Show why individually random cards can still form an unfair deck",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G7.5",
+  "title": "G7.5: A disorder slider for lattice-wave interference",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G7.6",
+  "title": "G7.6: Size-aware difficulty bands for random logic puzzles",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G7.7",
+  "title": "G7.7: Noncrossing paths with a calibrated fractal footprint",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G7.8",
+  "title": "G7.8: Percolation in a world of binary-tree transformations",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G8.1",
+  "title": "G8.1: A quantum momentum cloud with a proved density knob",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G8.2",
+  "title": "G8.2: Entanglement survives two applications of explicit PPT noise",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G8.3",
+  "title": "G8.3: Exact noisy-qubit capacity from one scalar search",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G8.4",
+  "title": "G8.4: Temperature-sensitive magnetism with the first lattice correction",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G8.5",
+  "title": "G8.5: A six-symbol puzzle with exactly three neutral measurement modes",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G8.6",
+  "title": "G8.6: A classical optimizer for random, conflicting faction affinities",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G9.1",
+  "title": "G9.1: Median-of-three diffusion for graph-driven game attributes",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G9.2",
+  "title": "G9.2: A factor-two error certificate for coupled simulation filters",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G9.3",
+  "title": "G9.3: Hierarchical ability budgets from two recursive fields",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G10.1",
+  "title": "G10.1: A periodic blob switches from ball to tube to slab",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G10.2",
+  "title": "G10.2: Fluid gates that move whole regions without compressing them",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G10.3",
+  "title": "G10.3: A tiny moving hub can reassign a much larger crowd",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G10.4",
+  "title": "G10.4: A positive shrinking geometry with exploding curvature",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G10.5",
+  "title": "G10.5: Correct a dilute gas's particle count at the noise scale",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G10.6",
+  "title": "G10.6: A spectral steering field with no interior dead ends",
+  "issues": [],
+  "repos": []
+ },
+ {
+  "id": "G10.7",
+  "title": "G10.7: Volumetric interpolation that controls the steepest slope",
+  "issues": [],
+  "repos": []
+ }
+]

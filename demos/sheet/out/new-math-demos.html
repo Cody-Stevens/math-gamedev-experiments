@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New math, played: nine before/after demos</title>
+<link rel="stylesheet" href="https://tacksheet.com/kit/1.1.2/tacksheet.css">
+<script src="https://tacksheet.com/kit/1.1.2/tacksheet.js" defer></script>
+<style>
+.verdict{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem 1.4rem;margin:.6rem 0 1rem}
+.verdict p{margin:0;flex:1 1 16rem}
+.where{font-size:.86rem;color:var(--tk-muted);overflow-wrap:anywhere}
+.where code{font-size:.84rem}
+.vid{margin:1rem 0 1.2rem}
+.vid video{width:100%;height:auto;display:block;border-radius:6px;background:#0b0d12}
+.vid figcaption{font-size:.86rem;color:var(--tk-muted);margin-top:.35rem}
+tk-stat .tk-value{font-size:clamp(1.15rem,.85rem + 2vw,1.9rem);white-space:nowrap}
+.use{margin:.4rem 0}
+</style>
+</head>
+<body data-tk-theme="riso">
+<tk-page>
+<tk-hero>
+<tk-tape-title level="1" tape="kraft" pattern="grid">New math, played: nine before/after demos</tk-tape-title>
+<p class="tk-dek">Ten agents read all 372 result families for game, simulation and visualization uses. Six more checked every lead against its paper. The nine strongest became small C++ demos, each run without and with the new result and recorded side by side with live compute timings.</p>
+<p class="tk-byline">7 October 2026 · demos in <code>Documents\math-scan\demos</code> · timings on a Ryzen 9 9900X, compute only</p>
+</tk-hero>
+
+<tk-section id="summary">
+<h2>Summary</h2>
+<tk-stats>
+<tk-stat><div class="tk-value">58</div><div class="tk-label">Game/sim leads across 372 families</div></tk-stat>
+<tk-stat><div class="tk-value">0</div><div class="tk-label">Hallucinated: every path and quote checks out</div></tk-stat>
+<tk-stat><div class="tk-value">26 · 32</div><div class="tk-label">Solid · stretch (classical math would do)</div></tk-stat>
+</tk-stats>
+<tk-table data="#summary-rows"></tk-table>
+<script type="application/json" id="summary-rows">{"columns":["Demo","What the new math buys","Without → with"],"rows":[
+["Snaky opponent (187)","Proved win, microsecond moves","Wins vs search Breaker 41% → 100%"],
+["Stable economy (149)","Resources never die or explode","Extinct tracks 6/30 → 0"],
+["Fluid gates (376)","Regions swap without merging","Branch overlap 105% → 0%"],
+["Periodic blob (354)","Exact optimal shape to aim for","Area above optimum 8.7% → 0.13%"],
+["Fractal frontier (223)","Same timing at any grid size","Duration ratio across grids 7.9× → 0.99×"],
+["Dungeon shuffle (131)","Provably fair random layouts","Exact bias (TV) 0.46 → 1.8e-14"],
+["Convex morph (091)","Tighter morph, volume floor kept","Peak bloat 1.65× → 1.38× floor"],
+["Crowd hub (374)","Warning: small moves reshuffle crowds","Relabelled 0% → up to 11%"],
+["Cubic interference (023)","A proved hidden bias","Model miss 18σ → ratio 1.07"]]}</script>
+<tk-callout kind="note"><p>Only one of the nine is a real speedup: the Snaky certificate replaces a 4.7 ms search with a 1 µs lookup. The others buy a guarantee, an exact target or a warning, and several cost more compute than the baseline. The HUD in each video shows each side's own measured compute time; rendering and encoding are excluded.</p></tk-callout>
+</tk-section>
+
+<tk-torn></tk-torn>
+
+<tk-section id="snaky">
+<tk-tape-title level="2" tape="cobalt" pattern="dots">1. Snaky: an opponent that provably wins</tk-tape-title>
+<div class="verdict"><tk-stamp ink="cobalt" tilt="-5">Speed + proof</tk-stamp><p>Maker needs to claim a six-cell Snaky shape on a 17×17 board while Breaker blocks. Left is a classic α-β game AI. Right follows the paper's 39 KB certificate, which the demo rebuilds byte-identically (728 cards, hashes match the paper).</p></div>
+<figure class="vid"><video controls playsinline preload="none" poster="./files/03-snaky.jpg" src="./files/03-snaky.mp4"></video><figcaption>16 games per side, same seeded Breakers on both sides.</figcaption></figure>
+<tk-stats>
+<tk-stat><div class="tk-value">41 → 100%</div><div class="tk-label">Wins vs the α-β search Breaker (100 games each)</div></tk-stat>
+<tk-stat><div class="tk-value">4.7 ms → 1 µs</div><div class="tk-label">Decision time per Maker move</div></tk-stat>
+<tk-stat><div class="tk-value">≤ 21</div><div class="tk-label">Proved max Maker moves; a certificate-aware Breaker forces exactly 21</div></tk-stat>
+</tk-stats>
+<p class="use"><strong>Game use:</strong> a certificate turns a hard search into a table walk, so "unbeatable" AI costs nothing at runtime. The same idea fits any small game you can solve offline.</p>
+<p class="where"><strong>Compute per frame:</strong> without 32.0 ms → with 3.5 µs, median, measured alone (the two sides make different numbers of decisions per frame, so compare per move).<br><strong>Caveat:</strong> the certificate needs 94 KB in memory against 62 KB for the baseline. The win rate shown live in the video counts only finished games, so use the batch numbers above.<br><strong>Paper:</strong> family 187, <code>preprints/Snaky-in-21-Maker-moves-September-25-2026</code> · demo <code>demos\03-snaky</code></p>
+</tk-section>
+
+<tk-section id="economy">
+<tk-tape-title level="2" tape="cobalt" pattern="dots">2. A crafting economy that can't collapse</tk-tape-title>
+<div class="verdict"><tk-stamp ink="cobalt" tilt="4">Guarantee</tk-stamp><p>Five resources (ore, wood, tools, food, workers) and nine recipes, run as a mass-action reaction network. Left drops two "return" recipes. Right keeps every recipe on a directed cycle (weak reversibility), and the theorem then says every resource stays between fixed positive bounds.</p></div>
+<figure class="vid"><video controls playsinline preload="none" poster="./files/01-economy.jpg" src="./files/01-economy.mp4"></video><figcaption>Same rates, same six starting states, same stiff solver on both sides.</figcaption></figure>
+<tk-stats>
+<tk-stat><div class="tk-value">6/30 → 0</div><div class="tk-label">Resource tracks that went extinct (&lt;1e-6)</div></tk-stat>
+<tk-stat><div class="tk-value">6/6 → 0</div><div class="tk-label">Runs that blew up past 1e10</div></tk-stat>
+<tk-stat><div class="tk-value">0.48–1.54</div><div class="tk-label">Range of every resource at the end, with the rule</div></tk-stat>
+</tk-stats>
+<p class="use"><strong>Game use:</strong> a design rule you can check in code (strongly connected components of the recipe graph) before you ever balance a number. The demo's network sits outside every older special case, which the code also checks.</p>
+<p class="where"><strong>Compute per frame:</strong> without 16.7 µs → with 2.7 µs, median, measured alone (left is slower only because its blow-up is stiff).<br><strong>Caveat:</strong> the theorem proves the bounds exist but doesn't give their values, so the band in the plot is empirical. The left side's collapse is one demonstrated case, not a theorem about every network.<br><strong>Paper:</strong> family 149, <code>preprints/Uniform-Permanence-in-Weakly-Reversible-Mass-Action-Systems-October-5-2026</code> · demo <code>demos\01-economy</code></p>
+</tk-section>
+
+<tk-section id="gates">
+<tk-tape-title level="2" tape="cobalt" pattern="dots">3. Fluid gates: swap regions without merging them</tk-tape-title>
+<div class="verdict"><tk-stamp ink="cobalt" tilt="-4">Guarantee</tk-stamp><p>Three dye regions swap and reshape through overlapping slots, then return. Left tweens them in one plane: a straight lerp, then exponential scaling, which keeps area. Right uses the paper's seven-stage divergence-free shear flow, lifting each region to its own height.</p></div>
+<figure class="vid"><video controls playsinline preload="none" poster="./files/02-fluid-gates.jpg" src="./files/02-fluid-gates.mp4"></video><figcaption>Thousands of dye particles; the right side moves them with RK4 through the sampled velocity field.</figcaption></figure>
+<tk-stats>
+<tk-stat><div class="tk-value">105% → 0%</div><div class="tk-label">Overlap between regions on the same layer</div></tk-stat>
+<tk-stat><div class="tk-value">33% → 5e-12</div><div class="tk-label">Area drift (lerp); exp-scaling also keeps area but still collides</div></tk-stat>
+<tk-stat><div class="tk-value">1.90h ≤ 2h</div><div class="tk-label">Largest excursion, inside the proved bound</div></tk-stat>
+</tk-stats>
+<p class="use"><strong>Game use:</strong> scripted fluid or crowd "gates" that move and reshape whole regions while keeping volume exact and paths separate. Good for puzzle mechanics and set pieces.</p>
+<p class="where"><strong>Compute per frame:</strong> without 0.83 ms → with 2.71 ms, median, measured alone (12 threads; the new method is about 3× slower).<br><strong>Caveat:</strong> this demonstrates the construction. It is not a Navier–Stokes solver benchmark.<br><strong>Paper:</strong> family 376, <code>preprints/Finite-Instructions-and-Solenoidal-Shear-Flows-September-27-2026</code> · demo <code>demos\02-fluid-gates</code></p>
+</tk-section>
+
+<tk-section id="blob">
+<tk-tape-title level="2" tape="cobalt" pattern="dots">4. Periodic blob: the exact shape a solver should find</tk-tape-title>
+<div class="verdict"><tk-stamp ink="cobalt" tilt="5">Exact target</tk-stamp><p>In a wrap-around cube, the least-surface shape holding a given volume is a ball, then a tube, then a slab, switching at 4π/81 and 1/π. Left relaxes random starts with a standard volume-preserving MBO solver. Right draws the shape the theorem proves optimal, in closed form.</p></div>
+<figure class="vid"><video controls playsinline preload="none" poster="./files/07-periodic-blob.jpg" src="./files/07-periodic-blob.mp4"></video><figcaption>Volume sweeps 0.03 → 0.97; 2×2×2 periodic copies; the same area estimator scores both sides.</figcaption></figure>
+<tk-stats>
+<tk-stat><div class="tk-value">8.7% → 0.13%</div><div class="tk-label">Mean area above the optimum (0.13% is estimator bias)</div></tk-stat>
+<tk-stat><div class="tk-value">40% → 100%</div><div class="tk-label">Frames showing the right shape type</div></tk-stat>
+<tk-stat><div class="tk-value">20/36</div><div class="tk-label">Random starts within 2% after 240 solver iterations</div></tk-stat>
+</tk-stats>
+<p class="use"><strong>Game use:</strong> a free, exact answer for blob, terrain and slime shapes in tiling worlds, and a test oracle that shows when your relaxation solver gets stuck.</p>
+<p class="where"><strong>Compute per frame:</strong> without 5.17 ms → with 1.86 ms, median, measured alone (formula vs 3 solver iterations, so not a like-for-like speedup).<br><strong>Caveat:</strong> the shapes were conjectured before; the paper proves they are the global optimum. It says nothing about relaxation speed.<br><strong>Paper:</strong> family 354, <code>preprints/The-Isoperimetric-Conjecture-for-the-Cubic-Flat-Three-Torus-September-24-2026</code> · demo <code>demos\07-periodic-blob</code></p>
+</tk-section>
+
+<tk-section id="frontier">
+<tk-tape-title level="2" tape="cobalt" pattern="dots">5. Fractal frontier: one clock for every grid size</tk-tape-title>
+<div class="verdict"><tk-stamp ink="cobalt" tilt="-3">Consistency</tk-stamp><p>Critical percolation fronts creep across 64², 256² and 1024² grids. Left charges a constant speed per unit length, so finer grids take far longer. Right charges δ^(7/4) per step with one constant, which the paper proves converges.</p></div>
+<figure class="vid"><video controls playsinline preload="none" poster="./files/04-fractal-frontier.jpg" src="./files/04-fractal-frontier.mp4"></video><figcaption>Thousands of sampled curves per grid; duration distributions plotted live.</figcaption></figure>
+<tk-stats>
+<tk-stat><div class="tk-value">7.9× → 0.99×</div><div class="tk-label">Median duration, 1024² vs 64²</div></tk-stat>
+<tk-stat><div class="tk-value">683% → 2.9%</div><div class="tk-label">Mismatch in time spent per screen region</div></tk-stat>
+<tk-stat><div class="tk-value">3.08 / 3.06 / 3.03 s</div><div class="tk-label">Median duration on the three grids, with the new clock</div></tk-stat>
+</tk-stats>
+<p class="use"><strong>Game use:</strong> fog-of-war, fire or infection fronts that take the same time at any map resolution or LOD.</p>
+<p class="where"><strong>Compute per frame:</strong> without 6.48 ms → with 6.58 ms, median, measured alone (identical work on both sides).<br><strong>Caveat:</strong> the 7/4 exponent is classical. What's new is the proof that it gives a resolution-independent measure on the square lattice. The 1-second unit is arbitrary because the paper's constant isn't known.<br><strong>Paper:</strong> family 223, <code>preprints/Natural-Occupation-Measures-for-Critical-Square-Lattice-FK-Interfaces-October-5-2026</code> · demo <code>demos\04-fractal-frontier</code></p>
+</tk-section>
+
+<tk-section id="dungeon">
+<tk-tape-title level="2" tape="cobalt" pattern="dots">6. Dungeon shuffle: provably fair random layouts</tk-tape-title>
+<div class="verdict"><tk-stamp ink="cobalt" tilt="4">Guarantee</tk-stamp><p>Rewire a 20-room dungeon while every room keeps its door count. Left uses double-edge swaps with an ad hoc burn-in of one swap per door. Right uses Curveball trades for the burn-in the paper certifies: 12,644 trades.</p></div>
+<figure class="vid"><video controls playsinline preload="none" poster="./files/06-dungeon-shuffle.jpg" src="./files/06-dungeon-shuffle.mp4"></video><figcaption>Exact distance to uniform is computed over every possible graph for two small cases (70 and 623 graphs).</figcaption></figure>
+<tk-stats>
+<tk-stat><div class="tk-value">0.46 → 1.8e-14</div><div class="tk-label">Exact bias (TV distance), irregular 8-room case</div></tk-stat>
+<tk-stat><div class="tk-value">9.8 → 5.6</div><div class="tk-label">Original doors kept per layout (uniform ≈ 5.64)</div></tk-stat>
+<tk-stat><div class="tk-value">0.34 ms</div><div class="tk-label">Cost per certified layout (about 128× the ad hoc one)</div></tk-stat>
+</tk-stats>
+<p class="use"><strong>Game use:</strong> fair procedural levels for any door-count sequence, with a burn-in you can compute instead of guess.</p>
+<p class="where"><strong>Compute per frame:</strong> without 2.1 µs → with 0.32 ms, median, measured alone.<br><strong>Caveat:</strong> double-edge swaps also mix fast on these cases; they just come with no guarantee. The bound certifies fairness, not speed.<br><strong>Paper:</strong> family 131, <code>preprints/Polynomial-Mixing-of-the-Switch-Chain-for-Every-Graphical-Degree-Sequence-September-25-2026</code> · demo <code>demos\06-dungeon-shuffle</code></p>
+</tk-section>
+
+<tk-section id="morph">
+<tk-tape-title level="2" tape="cobalt" pattern="dots">7. Convex morph: a tighter in-between with a volume floor</tk-tape-title>
+<div class="verdict"><tk-stamp ink="cobalt" tilt="-5">Guarantee</tk-stamp><p>Morph between symmetric 3D crystals. Left is Minkowski interpolation, which already has a volume floor. Right is the logarithmic morph, whose floor ≥ |K|^(1−λ)|L|^λ is the new theorem. A naive vertex lerp, plotted in grey, has no floor at all.</p></div>
+<figure class="vid"><video controls playsinline preload="none" poster="./files/08-convex-morph.jpg" src="./files/08-convex-morph.mp4"></video><figcaption>Five generic symmetric polyhedra; both sides clip the same ~352 half-spaces.</figcaption></figure>
+<tk-stats>
+<tk-stat><div class="tk-value">1.65× → 1.38×</div><div class="tk-label">Peak bloat above the floor</div></tk-stat>
+<tk-stat><div class="tk-value">≥ 1.02</div><div class="tk-label">Lowest volume/floor with the log morph</div></tk-stat>
+<tk-stat><div class="tk-value">0.80×</div><div class="tk-label">Naive vertex lerp dips below the floor</div></tk-stat>
+</tk-stats>
+<p class="use"><strong>Game use:</strong> morphing rooms, crystals or collision hulls that never collapse and stay closer to the endpoints than Minkowski blending.</p>
+<p class="where"><strong>Compute per frame:</strong> without 7.33 ms → with 3.08 ms, median, measured alone (the log body is cheaper only because fewer planes cut it; that isn't the result).<br><strong>Caveat:</strong> the baseline doesn't collapse either. The gain is a smaller, guaranteed morph.<br><strong>Paper:</strong> family 091, <code>preprints/The-logarithmic-Brunn-Minkowski-conjecture-September-23-2026</code> · demo <code>demos\08-convex-morph</code></p>
+</tk-section>
+
+<tk-section id="crowd">
+<tk-tape-title level="2" tape="cobalt" pattern="dots">8. Crowd hub: a small move reshuffles many people</tk-tape-title>
+<div class="verdict"><tk-stamp ink="cobalt" tilt="3">Warning</tk-stamp><p>176,400 agents split optimally between three destinations. A hub nudges back and forth. Left keeps everyone's assignment frozen. Right recomputes the optimal assignment, which jumps like the cube root of the move. The paper proves 1/3 is sharp.</p></div>
+<figure class="vid"><video controls playsinline preload="none" poster="./files/05-crowd-hub.jpg" src="./files/05-crowd-hub.mp4"></video><figcaption>All numbers come from exact integration, not agent counts.</figcaption></figure>
+<tk-stats>
+<tk-stat><div class="tk-value">0% → 11%</div><div class="tk-label">Agents relabelled per nudge (largest hub)</div></tk-stat>
+<tk-stat><div class="tk-value">1.00 → 0.334</div><div class="tk-label">Log-log slope of map change vs move (proved: 1/3)</div></tk-stat>
+<tk-stat><div class="tk-value">a²/12</div><div class="tk-label">Exact extra cost of keeping labels frozen</div></tk-stat>
+</tk-stats>
+<p class="use"><strong>Game use:</strong> if you re-solve crowd or unit allocation every frame, expect visible flicker when targets move slightly. Freezing or hysteresis is cheap by comparison.</p>
+<p class="where"><strong>Compute per frame:</strong> without 81.7 µs → with 0.20 ms, median, measured alone.<br><strong>Caveat:</strong> this is a warning, not a faster allocator. A classical power-cell solver gives the same labels.<br><strong>Paper:</strong> family 374, <code>preprints/Sharp-One-Third-Stability-of-Brenier-Maps-September-25-2026</code> · demo <code>demos\05-crowd-hub</code></p>
+</tk-section>
+
+<tk-section id="cubic">
+<tk-tape-title level="2" tape="cobalt" pattern="dots">9. Cubic interference: a proved hidden bias</tk-tape-title>
+<div class="verdict"><tk-stamp ink="cobalt" tilt="-4">Proved bias</tk-stamp><p>Phasor walks of e^(2πi x³/p) for primes p ≡ 1 mod 3, summed into a running total M(X). Left assumes each sum is a random arrow, which is what a designer would guess. Right shows the true sums tracking the paper's proved law K·X^(5/6)/log X.</p></div>
+<figure class="vid"><video controls playsinline preload="none" poster="./files/09-cubic-interference.jpg" src="./files/09-cubic-interference.mp4"></video><figcaption>X sweeps to 250,000 (10,996 primes).</figcaption></figure>
+<tk-stats>
+<tk-stat><div class="tk-value">18σ</div><div class="tk-label">How far the random-arrow model misses</div></tk-stat>
+<tk-stat><div class="tk-value">1.07</div><div class="tk-label">True total / proved prediction at X = 250,000</div></tk-stat>
+<tk-stat><div class="tk-value">0</div><div class="tk-label">Speedup: both sides do the same sums</div></tk-stat>
+</tk-stats>
+<p class="use"><strong>Game use:</strong> generative art, and a "looks random but drifts" mechanic with a known drift rate.</p>
+<p class="where"><strong>Compute per frame:</strong> without 10.2 ms → with 9.36 ms, median, measured alone.<br><strong>Caveat:</strong> the error term has no bound at finite X, so the 1.07 isn't explained by the theorem.<br><strong>Paper:</strong> family 023, <code>preprints/An-unconditional-first-moment-for-cubic-Gauss-sums-September-25-2026</code> · demo <code>demos\09-cubic-interference</code></p>
+</tk-section>
+
+<tk-torn></tk-torn>
+
+<tk-section id="others">
+<h2>Other solid leads, not demoed</h2>
+<p>The verifiers rated these accurate, with the new result genuinely needed. The 32 stretches are in <code>math-scan\verify-games</code>.</p>
+<tk-table data="#other-rows"></tk-table>
+<script type="application/json" id="other-rows">{"columns": ["Family", "Lead", "What you get"], "rows": [["011", "A cheap proxy for prime-factor fragmentation", "Generate cheap random fragment sizes that reproduce the limiting logarithmic factor sizes of prime predecessors."], ["017", "A threshold for rare resonance bursts", "Choose decay and resonance strengths so an exact integer-radian impulse stream has a finite lifetime total."], ["049", "An extra dimension straightens a polynomial world", "Sample a warped polynomial surface exactly, then expose the extra variable that makes its coordinate system polynomially straight."], ["076", "Binary probes with almost perfectly flat spectra", "A binary probe could deliver nearly equal spectral power at every frequency if a practical theorem-derived sign sequence can be produced."], ["082", "XOR interactions with a fixed budget across scales", "Combine three cyclic interaction fields across dyadic scales with a certified total contribution budget."], ["096", "An exact noise budget for an NPC choosing its best action", "Put an exact ceiling on an NPC's average best Gaussian action score under a fixed total noise budget."], ["173", "Choose a start with at least as many fresh two-hop options", "Select a map start whose fresh two-hop destinations carry at least as much reward as its immediate destinations."], ["211", "A procedural world that becomes tree-like above q = 4", "Generate cycle-containing planar worlds whose large-scale distances approach a random tree when the FK weight is above four."], ["224", "Keep random-map connectivity difficulty consistent across resolutions", "Give random Voronoi terrain a connectivity slider calibrated across resolutions and comparable with a regular triangular board."], ["225", "An exact roughness knob for constrained random surfaces", "Calibrate the large-scale roughness of an arrow-constrained random surface with a known formula instead of fitting its amplitude separately at every setting."], ["229", "A precise noise knob for hidden-faction clues", "Choose when distant, noisy clues can still reveal a hidden three-way faction, accounting for both branching and contrary rumors."], ["235", "Size-aware difficulty bands for random logic puzzles", "Scale a random logic puzzle's satisfiability band with its size instead of keeping a fixed clause-density offset."], ["262", "Wave traps that spend their binding budget optimally", "Build the most efficient two-channel wave wells, and show why rotating their channels with position wastes binding budget."], ["272", "Entanglement survives two applications of explicit PPT noise", "Show a concrete quantum noise channel whose repeated use leaves some entanglement intact."], ["331", "Hierarchical ability budgets from two recursive fields", "Build a hierarchy-aware signed budget whose cost depends on where demands sit and how the two recursive capacity fields interact."], ["332", "Median-of-three diffusion for graph-driven game attributes", "Smooth many graph-node attributes with an explicit nonlinear rule and a dimension-independent bound on how far values move versus how rough they remain."], ["352", "A positive shrinking geometry with exploding curvature", "Animate an explicit shrinking radial core whose metric remains positive while its center curvature diverges."]]}</script>
+</tk-section>
+
+<tk-section id="fixes">
+<h2>Repo fixes, merged</h2>
+<p>Following the earlier advice, each fix was fast-forwarded into its local working branch. Nothing was pushed.</p>
+<ul>
+<li>HexagonPacker, Keylight-Kate, the tee sheet and the face tracker merged as they were.</li>
+<li>ListingPipeline got the glare part only (<code>f09e19d</code>); 80/80 tests pass. The blur change stays on <code>mathscan/qc-item-region</code>.</li>
+<li>The tee sheet's grouping docs and ADR-011 now describe whole-cluster placement; those edits are uncommitted, beside your other doc changes.</li>
+</ul>
+</tk-section>
+</tk-page>
+</body>
+</html>

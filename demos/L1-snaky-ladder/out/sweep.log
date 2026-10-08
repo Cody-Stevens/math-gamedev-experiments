@@ -1,0 +1,29 @@
+certificate Maker quality (budget-independent, same seeds as every stage): vs alpha-beta 100%, vs greedy 100%, max moves in a win 13, 0.298 us/move [1s]
+sweep: stages 1..262144 (x2), untimed referee/Breaker threads 1, quality threads 6, 60 games per Breaker kind
+timing Breakers: random-local / greedy ES blocker (alternating by slot); quality Breakers: alpha-beta (03-snaky, 6000 nodes) and greedy
+       n |    W/O med    W/O p95    frm |   WITH med   WITH p95    frm |     ratio | quality a-b: srch / cert | greedy: srch / cert, srch us/move (allot), nodes
+       1 |    3.62 ms    4.88 ms    579 |   0.10 µs   0.20 µs 300000 |   >=×18k |   100% /   100%            |  100% /  100%, 12912.85 us (1.67e+04), 13784 nodes  [4s]
+       2 |    5.45 ms    9.78 ms    244 |   0.10 µs   0.30 µs 174862 |   >=×27k |   100% /   100%            |  100% /  100%, 6364.50 us (8.35e+03), 7181 nodes  [2s]
+       4 |    13.4 ms    17.9 ms    121 |   0.20 µs   0.40 µs  88376 |   >=×45k |    88% /   100%            |  100% /  100%, 3721.51 us (4.18e+03), 5416 nodes  [4s]
+       8 |    25.7 ms    35.8 ms     63 |   0.30 µs   0.70 µs  44862 |     ×86k |    85% /   100%            |  100% /  100%, 1878.71 us (2.09e+03), 2982 nodes  [3s]
+      16 |    48.0 ms    71.6 ms     32 |   0.70 µs   1.50 µs  21228 |     ×69k |    80% /   100%            |  100% /  100%, 983.51 us (1.04e+03), 1692 nodes  [4s]
+      32 |    91.2 ms   133.1 ms     16 |   1.40 µs   3.20 µs  10366 |     ×65k |    60% /   100%            |  100% /  100%, 504.40 us (522), 903 nodes  [5s]
+      64 |   187.3 ms   283.3 ms     15 |   2.10 µs   3.70 µs   6038 |     ×89k |    43% /   100%            |   98% /  100%, 255.25 us (261), 470 nodes  [5s]
+     128 |   350.5 ms   676.7 ms     10 |   6.40 µs   11.1 µs   2429 |     ×55k |    42% /   100%            |  100% /  100%, 129.79 us (130), 268 nodes  [5s]
+     256 |     1.05 s     1.26 s      7 |   12.3 µs   14.3 µs   1201 |     ×86k |    15% /   100%            |   93% /  100%, 67.12 us (65.2), 121 nodes  [6s]
+     512 |     2.46 s     2.50 s      4 |   27.4 µs   45.9 µs    560 |     ×90k |     3% /   100%            |   90% /  100%, 34.83 us (32.6), 62 nodes  [7s]
+   1,024 |     5.05 s     5.05 s      1 |   59.2 µs   86.9 µs    297 |     ×85k |     0% /   100%            |   77% /  100%, 18.69 us (16.3), 29 nodes  [7s]
+   2,048 |          -          -      0 |  174.8 µs  213.3 µs    150 |         - |     0% /   100%            |  100% /  100%, 11.00 us (8.15), 15 nodes  [7s]
+   4,096 |          -          -      0 |  390.6 µs  489.5 µs     77 |         - |     2% /   100%            |  100% /  100%, 4.82 us (4.08), 4 nodes  [7s]
+   8,192 |          -          -      0 |  832.9 µs  953.7 µs     36 |         - |     0% /   100%            |   90% /  100%, 3.08 us (2.04), 1 nodes  [7s]
+  16,384 |          -          -      0 |    1.74 ms    2.01 ms     18 |         - |     0% /   100%            |  100% /  100%, 2.86 us (1.02), 0 nodes  [7s]
+  32,768 |          -          -      0 |    3.13 ms    4.06 ms     15 |         - |     0% /   100%            |  100% /  100%, 2.78 us (0.51), 0 nodes  [7s]
+  65,536 |          -          -      0 |    6.78 ms    8.07 ms     15 |         - |     0% /   100%            |  100% /  100%, 3.09 us (0.255), 0 nodes  [7s]
+ 131,072 |          -          -      0 |    14.1 ms    16.6 ms     15 |         - | 
+ 262,144 |          -          -      0 |    28.7 ms    31.0 ms     15 |         - | 
+fit (log-log slope of median ms vs n): WITHOUT 1.053 (all), 1.080 (n>=4) | WITH 1.132 (n>=32, medians >= 10 timer ticks), 1.076 (all, resolution-limited at small n), 1.137 (n>=64)
+timer tick 0.1 us
+max n within 16.7 ms: WITHOUT 4 (first over: 8) | WITH 131072 (first over: 262144)
+WITHOUT not timed above n=1024 (median > 5000 ms/frame there)
+sweep wall 216.4 s
+wrote L1-snaky-ladder/out/ladder.json

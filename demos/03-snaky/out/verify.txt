@@ -1,0 +1,12 @@
+certificate: 39089 bytes on disk, 38367 bytes LF, sha256(LF) 3fa12d36a6d4dbb185e3f2808c8dfde13d85ee309afbca030d6ad17ae9fe3d04 MATCH
+cards 728  combination nodes 1620  inline 898  references 4089  reply classes 37042
+card 727: pivot (8,8) |A| 0 |T| 251 h 21 ; T in {0..16}^2
+cards_sha256     8d9134e82a9e75f5959ca928c20d1625d7b3929f1bb6525d32317eaadbca844a MATCH
+postorder_sha256 99a97ab2fc1be95e3ce2addeef7ce2a70787f199ea328d122158a81c00098bd1 MATCH
+runtime tables: 94.1 KB
+stress mode 0: 20000 games, 20000 wins, max Maker moves 21, invariant breaks 0, replacements 0 (0.6 s)
+  hist: 21:20000
+stress mode 1: 20000 games, 20000 wins, max Maker moves 10, invariant breaks 0, replacements 0 (0.1 s)
+  hist: 6:3068 7:16566 8:322 9:39 10:5
+stress mode 2: 20000 games, 20000 wins, max Maker moves 9, invariant breaks 0, replacements 0 (0.0 s)
+  hist: 6:503 7:19429 8:64 9:4

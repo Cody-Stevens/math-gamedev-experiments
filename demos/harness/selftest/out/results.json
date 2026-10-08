@@ -1,0 +1,58 @@
+{
+  "demo": "selftest",
+  "generated_utc": "2026-10-07T16:44:07Z",
+  "title_left": "primitive gallery",
+  "title_right": "colormaps + fields",
+  "caption": "harness self-test · every primitive, both HUD styles · ignore the numbers",
+  "frames": 30,
+  "fps": 60,
+  "warmup_frames_excluded": 3,
+  "preview": true,
+  "video": null,
+  "poster": "<repo>/demos/harness/selftest/out/poster.png",
+  "stills": ["<repo>/demos/harness/selftest/out/still_frame10.png"],
+  "timing_note": "compute_ms_per_frame = wall time inside the panel's measure() scopes per frame (QueryPerformanceCounter); rendering, HUD, PNG and video encoding excluded. fps = 1000 / ms.",
+  "machine": {"cpu": "AMD Ryzen 9 9900X 12-Core Processor", "hw_threads": 24, "ram_gb": 30.9, "os": "Windows", "compiler": "clang 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)"},
+  "wall_seconds": 0.73,
+  "harness_ms_per_frame": 10.45,
+  "panels": [
+    {
+      "side": "left",
+      "role": "WITHOUT",
+      "method": "primitive gallery",
+      "compute_label": "compute",
+      "steps_per_frame": 1,
+      "compute_ms_per_frame": {"n": 27, "mean": 1.60011, "median": 1.5972, "p95": 1.72936, "min": 1.4346, "max": 1.808, "stdev": 0.0950054},
+      "ms_per_step_median": 1.5972,
+      "fps_from_median": 626.096,
+      "fps_from_mean": 624.958,
+      "budget_ms": 1,
+      "frames_over_budget": 27,
+      "metrics": {
+        "residual": {"last": 1.58489e-07, "mean": 0.00903237, "min": 1.58489e-07, "max": 0.1, "n": 30, "display": "1.58e-07"},
+        "status": {"display": "text-only metric"}
+      },
+      "extra": {}
+    },
+    {
+      "side": "right",
+      "role": "WITH",
+      "method": "colormaps + fields",
+      "compute_label": "compute",
+      "steps_per_frame": 1,
+      "compute_ms_per_frame": {"n": 27, "mean": 0.156222, "median": 0.1539, "p95": 0.17012, "min": 0.1495, "max": 0.1735, "stdev": 0.00661945},
+      "ms_per_step_median": 0.1539,
+      "fps_from_median": 6497.73,
+      "fps_from_mean": 6401.14,
+      "metrics": {
+        "residual": {"last": 1.58489e-09, "mean": 9.03237e-05, "min": 1.58489e-09, "max": 0.001, "n": 30, "display": "1.58e-09"}
+      },
+      "extra": {}
+    }
+  ],
+  "speedup_median_compute": 10.3782,
+  "extra": {
+    "checksum": 33141.3,
+    "note": "selftest"
+  }
+}

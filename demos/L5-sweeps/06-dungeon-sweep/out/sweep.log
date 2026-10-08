@@ -1,0 +1,17 @@
+06-dungeon-sweep: 1 layout per frame, single-threaded timing; untimed WITH quality samples on 12 threads
+n= 10 m= 12 deg 1..5 T=734 | WITHOUT 0.0002023 ms  empirical 0.0002632 ms  WITH 0.01403 ms (3209 frames, 0.0191 us/step) | autocorr +0.2539 / +0.1165 / -0.0077 (n_with=4000) ref 5.17/5.15 floor 0.012  [5 s]
+n= 20 m= 28 deg 1..6 T=12644 | WITHOUT 0.000453 ms  empirical 0.0008365 ms  WITH 0.3869 ms (2005 frames, 0.0306 us/step) | autocorr +0.1775 / +0.0666 / -0.0038 (n_with=4000) ref 5.68/5.63 floor 0.010  [9 s]
+n= 40 m= 60 deg 1..6 T=211397 | WITHOUT 0.0007596 ms  empirical 0.001846 ms  WITH 6.957 ms (216 frames, 0.0329 us/step) | autocorr +0.1554 / +0.0602 / -0.0003 (n_with=4000) ref 6.00/6.00 floor 0.023  [16 s]
+n= 80 m=127 deg 1..6 T=3462936 | WITHOUT 0.001548 ms  empirical 0.00524 ms  WITH 158.8 ms (15 frames, 0.0459 us/step) | autocorr +0.1468 / +0.0542 / +0.0013 (n_with=921) ref 6.72/6.72 floor 0.021  [35 s]
+n=160 m=261 deg 1..6 T=56083870 | WITHOUT 0.003198 ms  empirical 0.01292 ms  WITH 3030 ms (2 frames, 0.0540 us/step) | autocorr +0.1397 / +0.0454 / -0.0004 (n_with=49) ref 6.42/6.43 floor 0.023  [58 s]
+n=320 m=535 deg 1..7 T=902887862 | WITHOUT 0.006508 ms  empirical 0.03391 ms  WITH 6.388e+04 ms (1 frames, 0.0707 us/step) | autocorr +0.1364 / +0.0474 / +0.0000 (n_with=1) ref 7.00/6.95 floor 0.025  [125 s]
+
+n            WITHOUT ms      WITH ms     ratio    empirical  frames(wo/w)
+10            0.0002023      0.01403    0.0144    0.0002632  4115/3209
+20             0.000453       0.3869   0.00117    0.0008365  3094/2005
+40            0.0007596        6.957  0.000109     0.001846  4425/216
+80             0.001548        158.8  9.75e-06      0.00524  3674/15
+160            0.003198         3030  1.06e-06      0.01292  3427/2
+320            0.006508    6.388e+04  1.02e-07      0.03391  3327/1
+fit exponents: without 0.986  with 4.397
+wrote <repo>\demos\L5-sweeps\06-dungeon-sweep/out/ladder.json  (total 125.3 s)

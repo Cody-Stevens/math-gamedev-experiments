@@ -1,0 +1,51 @@
+[build] L3-fractal-ladder/main.cpp
+[stats] reference n=8192, 6000 curves, 24 threads...
+[stats] n=   16 M=16000  0.0s  medErr WITHOUT -0.990 WITH +0.0669 [+0.0477,+0.0804]  occL1 WITHOUT 0.990 WITH 0.0916 [0.0874,0.0985] floor 0.0109  N/n^1.75=3.3117
+[stats] n=   32 M=16000  0.0s  medErr WITHOUT -0.984 WITH +0.0322 [+0.0191,+0.0488]  occL1 WITHOUT 0.984 WITH 0.0470 [0.0452,0.0560] floor 0.0108  N/n^1.75=3.2088
+[stats] n=   64 M=16000  0.1s  medErr WITHOUT -0.973 WITH +0.0088 [-0.0019,+0.0236]  occL1 WITHOUT 0.973 WITH 0.0277 [0.0259,0.0362] floor 0.0107  N/n^1.75=3.1473
+[stats] n=  128 M=16000  0.1s  medErr WITHOUT -0.956 WITH -0.0006 [-0.0146,+0.0156]  occL1 WITHOUT 0.956 WITH 0.0154 [0.0152,0.0233] floor 0.0107  N/n^1.75=3.1140
+[stats] n=  256 M=16000  0.4s  medErr WITHOUT -0.926 WITH +0.0023 [-0.0122,+0.0169]  occL1 WITHOUT 0.926 WITH 0.0125 [0.0120,0.0231] floor 0.0107  N/n^1.75=3.1094
+[stats] n=  512 M=16000  1.4s  medErr WITHOUT -0.875 WITH -0.0036 [-0.0186,+0.0119]  occL1 WITHOUT 0.875 WITH 0.0107 [0.0117,0.0202] floor 0.0107  N/n^1.75=3.1072
+[stats] n= 1024 M=12000  3.1s  medErr WITHOUT -0.793 WITH -0.0161 [-0.0282,-0.0004]  occL1 WITHOUT 0.793 WITH 0.0160 [0.0133,0.0260] floor 0.0111  N/n^1.75=3.0726
+[stats] n= 2048 M= 8000  7.4s  medErr WITHOUT -0.654 WITH -0.0203 [-0.0358,-0.0025]  occL1 WITHOUT 0.651 WITH 0.0162 [0.0140,0.0272] floor 0.0120  N/n^1.75=3.0715
+[stats] n= 4096 M= 4000  11.6s  medErr WITHOUT -0.403 WITH +0.0035 [-0.0150,+0.0191]  occL1 WITHOUT 0.408 WITH 0.0123 [0.0141,0.0252] floor 0.0144  N/n^1.75=3.1041
+[stats] n= 8192 M= 3000  29.2s  medErr WITHOUT -0.001 WITH -0.0009 [-0.0239,+0.0203]  occL1 WITHOUT 0.011 WITH 0.0110 [0.0151,0.0265] floor 0.0157  N/n^1.75=3.0950
+[L3-fractal-ladder] 2210 frames @ 60 fps, libx264 -> <repo>/demos/L3-fractal-ladder/out
+[L3-fractal-ladder] frame 403/2210  L 0.008 ms  R 0.009 ms  (5.0 s)
+[L3-fractal-ladder] frame 758/2210  L 0.093 ms  R 0.096 ms  (10.0 s)
+[L3-fractal-ladder] frame 1133/2210  L 1.31 ms  R 1.31 ms  (15.0 s)
+[L3-fractal-ladder] frame 1421/2210  L 3.04 ms  R 3.02 ms  (20.0 s)
+[L3-fractal-ladder] frame 1575/2210  L 12.2 ms  R 12.4 ms  (25.0 s)
+[L3-fractal-ladder] frame 1696/2210  L 32.5 ms  R 32.5 ms  (30.1 s)
+[L3-fractal-ladder] frame 1746/2210  L 43.0 ms  R 43.9 ms  (35.2 s)
+[L3-fractal-ladder] frame 1800/2210  L 44.7 ms  R 44.3 ms  (40.3 s)
+[L3-fractal-ladder] frame 1858/2210  L 39.5 ms  R 39.3 ms  (45.3 s)
+[L3-fractal-ladder] frame 1898/2210  L 85.9 ms  R 84.4 ms  (50.6 s)
+[L3-fractal-ladder] frame 1916/2210  L 137 ms  R 136 ms  (55.7 s)
+[L3-fractal-ladder] frame 1933/2210  L 144 ms  R 144 ms  (60.7 s)
+[L3-fractal-ladder] frame 1952/2210  L 131 ms  R 132 ms  (65.8 s)
+[L3-fractal-ladder] frame 1970/2210  L 133 ms  R 134 ms  (70.9 s)
+[L3-fractal-ladder] frame 1989/2210  L 138 ms  R 139 ms  (76.1 s)
+[L3-fractal-ladder] frame 2008/2210  L 129 ms  R 128 ms  (81.3 s)
+[L3-fractal-ladder] frame 2030/2210  L 113 ms  R 113 ms  (86.5 s)
+[L3-fractal-ladder] frame 2046/2210  L 138 ms  R 139 ms  (91.6 s)
+[L3-fractal-ladder] frame 2062/2210  L 137 ms  R 140 ms  (96.8 s)
+[L3-fractal-ladder] frame 2082/2210  L 126 ms  R 127 ms  (102.1 s)
+[L3-fractal-ladder] frame 2101/2210  L 122 ms  R 121 ms  (107.1 s)
+[L3-fractal-ladder] frame 2120/2210  L 127 ms  R 126 ms  (112.2 s)
+[L3-fractal-ladder] frame 2141/2210  L 110 ms  R 113 ms  (117.3 s)
+[L3-fractal-ladder] frame 2163/2210  L 109 ms  R 111 ms  (122.6 s)
+[L3-fractal-ladder] frame 2182/2210  L 135 ms  R 138 ms  (128.0 s)
+[L3-fractal-ladder] frame 2198/2210  L 149 ms  R 148 ms  (133.1 s)
+[L3-fractal-ladder] frame 2210/2210  L 128 ms  R 127 ms  (136.4 s)
+[L3-fractal-ladder] done: 2210 frames in 136.5 s
+  LEFT   length clock · dt ∝ δ, tuned at the  median 0.852 ms/frame  p95 150  (1,174 fps compute-only)
+  RIGHT  natural clock · dt = 1 s × δ^(7/4), o median 0.865 ms/frame  p95 149  (1,156 fps compute-only)
+  speedup (median compute): 0.98x
+  video:   <repo>/demos/L3-fractal-ladder/out/L3-fractal-ladder.mp4
+  poster:  <repo>/demos/L3-fractal-ladder/out/poster.png
+  results: <repo>/demos/L3-fractal-ladder/out/results.json
+
+real	4m13.189s
+user	0m0.000s
+sys	0m0.090s

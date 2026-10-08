@@ -1,0 +1,51 @@
+# Slice 2 games/sim findings (families 038-077)
+
+Families scanned: 37. Families with findings: 039, 049, 073, 076.
+
+The assigned lines contain no entries for 045, 061, or 070. Findings are ranked by practical demo value; G2.4 is a research lead with an unresolved construction step. All family descriptions and manuscript abstracts in the slice were scanned, and promising sources were checked in TeX.
+
+## G2.1: An extra dimension straightens a polynomial world
+
+- Family / paper: 049 — A stable coordinate that is not a coordinate in four variables — `preprints/A-stable-coordinate-that-is-not-a-coordinate-in-four-variables-October-5-2026/stable-coordinate-four-variables.pdf`. Checked `build/source/sections/01-introduction.tex` and `build/source/sections/02-construction.tex` in that manuscript directory.
+- Quote: "This gives a counterexample to the stable coordinate conjecture in four variables."
+- Kind: gameplay | visualization
+- Idea: Build a projected four-dimensional world from the explicit degree-five polynomial `Q = x2*x2 - x4*x4 + x1*x3`, `f = x1 - 2*Q*(Q*(x2+x4) + x1*x4)`. The paper supplies finite polynomial substitutions that make `f` a coordinate after adding one independent variable, although no complex polynomial automorphism can do so in the original four variables. A puzzle could expose that extra coordinate as a tool for changing the world's coordinate system, with the warped level sets and their flat representation shown side by side.
+- Demo sketch: In C++, use the construction section's explicit fiber parameterizations and matrix substitution to sample `f=0`, then project the samples into 3D and color them by the fourth coordinate; WITH these formulas, sampling requires no iterative constraint solve. WITHOUT them, project random starting points onto the same level set using Newton corrections, and compare maximum `abs(f)`, time per accepted vertex, failed projections, and frame time at equal vertex counts. A second view can apply the finite stabilization maps to show the level set as a coordinate hyperplane in five variables, recording round-trip error.
+- Proven vs. speculative: The polynomial, affine-three-space fibers, finite stabilization maps, and obstruction to complex polynomial rectification in four variables are proved; no asymptotic threshold or large construction constant is required. The puzzle and projection are extrapolations, and the theorem supplies neither an obstruction to smooth coordinate changes nor a claim of exotic topology in a visible real slice.
+- Wow: high · Confidence: med · Effort: M
+
+## G2.2: Fit a procedural field one row at a time
+
+- Family / paper: 039 — Nagata's conjecture for plane curves — `preprints/Nagatas-Conjecture-for-Plane-Curves-September-23-2026/build/sections/04-interpolation.tex`, Lemma "Interpolation by horizontal rows"; associated manuscript `preprints/Nagatas-Conjecture-for-Plane-Curves-September-23-2026/main.pdf`.
+- Quote: "Starting with the zero polynomial, match the prescribed values one row at a time."
+- Kind: gameplay | performance | sim-design-rule
+- Idea: Extract the paper's finite interpolation lemma as a placement rule for procedural-field control points or a polynomial-fitting puzzle. For positive integers `q,m`, let `N_K` count samples at height `K`: the conditions `N_K <= m` and `count{K: N_K >= t} <= q*(m-t+1)` for every integer `1 <= t <= m` guarantee arbitrary sample values can be matched in the basis `K^ell * J^b`, with `0 <= b < m` and `0 <= ell < q*(m-b)`. Sort rows by decreasing size, interpolate each row's residuals in `J`, and multiply its correction by `product(K-K_previous)` so previously matched rows stay fixed. This gives both a sufficient layout check and an explicit construction within a known coefficient budget.
+- Demo sketch: WITH the rule, choose `q=2,m=8` and row sizes `8,8,7,7,...,1,1`, giving 72 control values and 72 basis coefficients, then display the interpolated scalar field. WITHOUT the placement rule, put 72 distinct points on one height, where the basis has rank at most eight and generic targets cannot all be fitted. Separately benchmark row interpolation against dense 72-by-72 elimination on the same valid nodes, measuring solve time, maximum control-point residual, and overshoot between samples.
+- Proven vs. speculative: Exact interpolability and the degree budget are proved for finite sets, without the headline theorem's limiting degeneration machinery. Faster floating-point solves, good conditioning, and useful terrain or texture behavior require measurement; this uses familiar interpolation operations and is an implementation opportunity from the proof, not a claimed new standalone interpolation algorithm.
+- Wow: med · Confidence: high · Effort: S
+
+## G2.3: Irregular fractal worlds with a guaranteed supply of distances
+
+- Family / paper: 073 — The Falconer distance conjecture in all dimensions — `preprints/The-Falconer-distance-conjecture-in-all-dimensions-September-23-2026/paper.pdf`. Checked `preprints/The-Falconer-distance-conjecture-in-all-dimensions-September-23-2026/build/sections/00_introduction.tex`.
+- Quote: "The assertion concerns positive Lebesgue measure; a distance set of Hausdorff dimension one alone would not suffice."
+- Kind: gameplay | visualization | sim-design-rule
+- Idea: Use the strict threshold `Hausdorff dimension > d/2` as a sufficient rule when designing irregular fractal locations whose all-pairs distances should occupy positive length in the continuum limit. In 2D, an analyst-designed four-corner construction can alternate contraction factors `0.30` and `0.45` in increasingly dominant blocks: its lower dimension stays at least `log(4)/log(1/0.30)`, approximately 1.151, while its density varies sharply across scales. That deliberately irregular regime matters because the introduction cites earlier results already covering planar sets with equal Hausdorff and packing dimensions above one. A zoomable map could expose the changing spatial density beside a histogram of distances between locations anywhere in the map.
+- Demo sketch: A small C/C++ demo samples recursive addresses directly, avoiding enumeration of every occupied cell, and displays the point cloud and a sampled all-pairs distance histogram. WITH the dimension rule, use the `0.30/0.45` schedule; WITHOUT the rule, allow an unchecked `0.18/0.45` schedule with arbitrarily long low-density blocks, while keeping the sample count and pair budget equal. Measure occupied distance-bin fraction and estimated covered length as bin width shrinks, plus generation and histogram time; the baseline has no guarantee, rather than a theorem that it must fail.
+- Proven vs. speculative: The theorem guarantees positive measure for the distance set of a compact limiting set above the strict threshold; it is unpinned and gives no corresponding range guarantee from a particular player or enemy location. The proposed fractal recipe and finite histogram are extrapolations: every finite cloud has only finitely many distances, and the inspected source supplies no usable sampling rate, uniform measure lower bound, or promise that the distance set contains an interval.
+- Wow: med · Confidence: med · Effort: S
+
+## G2.4: Binary probes with almost perfectly flat spectra
+
+- Family / paper: 076 — Ultraflat real Littlewood polynomials — `preprints/Ultraflat-real-Littlewood-polynomials-October-5-2026/ultraflat-real-littlewood-polynomials.pdf`. Checked `build/main.tex` and `build/sections/introduction.tex` and `build/sections/completion.tex` in that manuscript directory, with additional construction checks in `balanced.tex`, `rounding.tex`, and `waves.tex`.
+- Quote: "Thus real Littlewood polynomials can be ultraflat through every sufficiently large integer length."
+- Kind: visualization | sim-design-rule
+- Idea: A sequence of signs `a[k]` defines `P(z) = sum(a[k]*z^k)`; the paper proves that its magnitude can stay arbitrarily close to `sqrt(N)` at every frequency on the unit circle. Such a binary stimulus could excite a bank of simulated audio or mechanical oscillators with nearly equal spectral power while every input sample has the same magnitude. Uniform flatness also implies small aggregate aperiodic autocorrelation energy relative to `N*N`, suggesting low-correlation probe signals. These are signal-design applications, not guarantees of independent bits or unpredictable gameplay randomness.
+- Demo sketch: A small C++ viewer could compare a sequence produced by a finite port of the paper's construction WITH random signs and classical Rudin–Shapiro signs as the WITHOUT baselines, plotting frequency magnitude, aperiodic autocorrelation, and oscillator responses. Record normalized spectral minimum and maximum, ripple, binary merit factor, excitation spread, and offline generation time. Producing the paper-derived sequence is the unresolved first milestone; a heuristic search at lengths 32–512 would be a target-inspired feasibility experiment and must not be labeled an implementation of this theorem.
+- Proven vs. speculative: Uniform two-sided flatness is proved for independently chosen signs at every sufficiently large length, but the checked construction gives no evaluated `N0(epsilon)`, practical sign sequence, or runtime bound. It uses expanding auxiliary Fourier supports, constrained packing, oscillatory waves, and discrepancy rounding with unspecified size choices, so practical cost could be galactic and a few-hundred-line generator is not established; the oscillator applications remain speculative.
+- Wow: high · Confidence: low · Effort: L
+
+## Near misses
+
+- 071: Koebe circle-domain existence reaches arbitrary connectivity, but finite mapping was already classical and the new exhaustion/selection supplies no usable stopping or map-error rate.
+- 072, 074, 075, 077: Sharp conformal, tube, Fourier-convergence, and wave-extension results lack the finite constants, cutoff rates, or numerical stability guarantees needed for a convincing small with/without solver demo.
+- 053, 054: The former's genus is `10^60` with `3*binomial(10^60,3)` markings, a galactic object size; the latter's discriminant threshold is explicitly ineffective. Neither supplies a practical construction for this task.

@@ -1,0 +1,288 @@
+{
+ "generated": "2026-10-08T10:55:58.448Z",
+ "node": "v22.16.0",
+ "quick": false,
+ "games_per_cell": 60,
+ "calibration": {
+  "usPerNode": 1.2504545406589698,
+  "msPerMove": 5.5557890625,
+  "decisions": 64
+ },
+ "timing": [
+  {
+   "n": 1,
+   "prior_fixed_ms": 6.639700000000062,
+   "prior_budget_ms": 16.71394999999984,
+   "prior_budget_cut_pct": 0,
+   "prior_budget_depth": 6.115384615384615,
+   "new_ms": 0.0007000000005064066,
+   "new_us_per_move": 1.1020499999965523
+  },
+  {
+   "n": 4,
+   "prior_fixed_ms": 26.396099999999933,
+   "prior_budget_ms": 13.564500000000407,
+   "prior_budget_cut_pct": 76.19047619047619,
+   "prior_budget_depth": 4.791005291005291,
+   "new_ms": 0.0004000000008090865,
+   "new_us_per_move": 0.1693562500020107
+  },
+  {
+   "n": 16,
+   "prior_fixed_ms": 111.70919999999933,
+   "prior_budget_ms": 14.932300000000396,
+   "prior_budget_cut_pct": 81.93247126436782,
+   "prior_budget_depth": 3.6813936781609193,
+   "new_ms": 0.0015999999995983671,
+   "new_us_per_move": 0.14004375000089908
+  },
+  {
+   "n": 64,
+   "prior_fixed_ms": 462.15160000000105,
+   "prior_budget_ms": 16.421700000002602,
+   "prior_budget_cut_pct": 86.58266129032258,
+   "prior_budget_depth": 2.7555443548387095,
+   "new_ms": 0.006099999998696148,
+   "new_us_per_move": 0.11586328124980128
+  },
+  {
+   "n": 256,
+   "prior_fixed_ms": null,
+   "prior_budget_ms": 16.72739999999976,
+   "prior_budget_cut_pct": 98.45622859589041,
+   "prior_budget_depth": 1.8427065496575343,
+   "new_ms": 0.02569999999832362,
+   "new_us_per_move": 0.1253644183286437
+  },
+  {
+   "n": 1024,
+   "prior_fixed_ms": null,
+   "prior_budget_ms": 16.77484999999797,
+   "prior_budget_cut_pct": 95.14047475961539,
+   "prior_budget_depth": 0.909502704326923,
+   "new_ms": 0.13119999999980791,
+   "new_us_per_move": 0.1458408067699517
+  },
+  {
+   "n": 4096,
+   "prior_fixed_ms": null,
+   "prior_budget_ms": 17.07615000000078,
+   "prior_budget_cut_pct": 100,
+   "prior_budget_depth": 0.0006043969131097561,
+   "new_ms": 0.6562000000049011,
+   "new_us_per_move": 0.20071759090248611
+  },
+  {
+   "n": 16384,
+   "prior_fixed_ms": null,
+   "prior_budget_ms": 21.08560000000216,
+   "prior_budget_cut_pct": 100,
+   "prior_budget_depth": 0,
+   "new_ms": 3.229849999999715,
+   "new_us_per_move": 0.24576797485353907
+  }
+ ],
+ "quality_new": {
+  "0": {
+   "games": 60,
+   "wins": 60,
+   "winPct": 100,
+   "avgWinMoves": 6.916666666666667,
+   "maxWinMoves": 8,
+   "usPerMove": 0.28303571424917856,
+   "cutPct": 0,
+   "breaks": 0
+  },
+  "1": {
+   "games": 60,
+   "wins": 60,
+   "winPct": 100,
+   "avgWinMoves": 12.566666666666666,
+   "maxWinMoves": 13,
+   "usPerMove": 0.12262500001270382,
+   "cutPct": 0,
+   "breaks": 0
+  },
+  "2": {
+   "games": 60,
+   "wins": 60,
+   "winPct": 100,
+   "avgWinMoves": 11,
+   "maxWinMoves": 11,
+   "usPerMove": 0.8546874999472659,
+   "cutPct": 0,
+   "breaks": 0
+  }
+ },
+ "quality_prior": [
+  {
+   "n": 1,
+   "allot_us": 16700,
+   "prior_vs_greedy": {
+    "games": 60,
+    "wins": 60,
+    "winPct": 100,
+    "avgWinMoves": 14.166666666666666,
+    "maxWinMoves": 19,
+    "usPerMove": 13083.690235294087,
+    "cutPct": 0,
+    "breaks": 0
+   },
+   "prior_vs_ab": {
+    "games": 60,
+    "wins": 60,
+    "winPct": 100,
+    "avgWinMoves": 13.933333333333334,
+    "maxWinMoves": 77,
+    "usPerMove": 12676.939952153194,
+    "cutPct": 0.3588516746411483,
+    "breaks": 0
+   }
+  },
+  {
+   "n": 4,
+   "allot_us": 4175,
+   "prior_vs_greedy": {
+    "games": 60,
+    "wins": 60,
+    "winPct": 100,
+    "avgWinMoves": 12.4,
+    "maxWinMoves": 15,
+    "usPerMove": 3305.3932642487875,
+    "cutPct": 76.55440414507773,
+    "breaks": 0
+   },
+   "prior_vs_ab": {
+    "games": 60,
+    "wins": 60,
+    "winPct": 100,
+    "avgWinMoves": 14.933333333333334,
+    "maxWinMoves": 61,
+    "usPerMove": 3436.464723320134,
+    "cutPct": 78.45849802371542,
+    "breaks": 0
+   }
+  },
+  {
+   "n": 16,
+   "allot_us": 1043.75,
+   "prior_vs_greedy": {
+    "games": 60,
+    "wins": 60,
+    "winPct": 100,
+    "avgWinMoves": 12.816666666666666,
+    "maxWinMoves": 62,
+    "usPerMove": 899.1744718310067,
+    "cutPct": 83.0105633802817,
+    "breaks": 0
+   },
+   "prior_vs_ab": {
+    "games": 60,
+    "wins": 33,
+    "winPct": 55,
+    "avgWinMoves": 37.93939393939394,
+    "maxWinMoves": 92,
+    "usPerMove": 1024.1504045996353,
+    "cutPct": 96.89097103918229,
+    "breaks": 0
+   }
+  },
+  {
+   "n": 64,
+   "allot_us": 260.9375,
+   "prior_vs_greedy": {
+    "games": 60,
+    "wins": 60,
+    "winPct": 100,
+    "avgWinMoves": 12.2,
+    "maxWinMoves": 20,
+    "usPerMove": 244.07986111115557,
+    "cutPct": 83.68055555555556,
+    "breaks": 0
+   },
+   "prior_vs_ab": {
+    "games": 60,
+    "wins": 25,
+    "winPct": 41.666666666666664,
+    "avgWinMoves": 34.92,
+    "maxWinMoves": 82,
+    "usPerMove": 260.4941860465265,
+    "cutPct": 98.01962209302326,
+    "breaks": 0
+   }
+  },
+  {
+   "n": 256,
+   "allot_us": 65.234375,
+   "prior_vs_greedy": {
+    "games": 60,
+    "wins": 53,
+    "winPct": 88.33333333333333,
+    "avgWinMoves": 42.22641509433962,
+    "maxWinMoves": 96,
+    "usPerMove": 65.2021541262982,
+    "cutPct": 98.14927184466019,
+    "breaks": 0
+   },
+   "prior_vs_ab": {
+    "games": 60,
+    "wins": 2,
+    "winPct": 3.3333333333333335,
+    "avgWinMoves": 40,
+    "maxWinMoves": 40,
+    "usPerMove": 65.431408839707,
+    "cutPct": 99.26795580110497,
+    "breaks": 0
+   }
+  },
+  {
+   "n": 1024,
+   "allot_us": 16.30859375,
+   "prior_vs_greedy": {
+    "games": 60,
+    "wins": 60,
+    "winPct": 100,
+    "avgWinMoves": 18.533333333333335,
+    "maxWinMoves": 22,
+    "usPerMove": 16.664726027519375,
+    "cutPct": 94.86301369863014,
+    "breaks": 0
+   },
+   "prior_vs_ab": {
+    "games": 60,
+    "wins": 0,
+    "winPct": 0,
+    "avgWinMoves": null,
+    "maxWinMoves": null,
+    "usPerMove": 16.587361572503063,
+    "cutPct": 99.88925802879291,
+    "breaks": 0
+   }
+  },
+  {
+   "n": 4096,
+   "allot_us": 4.0771484375,
+   "prior_vs_greedy": {
+    "games": 60,
+    "wins": 58,
+    "winPct": 96.66666666666667,
+    "avgWinMoves": 18.189655172413794,
+    "maxWinMoves": 23,
+    "usPerMove": 4.098756218836434,
+    "cutPct": 100,
+    "breaks": 0
+   },
+   "prior_vs_ab": {
+    "games": 60,
+    "wins": 7,
+    "winPct": 11.666666666666666,
+    "avgWinMoves": 36.857142857142854,
+    "maxWinMoves": 48,
+    "usPerMove": 4.2194831590840165,
+    "cutPct": 100,
+    "breaks": 0
+   }
+  }
+ ],
+ "notes": "All numbers measured by bench.js with core.js on this machine. Breaker moves, referee and restarts are untimed. PRIOR = FastSearch port of demos/L1-snaky-ladder/fast_search.h; alpha-beta Breaker = port of demos/03-snaky SearchAI at 6000 nodes."
+}

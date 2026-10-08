@@ -1,0 +1,50 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  body { margin: 0; color: var(--foreground, #111); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { width: 100%; }
+  .pats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; margin: 2px 0 18px; }
+  .pat { border: 1px solid var(--border, #ddd); border-radius: var(--radius, 8px); padding: 9px 11px; font-size: 13px; color: var(--muted-foreground, #555); }
+  .pat b { display: block; color: var(--foreground, #111); font-size: 13.5px; }
+  .m { margin: 0 0 26px; }
+  .m h3 { margin: 0 0 2px; font-size: 17px; display: flex; gap: 10px; align-items: baseline; }
+  .n { font: 700 17px ui-monospace, Consolas, monospace; color: #2a78d6; }
+  .tag { font-size: 12.5px; color: var(--muted-foreground, #666); margin: 0 0 8px 27px; }
+  .m p { margin: 0 0 10px; }
+  .m img { width: 100%; height: auto; display: block; border-radius: var(--radius, 8px); border: 1px solid var(--border, #ddd); }
+  .cap { font-size: 12.5px; color: var(--muted-foreground, #666); margin-top: 6px; }
+</style></head>
+<body><div class="wrap">
+<div class="pats">
+  <div class="pat"><b>A proof that is a playbook</b>compile once, look up each move</div>
+  <div class="pat"><b>A rule you can check</b>a lint that runs when you save</div>
+  <div class="pat"><b>A scaling law</b>simulate small, get the big result</div>
+  <div class="pat"><b>A certified amount of work</b>a loop count you can trust</div>
+  <div class="pat"><b>A known answer</b>draw it instead of solving for it</div>
+</div>
+
+<div class="m"><h3><span class="n">1</span>A compiled playbook instead of a thinking AI</h3><div class="tag">All 4 panelists · Snaky certificate</div>
+<p>A normal game AI thinks before every move: it imagines thousands of possible futures and picks the best-looking one. For one board game, Snaky, mathematicians have already done all of that thinking. Their proof is a set of 728 cards that say "if the blocker plays here, play there", and following them wins in at most 21 moves against anyone. So the proof is a ready-made playbook: load it once, and each move becomes a lookup instead of a search. That takes about a microsecond, never loses, and doesn't slow down when thousands of games share one frame. The catch is that this playbook exists only for this one game.</p>
+<img src="<repo>/panel/web/out/img/1-snaky.jpg" alt="Board with the playbook's stones and its protected region, and a chart of compute per frame and win rate as games increase">
+<div class="cap">Left: the real certificate playing live, with the greedy blocker's X marks and the protected region shaded. Right: measured C++ cost per frame and win rate as more games share one frame.</div></div>
+
+<div class="m"><h3><span class="n">2</span>"Every recipe needs a way back": a lint for economies</h3><div class="tag">All 4 panelists · weakly reversible networks</div>
+<p>Think of every recipe as a one-way road between bundles of goods, such as "ore + wood → tools". The rule is that every road needs some route of other roads leading back to where it started. If your recipe map passes, the paper proves no good can ever die out or pile up forever, however fast or slow each recipe runs and however the towns start. If a road has no way back, the promise is gone, and in our tests those towns starved or flooded almost every time. A tool checks the rule instantly when the designer saves, so the guarantee costs nothing while the game runs.</p>
+<img src="<repo>/panel/web/out/img/2-econ.jpg" alt="Recipe map with two return recipes removed and the lint failing, beside trajectories that die out or run away">
+<div class="cap">With two return recipes deleted, the lint flags four recipes, and 6 of 30 goods die out while 12 run away. With all nine recipes it passes, and every good stays between 0.48 and 1.54.</div></div>
+
+<div class="m"><h3><span class="n">3</span>A clock that makes a tiny grid act like a huge one</h3><div class="tag">All 4 panelists · critical FK interface</div>
+<p>A fractal edge, like a wildfire creeping through dry brush, gets more wiggly the finer you draw it. On a finer grid the path gets much longer, so if every step takes the same time, the detailed fire takes far longer to cross the map. The paper proves the exact fix: each step's time should shrink with the cell size raised to the power 1.75. With that rule and one tuning number, a tiny 32×32 grid crosses the map in the same typical time, and lingers in the same places, as an 8192×8192 grid. You simulate small and still get the big grid's timing.</p>
+<img src="<repo>/panel/web/out/img/3-frac-p1.jpg" alt="Three fronts on 16, 64 and 256 grids racing with a plain length clock, and bars showing the 256 grid taking 7.6 times longer">
+<div class="cap">The plain clock (p = 1): the 256×256 fire takes 7.6× as long as the 16×16 one. Slide p to 1.75 and that ratio drops to 0.95×. Tracing a front costs 8 µs at 16×16 and 445 µs at 256×256.</div></div>
+
+<div class="m"><h3><span class="n">4</span>A fair dungeon shuffle with a proven step count</h3><div class="tag">3 of 4 panelists · switch-chain mixing</div>
+<p>Say a designer's dungeon fixes each room's door count: the boss room has one door, the hub has six. To make a new level you rewire the corridors but keep every room's count. A few quick swaps look scrambled but still remember the original, so players keep meeting the same corridors. The paper gives a number of trades that is proven to be enough for any door-count list. After that many, every possible layout is about equally likely. It's like knowing how many riffles fully mix a deck of cards. The count grows fast with size, so it suits small and medium dungeons generated at load time.</p>
+<img src="<repo>/panel/web/out/img/4-dungeon.jpg" alt="Dungeon layout and a histogram of template doors kept, quick shuffle versus certified">
+<div class="cap">The quick shuffle keeps 9.7 of the template's 28 doors on average, where a fair draw keeps 5.7. The certified shuffle (12,644 trades, 1.6 ms per layout in the browser) lands on the fair curve.</div></div>
+
+<div class="m"><h3><span class="n">5</span>Draw the best shape instead of solving for it</h3><div class="tag">2 of 4 panelists · flat 3-torus isoperimetry</div>
+<p>Suppose you want the blob with the least surface for a given amount of goo, in a world whose edges wrap around like Pac-Man's. The usual approach is to "melt" a random blob over and over and hope it settles. That's slow, and sometimes it gets stuck on a lumpy shape. The paper proves the answer is always one of three simple shapes: a ball for a little goo, a tube that wraps around the world in the middle range, and a flat slab for a lot (then the same shapes again as holes). So you skip the melting and draw the right one. It's like knowing the crossword answer instead of guessing letters.</p>
+<img src="<repo>/panel/web/out/img/5-blob.jpg" alt="Melting solver stuck in three pieces next to the drawn disk, and the 3D ball, tube, slab chart">
+<div class="cap">A 2D stand-in: the solver got stuck in pieces with 43% too much edge, while the drawn answer is within pixel error. On the right is the paper's 3D answer. In C++ (3D), drawing the answer was 96–157× faster.</div></div>
+</div></body></html>

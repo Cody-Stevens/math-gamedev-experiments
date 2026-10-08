@@ -1,0 +1,29 @@
+[03-snaky] 1500 frames @ 60 fps, no video -> <repo>/demos/03-snaky/out/clean
+[03-snaky] frame 81/1500  L 62.1 ms  R 0.003 ms  (5.0 s)
+[03-snaky] frame 149/1500  L 47.0 ms  R 0.004 ms  (10.1 s)
+[03-snaky] frame 211/1500  L 69.6 ms  R 0.005 ms  (15.1 s)
+[03-snaky] frame 280/1500  L 43.9 ms  R 0.003 ms  (20.2 s)
+[03-snaky] frame 353/1500  L 32.8 ms  R 0.006 ms  (25.2 s)
+[03-snaky] frame 421/1500  L 36.4 ms  R 0.004 ms  (30.3 s)
+[03-snaky] frame 479/1500  L 29.7 ms  R 0.004 ms  (35.3 s)
+[03-snaky] frame 542/1500  L 37.9 ms  R 0.004 ms  (40.4 s)
+[03-snaky] frame 609/1500  L 36.9 ms  R 0.005 ms  (45.4 s)
+[03-snaky] frame 670/1500  L 30.4 ms  R 0.005 ms  (50.4 s)
+[03-snaky] frame 736/1500  L 34.1 ms  R 0.005 ms  (55.5 s)
+[03-snaky] frame 808/1500  L 26.6 ms  R 0.004 ms  (60.5 s)
+[03-snaky] frame 885/1500  L 31.7 ms  R 0.005 ms  (65.6 s)
+[03-snaky] frame 968/1500  L 34.1 ms  R 0.003 ms  (70.6 s)
+[03-snaky] frame 1039/1500  L 30.2 ms  R 0.003 ms  (75.6 s)
+[03-snaky] frame 1111/1500  L 30.1 ms  R 0.003 ms  (80.6 s)
+[03-snaky] frame 1183/1500  L 28.9 ms  R 0.003 ms  (85.7 s)
+[03-snaky] frame 1262/1500  L 28.9 ms  R 0.003 ms  (90.7 s)
+[03-snaky] frame 1335/1500  L 31.8 ms  R 0.003 ms  (95.7 s)
+[03-snaky] frame 1409/1500  L 26.5 ms  R 0.003 ms  (100.8 s)
+[03-snaky] frame 1469/1500  L 31.6 ms  R 0.003 ms  (105.8 s)
+[03-snaky] frame 1500/1500  L 31.2 ms  R 0.004 ms  (108.1 s)
+[03-snaky] done: 1500 frames in 108.1 s
+  LEFT   game-AI Maker: α-β + threat eval, 6000 median 32.0 ms/frame  p95 70.7  (31 fps compute-only)
+  RIGHT  certificate Maker: 728 cards, first surv median 0.004 ms/frame  p95 0.009  (285,713 fps compute-only)
+  speedup (median compute): 9148.13x
+  poster:  <repo>/demos/03-snaky/out/clean/poster.png
+  results: <repo>/demos/03-snaky/out/clean/results.json

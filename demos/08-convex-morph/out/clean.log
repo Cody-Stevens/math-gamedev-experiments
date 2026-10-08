@@ -1,0 +1,23 @@
+[08-convex-morph] 1500 frames @ 60 fps, no video -> <repo>/demos/08-convex-morph/out/clean
+[08-convex-morph] frame 192/1500  L 8.10 ms  R 3.43 ms  (5.0 s)
+[08-convex-morph] frame 378/1500  L 6.58 ms  R 1.90 ms  (10.0 s)
+[08-convex-morph] frame 586/1500  L 5.49 ms  R 2.38 ms  (15.0 s)
+[08-convex-morph] frame 775/1500  L 7.22 ms  R 3.53 ms  (20.1 s)
+[08-convex-morph] frame 945/1500  L 9.33 ms  R 6.19 ms  (25.1 s)
+[08-convex-morph] frame 1101/1500  L 9.43 ms  R 5.88 ms  (30.1 s)
+[08-convex-morph] frame 1270/1500  L 8.71 ms  R 4.53 ms  (35.1 s)
+[08-convex-morph] frame 1442/1500  L 8.56 ms  R 2.61 ms  (40.1 s)
+[08-convex-morph] frame 1500/1500  L 1.96 ms  R 0.690 ms  (41.6 s)
+[08-convex-morph] done: 1500 frames in 41.6 s
+  LEFT   Minkowski morph (1−λ)h_K + λh_L      median 7.33 ms/frame  p95 10.3  (136 fps compute-only)
+  RIGHT  log morph W[h_K^(1−λ) h_L^λ]         median 3.08 ms/frame  p95 6.68  (325 fps compute-only)
+  speedup (median compute): 2.38x
+  poster:  <repo>/demos/08-convex-morph/out/clean/poster.png
+  results: <repo>/demos/08-convex-morph/out/clean/results.json
+[refine] M=   8 planes=  48  log/floor 1.36482   Minkowski/floor 1.57951
+[refine] M=  16 planes=  64  log/floor 1.35428   Minkowski/floor 1.56097
+[refine] M=  32 planes=  96  log/floor 1.36534   Minkowski/floor 1.57622
+[refine] M=  64 planes= 160  log/floor 1.34438   Minkowski/floor 1.54549
+[refine] M= 128 planes= 288  log/floor 1.34894   Minkowski/floor 1.54937
+[refine] M= 256 planes= 544  log/floor 1.33951   Minkowski/floor 1.53199
+[refine] M= 512 planes=1056  log/floor 1.33565   Minkowski/floor 1.52539

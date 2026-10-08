@@ -1,0 +1,2174 @@
+{
+  "version": "1.1.2",
+  "base": "/kit/1.1.2/",
+  "authoring": {
+    "css": "/kit/1.1.2/tacksheet.css",
+    "js": "/kit/1.1.2/tacksheet.js",
+    "themeAttribute": "data-tk-theme"
+  },
+  "files": [
+    {
+      "path": "/kit/1.1.2/tacksheet.css",
+      "bytes": 111954,
+      "sha256": "956c3de115f857ef7191b40dccff2873a7fd95b7ad135364fd00869a70a0a3c8",
+      "contentType": "text/css; charset=utf-8"
+    },
+    {
+      "path": "/kit/1.1.2/tacksheet.js",
+      "bytes": 161732,
+      "sha256": "a890e3662958036dd83e78006a32b1417850f54a2682ae83a19a87395925f48b",
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "/kit/1.1.2/charts.js",
+      "bytes": 75438,
+      "sha256": "64e7bd8de3597b3aa10c5ae4ad80aefe30e09c6b4582f932af075d590744e560",
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "/kit/1.1.2/maps.js",
+      "bytes": 461631,
+      "sha256": "970e09fa6f034d2c90746deb4082c569ab6f7129f74e724ac9201fd23008a010",
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "/kit/1.1.2/three-kit.js",
+      "bytes": 60341,
+      "sha256": "e0bec6865d9021c256ca9c0037e9152588c7c4fec75fe8f3c13303f953857402",
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "/kit/1.1.2/echarts.min.js",
+      "bytes": 1030855,
+      "sha256": "e84270bd0cd5bdf60fefc26d00c2a391cb2e81f4d26a7a9ee16185a54773a3cf",
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "/kit/1.1.2/three.min.js",
+      "bytes": 607784,
+      "sha256": "f34446bf875b5fb0dcd93819ffe1d9e182d46634ee855f5d904c6c4ac7cdbc95",
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "/kit/1.1.2/GLTFLoader.js",
+      "bytes": 103311,
+      "sha256": "b2edda923572c73e6b30b139756d182c87e2c34d022845c6e067a9a0a9544e01",
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "/kit/1.1.2/OrbitControls.js",
+      "bytes": 26660,
+      "sha256": "b4c6e53f98538535b11fd6655627d47fb5877b3ad972568bff0a7026c4b6d5c4",
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "/kit/1.1.2/PointerLockControls.js",
+      "bytes": 3443,
+      "sha256": "e37e140fa36586c16fd7ef0534c6b3ecf03d8daf44919ce97cf64f02555927ba",
+      "contentType": "text/javascript; charset=utf-8"
+    },
+    {
+      "path": "/kit/1.1.2/us-states.geojson",
+      "bytes": 260075,
+      "sha256": "9d7a7baff9be1f6a5226ebb7358d7fcbc5b8a2aa31af79b8266aa384be65ebda",
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/kit/1.1.2/world-countries.geojson",
+      "bytes": 201346,
+      "sha256": "42986659879c2a27f44970b4d035cd133c8d03ab5f8d848bec1fe47dfda85b60",
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/kit/1.1.2/sample.glb",
+      "bytes": 72828,
+      "sha256": "ae93f03c9168f28691a90b97f49e4c00e5165c638707f4efe61e3efcb4f6a76b",
+      "contentType": "model/gltf-binary"
+    },
+    {
+      "path": "/kit/1.1.2/docs.html",
+      "bytes": 199704,
+      "sha256": "c67eb7e83eff01c1480f6e02744345c4e0e9410d50ed923a46e9d86aee09b637",
+      "contentType": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/kit/1.1.2/fonts/newsreader.woff2",
+      "bytes": 58084,
+      "sha256": "62981321d9a3cc7a61a73792729043703fd6112da86e8ec848bb57f088578757",
+      "contentType": "font/woff2"
+    },
+    {
+      "path": "/kit/1.1.2/fonts/archivo.woff2",
+      "bytes": 34928,
+      "sha256": "8f704806dbedeaaeca334b11ec348bc3ac3a439d6431544b3afb54f534ee4967",
+      "contentType": "font/woff2"
+    },
+    {
+      "path": "/kit/1.1.2/fonts/archivo-black-400.woff2",
+      "bytes": 18604,
+      "sha256": "25f33e61cf995abd6be62931cf03bf427286259177b43618cc410ee0157cfd30",
+      "contentType": "font/woff2"
+    },
+    {
+      "path": "/kit/1.1.2/fonts/ibm-plex-mono-400.woff2",
+      "bytes": 14708,
+      "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7",
+      "contentType": "font/woff2"
+    },
+    {
+      "path": "/kit/1.1.2/fonts/ibm-plex-mono-500.woff2",
+      "bytes": 14888,
+      "sha256": "01d285447409c8a588692162439a038b8cbd7871309ee20267b0d2d91c6e8e22",
+      "contentType": "font/woff2"
+    },
+    {
+      "path": "/kit/1.1.2/fonts/kalam-400.woff2",
+      "bytes": 22336,
+      "sha256": "954410601a823f37e219f7930b7446f86afa15621326a7078d56fb9c910135cb",
+      "contentType": "font/woff2"
+    },
+    {
+      "path": "/kit/1.1.2/textures/paper.webp",
+      "bytes": 22728,
+      "sha256": "722152b3389aa47c49088706d4304a3d8533d0d158f58bdcb05b65786d83d05f",
+      "contentType": "image/webp"
+    },
+    {
+      "path": "/kit/1.1.2/textures/riso.webp",
+      "bytes": 15046,
+      "sha256": "6404a58a1fb26d73dd31d63f4edf6033d88e36ef7a574525c226a3c6a8e1626c",
+      "contentType": "image/webp"
+    },
+    {
+      "path": "/kit/1.1.2/textures/felt.webp",
+      "bytes": 28440,
+      "sha256": "f19417f5f60fa30702afceb88b47f42939e381913e1fe03154dcf91ef6f27128",
+      "contentType": "image/webp"
+    },
+    {
+      "path": "/kit/1.1.2/textures/speck.svg",
+      "bytes": 1438,
+      "sha256": "c7d8ba2ad838fb8dd804860535486acd9d4910949b8fc72ec338c01ee98304a8",
+      "contentType": "image/svg+xml"
+    },
+    {
+      "path": "/kit/1.1.2/textures/fibre.svg",
+      "bytes": 24297,
+      "sha256": "9a04e46e9379c2d974b2b6112b5c33b5e68e12421be0739e6b42143d80e421bb",
+      "contentType": "image/svg+xml"
+    },
+    {
+      "path": "/kit/1.1.2/textures/grain.webp",
+      "bytes": 63086,
+      "sha256": "6b787220581df87a177dd528cebf88c9a5b454f203cf65ff2d384e0982daeb7d",
+      "contentType": "image/webp"
+    },
+    {
+      "path": "/kit/1.1.2/textures/stamp-wear.png",
+      "bytes": 51729,
+      "sha256": "f79a23d6046b4dac2140631a64f057b04b4f0af45430c6dad26fdf32b1f6e061",
+      "contentType": "image/png"
+    },
+    {
+      "path": "/kit/1.1.2/textures/torn-top.png",
+      "bytes": 2657,
+      "sha256": "18b881470c9cb166dffad9cf855a74604be506a938bfc406ee42d1eb9c2e51cd",
+      "contentType": "image/png"
+    }
+  ],
+  "themes": [
+    {
+      "name": "riso",
+      "description": "Default. Riso stock printed in two inks (cobalt and vermilion, plum where they overprint) with misregistered headings, paper grain, a halftone bloom and kraft rules. The page column sits on a translucent reading panel (--tk-panel; transparent turns it off)."
+    },
+    {
+      "name": "riso-night",
+      "description": "Riso on deep navy stock with grain: cream type, sunflower links, vermilion marks and a cornflower second ink. Tape, slips, stamps and prints stay cream paper. The page column sits on a translucent navy reading panel."
+    },
+    {
+      "name": "auto",
+      "description": "Follows the reader’s system: riso by day, riso-night in dark mode."
+    },
+    {
+      "name": "paper",
+      "description": "Light publication: cream stock with fibre, cobalt ink, Newsreader display serif."
+    },
+    {
+      "name": "graphite",
+      "description": "Retired brand dark (kept for existing sheets): charcoal felt with an ember glow, cream type."
+    },
+    {
+      "name": "ink",
+      "description": "High-contrast Swiss neutral: white stock, heavy black rules, Archivo."
+    },
+    {
+      "name": "slate",
+      "description": "Technical dark: blueprint grid, steel accent, IBM Plex Mono headings."
+    },
+    {
+      "name": "none",
+      "description": "No kit styling; structure and behavior only."
+    }
+  ],
+  "elements": [
+    {
+      "name": "tk-page",
+      "description": "Max-width sheet column. In the riso themes it sits on a translucent reading panel over the page texture; set --tk-panel:transparent (or a colour) on body to change it.",
+      "attributes": [
+        {
+          "name": "wide",
+          "type": "boolean",
+          "default": "absent",
+          "description": "Wide 76rem column instead of the 43rem reading column; running text keeps a 46rem measure."
+        },
+        {
+          "name": "unnumbered",
+          "type": "boolean",
+          "default": "absent",
+          "description": "Turn off the 01, 02… numbers on section headings."
+        }
+      ]
+    },
+    {
+      "name": "tk-hero",
+      "description": "Sheet header block (h1, dek, byline).",
+      "attributes": []
+    },
+    {
+      "name": "tk-section",
+      "description": "Numbered section; h2 gets a deep-link anchor when the section has an id.",
+      "attributes": [
+        {
+          "name": "id",
+          "type": "string",
+          "default": "—",
+          "description": "Deep-link target, also used by tk-toc."
+        },
+        {
+          "name": "unnumbered",
+          "type": "boolean",
+          "default": "absent",
+          "description": "No number on this section’s heading."
+        }
+      ]
+    },
+    {
+      "name": "tk-grid",
+      "description": "Responsive grid; collapses to one column under 640px.",
+      "attributes": [
+        {
+          "name": "cols",
+          "type": "number",
+          "default": "2",
+          "description": "Columns on desktop (1–6)."
+        }
+      ]
+    },
+    {
+      "name": "tk-split",
+      "description": "Two-column split for genuinely parallel content.",
+      "attributes": []
+    },
+    {
+      "name": "tk-card",
+      "description": "Raised card on the theme surface.",
+      "attributes": []
+    },
+    {
+      "name": "tk-callout",
+      "description": "Callout with a rule in the kind colour and a rubber-stamped kind label.",
+      "attributes": [
+        {
+          "name": "kind",
+          "type": "enum note|tip|warning|decision|risk",
+          "default": "note",
+          "description": "Callout kind; also settable as data-kind."
+        }
+      ]
+    },
+    {
+      "name": "tk-stat",
+      "description": "Headline number (.tk-value) with a label (.tk-label) and delta (.tk-delta); a leading +/− colours the delta. A sparkline tk-chart inside sits under the number.",
+      "attributes": [
+        {
+          "name": "good",
+          "type": "enum up|down",
+          "default": "up",
+          "description": "Which direction is good: good=\"down\" for latency, churn or cost."
+        }
+      ]
+    },
+    {
+      "name": "tk-stats",
+      "description": "Responsive row of tk-stat cards.",
+      "attributes": []
+    },
+    {
+      "name": "tk-figure",
+      "description": "Figure wrapper with caption styling.",
+      "attributes": []
+    },
+    {
+      "name": "tk-table",
+      "description": "Sortable, filterable table from JSON or an HTML table; sticky header. Formatted figures (1,284, $12.9k, −5, 42%) sort as numbers.",
+      "attributes": [
+        {
+          "name": "data",
+          "type": "json-ref",
+          "default": "—",
+          "description": "JSON script id (\"#sales\") or inline <script type=\"application/json\"> child. Accepts {columns, rows} or an array of objects."
+        },
+        {
+          "name": "filter",
+          "type": "string",
+          "default": "—",
+          "description": "Name of a state value holding filter text (for example bound to tk-search). Every word of it, and of the filter box, must appear somewhere in a row. Re-applied when state changes. Not an expression."
+        },
+        {
+          "name": "sortable",
+          "type": "boolean",
+          "default": "absent",
+          "description": "Click a column header to sort."
+        },
+        {
+          "name": "searchable",
+          "type": "boolean",
+          "default": "absent",
+          "description": "Show a filter box (alias: filterable)."
+        },
+        {
+          "name": "filterable",
+          "type": "boolean",
+          "default": "absent",
+          "description": "Alias of searchable."
+        }
+      ]
+    },
+    {
+      "name": "tk-timeline",
+      "description": "Vertical timeline; from JSON {items:[{when,text}]} or a plain list.",
+      "attributes": [
+        {
+          "name": "data",
+          "type": "json-ref",
+          "default": "—",
+          "description": "JSON script id (\"#sales\") or inline <script type=\"application/json\"> child."
+        }
+      ]
+    },
+    {
+      "name": "tk-steps",
+      "description": "Numbered step list.",
+      "attributes": []
+    },
+    {
+      "name": "tk-kbd",
+      "description": "Keyboard-key chip.",
+      "attributes": []
+    },
+    {
+      "name": "tk-code",
+      "description": "Code block with highlighting (js, python, json, html, css, bash) and a copy button.",
+      "attributes": [
+        {
+          "name": "language",
+          "type": "string",
+          "default": "text",
+          "description": "Highlight language."
+        }
+      ]
+    },
+    {
+      "name": "tk-details",
+      "description": "Styled disclosure wrapper.",
+      "attributes": [
+        {
+          "name": "summary",
+          "type": "string",
+          "default": "Details",
+          "description": "Summary label."
+        }
+      ]
+    },
+    {
+      "name": "tk-page-section",
+      "description": "One page inside tk-pager.",
+      "attributes": []
+    },
+    {
+      "name": "tk-toc",
+      "description": "Table of contents from h2 plus h3s carrying an author id; sticky on desktop, collapsible on phone. Headings inside cards, callouts, tabs, accordions, slides, pages, details, hidden content or a [data-tk-toc=\"skip\"] block stay out.",
+      "attributes": [
+        {
+          "name": "sticky",
+          "type": "boolean",
+          "default": "absent",
+          "description": "Stick while scrolling on wide screens."
+        },
+        {
+          "name": "collapsible",
+          "type": "boolean",
+          "default": "absent",
+          "description": "Collapse behind a toggle on phone widths."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "On this sheet",
+          "description": "Heading label."
+        }
+      ]
+    },
+    {
+      "name": "tk-tabs",
+      "description": "Tabbed panels; children carry label=\"…\". Arrow-key navigation.",
+      "attributes": []
+    },
+    {
+      "name": "tk-accordion",
+      "description": "Stacked disclosures; children carry label=\"…\". Panels open and close independently.",
+      "attributes": []
+    },
+    {
+      "name": "tk-pager",
+      "description": "Multi-page sheet; shows one tk-page-section at a time with prev/next and arrow keys.",
+      "attributes": []
+    },
+    {
+      "name": "tk-progress",
+      "description": "Sticky reading-progress bar.",
+      "attributes": []
+    },
+    {
+      "name": "tk-gallery",
+      "description": "Image set; click any image (or Tab to it and press Enter) for the built-in viewer, which pans a zoomed image by drag or arrow keys. A data-caption on a nested img becomes its caption.",
+      "attributes": [
+        {
+          "name": "layout",
+          "type": "enum grid|masonry|carousel",
+          "default": "grid",
+          "description": "Gallery arrangement."
+        }
+      ]
+    },
+    {
+      "name": "tk-lightbox",
+      "description": "Opens any image inside it in a dialog viewer (keyboard, swipe, zoom and pan); focus returns to the image on close.",
+      "attributes": []
+    },
+    {
+      "name": "tk-compare",
+      "description": "Before/after slider over two images (before on the left); drag anywhere or use the arrow keys.",
+      "attributes": [
+        {
+          "name": "before-label",
+          "type": "string",
+          "default": "Before",
+          "description": "Tag on the before side."
+        },
+        {
+          "name": "after-label",
+          "type": "string",
+          "default": "After",
+          "description": "Tag on the after side."
+        },
+        {
+          "name": "before",
+          "type": "url",
+          "default": "first img",
+          "description": "Before image URL."
+        },
+        {
+          "name": "after",
+          "type": "url",
+          "default": "second img",
+          "description": "After image URL."
+        },
+        {
+          "name": "before-alt",
+          "type": "string",
+          "default": "Before",
+          "description": "Alt text for the image built from before=."
+        },
+        {
+          "name": "after-alt",
+          "type": "string",
+          "default": "After",
+          "description": "Alt text for the image built from after=."
+        }
+      ]
+    },
+    {
+      "name": "tk-zoom",
+      "description": "Pan/zoom viewer for large images: buttons, pinch or Ctrl/Cmd+wheel zoom around the pointer, press-drag-release pans a zoomed image; a plain wheel scrolls the page; arrow keys, + and - on the focused image.",
+      "attributes": []
+    },
+    {
+      "name": "tk-annotate",
+      "description": "Image with numbered hotspot pins and a notes list.",
+      "attributes": [
+        {
+          "name": "data",
+          "type": "json-ref",
+          "default": "—",
+          "description": "Hotspots: [{x: 0–100, y: 0–100, label, note}]."
+        }
+      ]
+    },
+    {
+      "name": "tk-image",
+      "description": "Responsive captioned image around a nested <img> (give it alt text); a same-review ./files/… src loads through the shell file.fetch bridge when embedded.",
+      "attributes": [
+        {
+          "name": "caption",
+          "type": "string",
+          "default": "—",
+          "description": "Caption text."
+        },
+        {
+          "name": "credit",
+          "type": "string",
+          "default": "—",
+          "description": "Credit line appended to the caption."
+        }
+      ]
+    },
+    {
+      "name": "tk-video",
+      "description": "Video with chapters, playback-rate control and timestamp links.",
+      "attributes": [
+        {
+          "name": "src",
+          "type": "url",
+          "default": "—",
+          "description": "Video URL (or nest a <video> with <track> captions); same-review ./files/… names load through the shell file.fetch bridge when embedded."
+        },
+        {
+          "name": "poster",
+          "type": "url",
+          "default": "—",
+          "description": "Poster image (same bridge as src)."
+        },
+        {
+          "name": "chapters",
+          "type": "json-ref",
+          "default": "—",
+          "description": "Chapters: [{t: seconds, label}]."
+        },
+        {
+          "name": "rates",
+          "type": "string",
+          "default": "—",
+          "description": "Comma-separated playback rates, e.g. \"0.75,1,1.5,2\"."
+        },
+        {
+          "name": "rate",
+          "type": "number",
+          "default": "1",
+          "description": "Initial playback rate."
+        },
+        {
+          "name": "data-seek",
+          "type": "time",
+          "default": "—",
+          "description": "Goes on <a> links inside the tk-video, not on the element itself: data-seek=\"65\" or \"1:05\" seeks there and plays when the link is clicked."
+        }
+      ]
+    },
+    {
+      "name": "tk-audio",
+      "description": "Designed audio player (play, seek, time) with optional chapters.",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "Audio player",
+          "description": "Accessible name of the player."
+        },
+        {
+          "name": "src",
+          "type": "url",
+          "default": "—",
+          "description": "Audio URL (or nest an <audio>); same-review ./files/… names load through the shell file.fetch bridge when embedded."
+        },
+        {
+          "name": "chapters",
+          "type": "json-ref",
+          "default": "—",
+          "description": "Chapters: [{t: seconds, label}]."
+        }
+      ]
+    },
+    {
+      "name": "tk-slides",
+      "description": "Slide deck; direct children are slides. Arrow keys supported.",
+      "attributes": []
+    },
+    {
+      "name": "tk-scrolly",
+      "description": "Scroll-driven narrative: .tk-step children activate in turn; bound charts update from per-step JSON.",
+      "attributes": [
+        {
+          "name": "for",
+          "type": "id-ref",
+          "default": "—",
+          "description": "Bound tk-chart id updated from each step's inline JSON."
+        }
+      ]
+    },
+    {
+      "name": "tk-chart",
+      "description": "ECharts chart with theme palette, responsive resize and a data-table fallback.",
+      "attributes": [
+        {
+          "name": "type",
+          "type": "enum",
+          "default": "bar",
+          "description": "Chart type; see the manifest chartTypes list for all 40+ types."
+        },
+        {
+          "name": "data",
+          "type": "json-ref",
+          "default": "—",
+          "description": "JSON script id (\"#sales\") or inline <script type=\"application/json\"> child."
+        },
+        {
+          "name": "x",
+          "type": "string",
+          "default": "—",
+          "description": "Label column (rows data) for cartesian charts."
+        },
+        {
+          "name": "y",
+          "type": "string",
+          "default": "—",
+          "description": "Value column(s), comma-separated (rows data)."
+        },
+        {
+          "name": "series",
+          "type": "string",
+          "default": "—",
+          "description": "Grouping column for long-form rows data."
+        },
+        {
+          "name": "filter",
+          "type": "expression",
+          "default": "—",
+          "description": "Row predicate; re-evaluated when state changes."
+        },
+        {
+          "name": "x-domain",
+          "type": "string",
+          "default": "—",
+          "description": "\"min,max\" clamp for a value x-axis."
+        },
+        {
+          "name": "y-domain",
+          "type": "string",
+          "default": "—",
+          "description": "\"min,max\" clamp for a value y-axis."
+        },
+        {
+          "name": "facet",
+          "type": "string",
+          "default": "—",
+          "description": "Column for small multiples: one chart per value."
+        },
+        {
+          "name": "options",
+          "type": "json-ref",
+          "default": "—",
+          "description": "Raw ECharts option deep-merged over the generated one (escape hatch)."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "—",
+          "description": "Accessible title, also the aria-label."
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "default": "—",
+          "description": "Subtitle line."
+        },
+        {
+          "name": "size",
+          "type": "enum small|large",
+          "default": "—",
+          "description": "Chart height preset."
+        },
+        {
+          "name": "frame",
+          "type": "enum full",
+          "default": "—",
+          "description": "Keep categories and the value axis of the unfiltered data, so filters reveal data in a stable frame (tk-scrolly sets it on its chart)."
+        },
+        {
+          "name": "labels",
+          "type": "enum none",
+          "default": "—",
+          "description": "labels=\"none\" turns off the direct end labels on 2–4 line series."
+        },
+        {
+          "name": "z",
+          "type": "string",
+          "default": "—",
+          "description": "Bubble size column for rows data (alias: r; plain size is deprecated because size means the height preset)."
+        },
+        {
+          "name": "r",
+          "type": "string",
+          "default": "—",
+          "description": "Alias of z."
+        },
+        {
+          "name": "map",
+          "type": "enum usa|world",
+          "default": "usa",
+          "description": "Choropleth / dot-map geography."
+        },
+        {
+          "name": "smooth",
+          "type": "boolean",
+          "default": "absent",
+          "description": "Line, area, stacked-area: smooth the curves (smooth=\"false\" keeps them straight)."
+        },
+        {
+          "name": "step",
+          "type": "enum start|middle|end",
+          "default": "—",
+          "description": "Line, area, stacked-area: draw a step line."
+        },
+        {
+          "name": "bins",
+          "type": "number",
+          "default": "12 (contour 24)",
+          "description": "Histogram bin count (3–40); contour/density grid size (8–48)."
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "—",
+          "description": "Box plot on rows data: value column when y is not set."
+        },
+        {
+          "name": "year",
+          "type": "number",
+          "default": "current year",
+          "description": "Calendar heatmap: year to draw when the data has no dates."
+        },
+        {
+          "name": "layout",
+          "type": "enum force|circular|none",
+          "default": "force",
+          "description": "Network/graph layout."
+        },
+        {
+          "name": "open",
+          "type": "string",
+          "default": "open",
+          "description": "Candlestick on rows data: open column (x defaults to date)."
+        },
+        {
+          "name": "close",
+          "type": "string",
+          "default": "close",
+          "description": "Candlestick on rows data: close column."
+        },
+        {
+          "name": "low",
+          "type": "string",
+          "default": "low",
+          "description": "Candlestick on rows data: low column."
+        },
+        {
+          "name": "high",
+          "type": "string",
+          "default": "high",
+          "description": "Candlestick on rows data: high column."
+        },
+        {
+          "name": "a",
+          "type": "string",
+          "default": "a",
+          "description": "Dumbbell on rows data: first value column (x is the label column, default label)."
+        },
+        {
+          "name": "b",
+          "type": "string",
+          "default": "b",
+          "description": "Dumbbell on rows data: second value column."
+        },
+        {
+          "name": "a-label",
+          "type": "string",
+          "default": "Before",
+          "description": "Dumbbell legend name for a."
+        },
+        {
+          "name": "b-label",
+          "type": "string",
+          "default": "After",
+          "description": "Dumbbell legend name for b."
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "default": "error",
+          "description": "Error bars on rows data: error column (x and y default to label and value)."
+        },
+        {
+          "name": "kinds",
+          "type": "string",
+          "default": "bar,line",
+          "description": "Combo: comma-separated bar|line per series."
+        },
+        {
+          "name": "axes",
+          "type": "string",
+          "default": "0,1",
+          "description": "Combo: comma-separated value-axis index (0 left, 1 right) per series."
+        },
+        {
+          "name": "y-label",
+          "type": "string",
+          "default": "—",
+          "description": "Combo: left axis name."
+        },
+        {
+          "name": "y2-label",
+          "type": "string",
+          "default": "—",
+          "description": "Combo: right axis name."
+        }
+      ]
+    },
+    {
+      "name": "tk-state",
+      "description": "Registers a named reactive value.",
+      "attributes": [
+        {
+          "name": "name",
+          "type": "string",
+          "default": "required",
+          "description": "Reactive state name written with Tacksheet.state.set / tk-state."
+        },
+        {
+          "name": "value",
+          "type": "json",
+          "default": "—",
+          "description": "Initial value (JSON literal) or an inline JSON child."
+        }
+      ]
+    },
+    {
+      "name": "tk-slider",
+      "description": "Range slider bound to state.",
+      "attributes": [
+        {
+          "name": "bind",
+          "type": "string",
+          "default": "required",
+          "description": "Reactive state name written with Tacksheet.state.set / tk-state."
+        },
+        {
+          "name": "min",
+          "type": "number",
+          "default": "0",
+          "description": "Minimum."
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "default": "100",
+          "description": "Maximum."
+        },
+        {
+          "name": "step",
+          "type": "string",
+          "default": "1",
+          "description": "Step."
+        },
+        {
+          "name": "value",
+          "type": "json",
+          "default": "min",
+          "description": "Initial value."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "bind name",
+          "description": "Field label."
+        }
+      ]
+    },
+    {
+      "name": "tk-range",
+      "description": "Dual slider bound to a [lo, hi] state pair.",
+      "attributes": [
+        {
+          "name": "bind",
+          "type": "string",
+          "default": "required",
+          "description": "Reactive state name written with Tacksheet.state.set / tk-state."
+        },
+        {
+          "name": "min",
+          "type": "number",
+          "default": "0",
+          "description": "Minimum."
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "default": "100",
+          "description": "Maximum."
+        },
+        {
+          "name": "step",
+          "type": "string",
+          "default": "1",
+          "description": "Step."
+        },
+        {
+          "name": "value",
+          "type": "json",
+          "default": "[min, max]",
+          "description": "Initial [lo, hi] pair (JSON) when the state has none yet."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "bind name",
+          "description": "Field label."
+        }
+      ]
+    },
+    {
+      "name": "tk-select",
+      "description": "Dropdown bound to state.",
+      "attributes": [
+        {
+          "name": "bind",
+          "type": "string",
+          "default": "required",
+          "description": "Reactive state name written with Tacksheet.state.set / tk-state."
+        },
+        {
+          "name": "options",
+          "type": "json-ref",
+          "default": "—",
+          "description": "Options: [{value,label}] or plain values."
+        },
+        {
+          "name": "value",
+          "type": "json",
+          "default": "first option",
+          "description": "Initial value (JSON literal) when the state has none yet."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "bind name",
+          "description": "Field label."
+        }
+      ]
+    },
+    {
+      "name": "tk-toggle",
+      "description": "Switch bound to a boolean.",
+      "attributes": [
+        {
+          "name": "bind",
+          "type": "string",
+          "default": "required",
+          "description": "Reactive state name written with Tacksheet.state.set / tk-state."
+        },
+        {
+          "name": "value",
+          "type": "json",
+          "default": "false",
+          "description": "Initial value (JSON literal) when the state has none yet."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "bind name",
+          "description": "Visible label."
+        }
+      ]
+    },
+    {
+      "name": "tk-radio-group",
+      "description": "Radio group bound to state.",
+      "attributes": [
+        {
+          "name": "bind",
+          "type": "string",
+          "default": "required",
+          "description": "Reactive state name written with Tacksheet.state.set / tk-state."
+        },
+        {
+          "name": "options",
+          "type": "json-ref",
+          "default": "—",
+          "description": "Options: [{value,label}]."
+        },
+        {
+          "name": "value",
+          "type": "json",
+          "default": "first option",
+          "description": "Initial value (JSON literal) when the state has none yet."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "bind name",
+          "description": "Group legend."
+        }
+      ]
+    },
+    {
+      "name": "tk-search",
+      "description": "Debounced search box bound to state.",
+      "attributes": [
+        {
+          "name": "bind",
+          "type": "string",
+          "default": "required",
+          "description": "Reactive state name written with Tacksheet.state.set / tk-state."
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "Search…",
+          "description": "Placeholder."
+        },
+        {
+          "name": "value",
+          "type": "json",
+          "default": "\"\"",
+          "description": "Initial value (JSON literal) when the state has none yet."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "bind name",
+          "description": "Field label."
+        }
+      ]
+    },
+    {
+      "name": "tk-number",
+      "description": "Number input bound to state.",
+      "attributes": [
+        {
+          "name": "bind",
+          "type": "string",
+          "default": "required",
+          "description": "Reactive state name written with Tacksheet.state.set / tk-state."
+        },
+        {
+          "name": "min",
+          "type": "number",
+          "default": "—",
+          "description": "Minimum."
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "default": "—",
+          "description": "Maximum."
+        },
+        {
+          "name": "step",
+          "type": "number",
+          "default": "—",
+          "description": "Step."
+        },
+        {
+          "name": "value",
+          "type": "json",
+          "default": "0",
+          "description": "Initial value (JSON literal) when the state has none yet."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "bind name",
+          "description": "Field label."
+        }
+      ]
+    },
+    {
+      "name": "tk-date",
+      "description": "Date input bound to state (ISO yyyy-mm-dd).",
+      "attributes": [
+        {
+          "name": "bind",
+          "type": "string",
+          "default": "required",
+          "description": "Reactive state name written with Tacksheet.state.set / tk-state."
+        },
+        {
+          "name": "min",
+          "type": "string",
+          "default": "—",
+          "description": "Earliest date."
+        },
+        {
+          "name": "max",
+          "type": "string",
+          "default": "—",
+          "description": "Latest date."
+        },
+        {
+          "name": "value",
+          "type": "json",
+          "default": "\"\"",
+          "description": "Initial date as a JSON string (value='\"2026-10-01\"') when the state has none yet."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "bind name",
+          "description": "Field label."
+        }
+      ]
+    },
+    {
+      "name": "tk-play",
+      "description": "Animates a numeric state from→to with a scrubber. It follows the shared state: Play starts from the current value (from `from` once a run has finished), another control moving the value stops the run, and with a step only whole steps are written. Honors reduced motion.",
+      "attributes": [
+        {
+          "name": "bind",
+          "type": "string",
+          "default": "required",
+          "description": "Reactive state name written with Tacksheet.state.set / tk-state."
+        },
+        {
+          "name": "from",
+          "type": "number",
+          "default": "0",
+          "description": "Start value."
+        },
+        {
+          "name": "to",
+          "type": "number",
+          "default": "100",
+          "description": "End value."
+        },
+        {
+          "name": "step",
+          "type": "number | \"any\"",
+          "default": "1 when from and to are whole numbers, else any",
+          "description": "Values are written in whole steps (each one once); \"any\" animates smoothly."
+        },
+        {
+          "name": "duration",
+          "type": "number",
+          "default": "4000",
+          "description": "Milliseconds for a run from `from` to `to` (200 or more)."
+        },
+        {
+          "name": "loop",
+          "type": "boolean",
+          "default": "absent",
+          "description": "Loop until paused; the end value shows for one step before the run starts over."
+        },
+        {
+          "name": "value",
+          "type": "json",
+          "default": "from",
+          "description": "Initial value (JSON literal) when the state has none yet."
+        },
+        {
+          "name": "data-motion-ok",
+          "type": "boolean",
+          "default": "absent",
+          "description": "Animate even when the reader prefers reduced motion (otherwise Play jumps to the end value)."
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "bind name",
+          "description": "Field label."
+        }
+      ]
+    },
+    {
+      "name": "tk-text",
+      "description": "Live template: {name}, {expr}, {value:.2f}, {rate:%}.",
+      "attributes": [
+        {
+          "name": "template",
+          "type": "string",
+          "default": "text content",
+          "description": "Template using state expressions."
+        }
+      ]
+    },
+    {
+      "name": "tk-show",
+      "description": "Shows its content only while the expression is truthy.",
+      "attributes": [
+        {
+          "name": "when",
+          "type": "expression",
+          "default": "true",
+          "description": "Safe expression over state (==, !=, <, >, &&, ||, !, ternary, min/max/abs/round…)."
+        }
+      ]
+    },
+    {
+      "name": "tk-compute",
+      "description": "Derived value: re-evaluates expr on every change and writes name.",
+      "attributes": [
+        {
+          "name": "name",
+          "type": "string",
+          "default": "required",
+          "description": "Derived value name."
+        },
+        {
+          "name": "expr",
+          "type": "expression",
+          "default": "required",
+          "description": "Safe expression over state."
+        },
+        {
+          "name": "value",
+          "type": "expression",
+          "default": "—",
+          "description": "Alias of expr."
+        }
+      ]
+    },
+    {
+      "name": "tk-feedback",
+      "description": "Free-text reply through the shell bridge; disabled outside Tacksheet.",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "Leave feedback",
+          "description": "Widget heading."
+        },
+        {
+          "name": "prompt",
+          "type": "string",
+          "default": "Your reply",
+          "description": "Textarea label."
+        },
+        {
+          "name": "maxlength",
+          "type": "number",
+          "default": "—",
+          "description": "Longest reply in characters."
+        },
+        {
+          "name": "submit-label",
+          "type": "string",
+          "default": "Send feedback",
+          "description": "Send button label."
+        },
+        {
+          "name": "expected-revision",
+          "type": "number",
+          "default": "shell value",
+          "description": "Optimistic-concurrency revision sent with the submission."
+        }
+      ]
+    },
+    {
+      "name": "tk-question",
+      "description": "Single reader question through the bridge.",
+      "attributes": [
+        {
+          "name": "min-label",
+          "type": "string",
+          "default": "—",
+          "description": "Scale: words under the lowest value."
+        },
+        {
+          "name": "max-label",
+          "type": "string",
+          "default": "—",
+          "description": "Scale: words under the highest value."
+        },
+        {
+          "name": "type",
+          "type": "enum choice|scale|rating|yes-no|text",
+          "default": "text",
+          "description": "Answer widget."
+        },
+        {
+          "name": "question",
+          "type": "string",
+          "default": "Question",
+          "description": "Question text."
+        },
+        {
+          "name": "options",
+          "type": "json-ref",
+          "default": "—",
+          "description": "Choice options: [{value,label}]."
+        },
+        {
+          "name": "min",
+          "type": "number",
+          "default": "1",
+          "description": "Scale minimum."
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "default": "5",
+          "description": "Scale maximum."
+        },
+        {
+          "name": "expected-revision",
+          "type": "number",
+          "default": "shell value",
+          "description": "Revision sent with the submission."
+        }
+      ]
+    },
+    {
+      "name": "tk-form",
+      "description": "Multi-field reply rendered from the server form schema (identical shape).",
+      "attributes": [
+        {
+          "name": "schema",
+          "type": "json-ref",
+          "default": "required",
+          "description": "Form schema: {fields:[…]} or JSON-schema {properties}."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "schema title",
+          "description": "Widget heading."
+        },
+        {
+          "name": "form-id",
+          "type": "string",
+          "default": "schema id",
+          "description": "Echoed in the payload."
+        },
+        {
+          "name": "submit-label",
+          "type": "string",
+          "default": "Submit",
+          "description": "Send button label."
+        },
+        {
+          "name": "expected-revision",
+          "type": "number",
+          "default": "shell value",
+          "description": "Revision sent with the submission."
+        }
+      ]
+    },
+    {
+      "name": "tk-vote",
+      "description": "Choose between options/variants through the bridge.",
+      "attributes": [
+        {
+          "name": "question",
+          "type": "string",
+          "default": "Vote",
+          "description": "Vote question."
+        },
+        {
+          "name": "options",
+          "type": "json-ref",
+          "default": "required",
+          "description": "Options: [{value,label}]."
+        },
+        {
+          "name": "expected-revision",
+          "type": "number",
+          "default": "shell value",
+          "description": "Revision sent with the submission."
+        }
+      ]
+    },
+    {
+      "name": "tk-request-info",
+      "description": "Reader asks for more info on a section.",
+      "attributes": [
+        {
+          "name": "section",
+          "type": "string",
+          "default": "title, else \"this section\"",
+          "description": "Section name or id included in the payload and the prompt."
+        },
+        {
+          "name": "expected-revision",
+          "type": "number",
+          "default": "shell value",
+          "description": "Revision sent with the submission."
+        }
+      ]
+    },
+    {
+      "name": "tk-annotate-feedback",
+      "description": "Reader pins a comment on an image.",
+      "attributes": [
+        {
+          "name": "src",
+          "type": "url",
+          "default": "required",
+          "description": "Image URL."
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "default": "Image to comment on",
+          "description": "Alt text."
+        },
+        {
+          "name": "expected-revision",
+          "type": "number",
+          "default": "shell value",
+          "description": "Revision sent with the submission."
+        }
+      ]
+    },
+    {
+      "name": "tk-model",
+      "description": "GLB viewer: orbit, authored path, fly and walk modes; poster, hotspots, WebGL fallback.",
+      "attributes": [
+        {
+          "name": "title",
+          "type": "string",
+          "default": "3D model",
+          "description": "Accessible name of the viewer (aria-label also works), shown as its caption."
+        },
+        {
+          "name": "src",
+          "type": "url",
+          "default": "—",
+          "description": "Same-review ./files/… file, loaded through the shell file.fetch bridge when embedded (or fetched directly when standalone)."
+        },
+        {
+          "name": "glb",
+          "type": "base64 | id-ref",
+          "default": "—",
+          "description": "Inline base64 GLB, or \"#id\" of an element holding the base64 (embed once, reuse in several viewers); renders with zero network under connect-src 'none'. Prefer for models under ~1 MB."
+        },
+        {
+          "name": "mode",
+          "type": "enum orbit|path|fly|walk",
+          "default": "orbit",
+          "description": "Navigation mode."
+        },
+        {
+          "name": "poster",
+          "type": "url",
+          "default": "—",
+          "description": "Poster shown until the viewer starts."
+        },
+        {
+          "name": "background",
+          "type": "color",
+          "default": "#101014",
+          "description": "Scene background."
+        },
+        {
+          "name": "auto-rotate",
+          "type": "boolean",
+          "default": "absent",
+          "description": "Slow turntable (paused under reduced motion)."
+        },
+        {
+          "name": "speed",
+          "type": "number",
+          "default": "1",
+          "description": "Rotation/movement speed multiplier."
+        },
+        {
+          "name": "data",
+          "type": "json-ref",
+          "default": "—",
+          "description": "Hotspots [{label,pos,view}] and path keyframes [{label,pos,target}]; for fly/walk also terrain {…}, place {x,z,scale}, and fly/walk start {pos,target}."
+        }
+      ]
+    },
+    {
+      "name": "tk-scene",
+      "description": "Data-driven 3D scene from JSON: points, lines, meshes, point clouds, terrain heightmaps (smoothed, elevation ramp, contours). Unset colours follow the theme.",
+      "attributes": [
+        {
+          "name": "data",
+          "type": "json-ref",
+          "default": "required",
+          "description": "Scene JSON; see docs/sheet-kit.md."
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "default": "3D scene",
+          "description": "Accessible name of the scene (aria-label also works), shown as its caption."
+        }
+      ]
+    },
+    {
+      "name": "tk-tape-title",
+      "description": "Washi-tape title: a real h1, h2 or h3 printed on a translucent strip of tape with torn ends, fibre and a faint pattern; each line gets its own strip. The ink is checked against the tape as it lands on the page (4.5:1, or 3:1 for 24px+ text) and replaced, with a console warning, when it fails.",
+      "attributes": [
+        {
+          "name": "level",
+          "type": "enum 1|2|3",
+          "default": "1",
+          "description": "Heading level built when the title is plain text; a nested <h1>, <h2> or <h3> is used as it is."
+        },
+        {
+          "name": "tape",
+          "type": "enum kraft|frost|vermilion|cobalt|plum|sunflower|cornflower|blush",
+          "default": "kraft",
+          "description": "Tape colour from the riso tape palette."
+        },
+        {
+          "name": "pattern",
+          "type": "enum plain|grid|dots|stripes|kraft",
+          "default": "plain",
+          "description": "Faint pattern printed on the tape."
+        },
+        {
+          "name": "ink",
+          "type": "enum auto|cobalt|black|cream|vermilion|plum",
+          "default": "auto",
+          "description": "Title ink. auto picks cobalt, near-black or cream for the tape; a named ink that fails contrast is overridden."
+        },
+        {
+          "name": "tilt",
+          "type": "number",
+          "default": "-1.2",
+          "description": "Rotation of the first strip in degrees (-6 to 6); later lines alternate around it."
+        },
+        {
+          "name": "hand",
+          "type": "boolean",
+          "default": "absent",
+          "description": "Letter the title by hand (Kalam marker) instead of the heading face."
+        }
+      ]
+    },
+    {
+      "name": "tk-taped",
+      "description": "Tapes its content to the sheet: an image becomes a print with a cream border, anything else a pinned piece of paper; strips of tape hold it at the top or the corners.",
+      "attributes": [
+        {
+          "name": "tape",
+          "type": "enum kraft|frost|vermilion|cobalt|plum|sunflower|cornflower|blush",
+          "default": "kraft",
+          "description": "Tape colour."
+        },
+        {
+          "name": "pattern",
+          "type": "enum plain|grid|dots|stripes|kraft",
+          "default": "plain",
+          "description": "Faint tape pattern."
+        },
+        {
+          "name": "at",
+          "type": "enum top|corners|diagonal",
+          "default": "top",
+          "description": "Where the strips go: one across the top, two top corners, or top-left and bottom-right."
+        },
+        {
+          "name": "tilt",
+          "type": "number",
+          "default": "1",
+          "description": "Rotation of the print in degrees (-6 to 6)."
+        },
+        {
+          "name": "frame",
+          "type": "enum print|none",
+          "default": "print",
+          "description": "print adds a cream photo border; none tapes the content as it is."
+        },
+        {
+          "name": "caption",
+          "type": "string",
+          "default": "—",
+          "description": "Handwritten caption on the print’s lower border."
+        }
+      ]
+    },
+    {
+      "name": "tk-stamp",
+      "description": "Rubber stamp in one riso ink, worn by the grain of the pad: APPROVED, DRAFT or your own word, with an optional date line.",
+      "attributes": [
+        {
+          "name": "kind",
+          "type": "enum approved|draft|rejected|final|shared|seen",
+          "default": "—",
+          "description": "Preset word and ink; text inside the element replaces the word."
+        },
+        {
+          "name": "ink",
+          "type": "enum cobalt|vermilion|plum",
+          "default": "by kind (cobalt)",
+          "description": "Stamp ink."
+        },
+        {
+          "name": "shape",
+          "type": "enum box|double|round",
+          "default": "box",
+          "description": "Stamp outline."
+        },
+        {
+          "name": "date",
+          "type": "string",
+          "default": "—",
+          "description": "Second, smaller line such as a date."
+        },
+        {
+          "name": "tilt",
+          "type": "number",
+          "default": "-6",
+          "description": "Rotation in degrees (-20 to 20)."
+        }
+      ]
+    },
+    {
+      "name": "tk-slip",
+      "description": "Torn, lined slip of cream paper with a handwritten note, held by a strip of tape. Use it for margin notes and asides; it is never a yellow square sticky note.",
+      "attributes": [
+        {
+          "name": "tape",
+          "type": "enum kraft|frost|vermilion|cobalt|plum|sunflower|cornflower|blush|none",
+          "default": "kraft",
+          "description": "Tape strip holding the slip (none for no tape)."
+        },
+        {
+          "name": "from",
+          "type": "string",
+          "default": "—",
+          "description": "Signature line, such as a name and a date."
+        },
+        {
+          "name": "float",
+          "type": "enum left|right",
+          "default": "—",
+          "description": "On wide sheets the slip floats beside the text; phones keep it in the flow."
+        },
+        {
+          "name": "tilt",
+          "type": "number",
+          "default": "-1.2",
+          "description": "Rotation in degrees (-6 to 6)."
+        }
+      ]
+    },
+    {
+      "name": "tk-mark",
+      "description": "Inline emphasis in riso ink: a highlighter swash, a hand-drawn underline or a ring around a word. Text keeps its own colour and contrast.",
+      "attributes": [
+        {
+          "name": "kind",
+          "type": "enum highlight|underline|circle",
+          "default": "highlight",
+          "description": "Mark style."
+        },
+        {
+          "name": "ink",
+          "type": "enum sunflower|vermilion|cobalt|plum|cornflower",
+          "default": "sunflower (underline and circle: vermilion)",
+          "description": "Mark ink."
+        }
+      ]
+    },
+    {
+      "name": "tk-torn",
+      "description": "Torn-paper divider: a ragged strip of paper between parts of a sheet, with an optional printed label.",
+      "attributes": [
+        {
+          "name": "paper",
+          "type": "enum kraft|cream|cobalt|vermilion|plum|sunflower",
+          "default": "kraft",
+          "description": "Paper of the torn strip; a label prints in an ink that passes on it."
+        }
+      ]
+    },
+    {
+      "name": "tk-duotone",
+      "description": "Riso duotone print of an image: two inks, slightly off register, overprinting where they meet, on paper that stays cream on night stock.",
+      "attributes": [
+        {
+          "name": "inks",
+          "type": "string",
+          "default": "cobalt,vermilion",
+          "description": "Two comma-separated inks: cobalt, vermilion, plum, sunflower, cornflower or black."
+        },
+        {
+          "name": "offset",
+          "type": "number",
+          "default": "2",
+          "description": "Misregistration of the second ink in pixels (0 to 6)."
+        },
+        {
+          "name": "halftone",
+          "type": "boolean",
+          "default": "absent",
+          "description": "Print the second ink as a halftone dot screen."
+        },
+        {
+          "name": "caption",
+          "type": "string",
+          "default": "—",
+          "description": "Caption text."
+        },
+        {
+          "name": "credit",
+          "type": "string",
+          "default": "—",
+          "description": "Credit line appended to the caption."
+        }
+      ]
+    },
+    {
+      "name": "tk-overprint",
+      "description": "Display words or numbers printed twice, in two inks off register, overprinting where the passes meet. Inks switch to their night shades on riso-night.",
+      "attributes": [
+        {
+          "name": "inks",
+          "type": "string",
+          "default": "cobalt,vermilion",
+          "description": "Two comma-separated inks: cobalt, vermilion, plum, sunflower, cornflower or black."
+        },
+        {
+          "name": "offset",
+          "type": "number",
+          "default": "0.05",
+          "description": "Misregistration in em (0 to 0.15)."
+        }
+      ]
+    },
+    {
+      "name": "tk-tear",
+      "description": "Alias of tk-torn, kept for sheets written from older instructions: it becomes a tk-torn with the same attributes. Write tk-torn.",
+      "attributes": [
+        {
+          "name": "paper",
+          "type": "enum kraft|cream|cobalt|vermilion|plum|sunflower",
+          "default": "kraft",
+          "description": "As on tk-torn."
+        }
+      ]
+    }
+  ],
+  "chartTypes": [
+    {
+      "type": "line",
+      "description": "Line chart over categories.",
+      "data": "Wide: {labels, datasets:[{label,data}]} or rows with x/y."
+    },
+    {
+      "type": "area",
+      "description": "Line chart with filled area.",
+      "data": "Same as line."
+    },
+    {
+      "type": "stacked-area",
+      "description": "Stacked areas sharing one baseline.",
+      "data": "Same as line, 2+ series."
+    },
+    {
+      "type": "bar",
+      "description": "Vertical bars.",
+      "data": "Same as line."
+    },
+    {
+      "type": "horizontal-bar",
+      "description": "Horizontal bars for long labels.",
+      "data": "Same as line."
+    },
+    {
+      "type": "stacked-bar",
+      "description": "Bars stacked to a total.",
+      "data": "Same as line, 2+ series."
+    },
+    {
+      "type": "grouped-bar",
+      "description": "Side-by-side bars (alias of bar).",
+      "data": "Same as line."
+    },
+    {
+      "type": "percent-bar",
+      "description": "Stacked bars normalized to 100%.",
+      "data": "Same as line, 2+ series."
+    },
+    {
+      "type": "scatter",
+      "description": "XY points.",
+      "data": "{points:[[x,y]]} or rows with x/y."
+    },
+    {
+      "type": "bubble",
+      "description": "XY points sized by a third value.",
+      "data": "{points:[[x,y,size]]} or rows with x/y/size."
+    },
+    {
+      "type": "histogram",
+      "description": "Binned value distribution (bins attr, default 12).",
+      "data": "{values:[…]}."
+    },
+    {
+      "type": "box",
+      "description": "Box plot with quartiles computed in the kit.",
+      "data": "{groups:[{name,values}]} or rows with series/y."
+    },
+    {
+      "type": "violin",
+      "description": "KDE violin with an inner box plot.",
+      "data": "{groups:[{name,values}]}."
+    },
+    {
+      "type": "heatmap",
+      "description": "Matrix heatmap.",
+      "data": "{x:[…], y:[…], values:[[xi,yi,v]]}."
+    },
+    {
+      "type": "calendar-heatmap",
+      "description": "Year calendar heatmap.",
+      "data": "{values:[[dateString, v]]}."
+    },
+    {
+      "type": "treemap",
+      "description": "Nested rectangles.",
+      "data": "{children:[{name,value,children?}]}."
+    },
+    {
+      "type": "sunburst",
+      "description": "Radial hierarchy.",
+      "data": "Same as treemap."
+    },
+    {
+      "type": "sankey",
+      "description": "Flow diagram.",
+      "data": "{nodes:[{name}], links:[{source,target,value}]} (names or indices)."
+    },
+    {
+      "type": "network",
+      "description": "Force-directed graph (alias: graph).",
+      "data": "{nodes:[{id?,name,category?}], links:[{source,target}], categories?}."
+    },
+    {
+      "type": "graph",
+      "description": "Alias of network.",
+      "data": "Same as network."
+    },
+    {
+      "type": "chord",
+      "description": "Approximation: ECharts 5 has no chord series, so a circular node-link graph stands in. Node size follows each row total and link width the square root of the upper-triangle value; direction and arc ribbons are not drawn.",
+      "data": "{labels:[…], matrix:[[n]]}."
+    },
+    {
+      "type": "radar",
+      "description": "Spider chart.",
+      "data": "{indicators:[{name,max}], wide series}."
+    },
+    {
+      "type": "polar-bar",
+      "description": "Bars on a polar grid.",
+      "data": "Wide single series."
+    },
+    {
+      "type": "candlestick",
+      "description": "Candlesticks: a body from open to close and a wick from low to high (alias: ohlc).",
+      "data": "{x:[…], values:[[open,close,low,high]]} or rows with open/close/low/high."
+    },
+    {
+      "type": "ohlc",
+      "description": "Approximation: an alias of candlestick, so the same values draw as candles, not as bars with open and close ticks.",
+      "data": "Same as candlestick."
+    },
+    {
+      "type": "waterfall",
+      "description": "Running-total bars; the last value is the total.",
+      "data": "{labels, values:[signed deltas…, total]}."
+    },
+    {
+      "type": "funnel",
+      "description": "Stage funnel.",
+      "data": "[{name,value}] or {values:[…]}."
+    },
+    {
+      "type": "gauge",
+      "description": "Single-value gauge.",
+      "data": "{value, min?, max?, name?}."
+    },
+    {
+      "type": "pie",
+      "description": "Pie chart.",
+      "data": "Named values [{name,value}]."
+    },
+    {
+      "type": "donut",
+      "description": "Pie with a hole.",
+      "data": "Same as pie."
+    },
+    {
+      "type": "rose",
+      "description": "Nightingale rose (area).",
+      "data": "Same as pie."
+    },
+    {
+      "type": "sparkline",
+      "description": "Minimal inline trend, no axes.",
+      "data": "{values:[…]}."
+    },
+    {
+      "type": "bullet",
+      "description": "Performance bullet: value bar, target tick, qualitative bands.",
+      "data": "{value, target, ranges:[…], label?}."
+    },
+    {
+      "type": "dumbbell",
+      "description": "Paired dots joined by a line.",
+      "data": "Rows with a/b (attrs) or {labels, pairs:[[a,b]]} or two wide series."
+    },
+    {
+      "type": "slope",
+      "description": "Slopegraph between two categories.",
+      "data": "Wide series; only the first two labels are drawn."
+    },
+    {
+      "type": "lollipop",
+      "description": "Thin stems with dots.",
+      "data": "Wide single series."
+    },
+    {
+      "type": "parallel-coordinates",
+      "description": "Parallel-coordinates plot (alias: parallel).",
+      "data": "{dimensions:[…], data:[[v…]]}."
+    },
+    {
+      "type": "parallel",
+      "description": "Alias of parallel-coordinates.",
+      "data": "Same as parallel-coordinates."
+    },
+    {
+      "type": "themeriver",
+      "description": "Streamgraph over time (alias: streamgraph).",
+      "data": "{values:[[time, value, name]]}."
+    },
+    {
+      "type": "streamgraph",
+      "description": "Alias of themeriver.",
+      "data": "Same as themeriver."
+    },
+    {
+      "type": "timeline",
+      "description": "Gantt bars on a time axis (alias: gantt).",
+      "data": "{tasks:[{name,start,end}]} (ISO dates)."
+    },
+    {
+      "type": "gantt",
+      "description": "Alias of timeline.",
+      "data": "Same as timeline."
+    },
+    {
+      "type": "choropleth",
+      "description": "Filled map (map attr: usa|world); matches data names to features case-insensitively.",
+      "data": "{values:[{name, value}]}."
+    },
+    {
+      "type": "dot-map",
+      "description": "Scaled dots on a map (aliases: dotmap).",
+      "data": "{points:[{name, lon, lat, value?}]}."
+    },
+    {
+      "type": "dotmap",
+      "description": "Alias of dot-map.",
+      "data": "Same as dot-map."
+    },
+    {
+      "type": "contour",
+      "description": "Approximation: a Gaussian-smoothed density heatmap on a bins×bins grid with hidden axes, not isolines (alias: density).",
+      "data": "{points:[[x,y]]}, bins attr (default 24)."
+    },
+    {
+      "type": "density",
+      "description": "Alias of contour (the same density-heatmap approximation).",
+      "data": "Same as contour."
+    },
+    {
+      "type": "error-bars",
+      "description": "Bars with whiskers (alias: errorbars).",
+      "data": "Rows with y/error (attrs) or {labels, values, errors}."
+    },
+    {
+      "type": "errorbars",
+      "description": "Alias of error-bars.",
+      "data": "Same as error-bars."
+    },
+    {
+      "type": "regression",
+      "description": "Scatter with a least-squares fit line.",
+      "data": "{points:[[x,y]]} or rows with x/y."
+    },
+    {
+      "type": "combo",
+      "description": "Mixed bar+line with an optional second axis (kinds/axes attrs).",
+      "data": "Wide series; kinds=\"bar,line\", axes=\"0,1\"."
+    }
+  ],
+  "bridge": {
+    "protocol": "tacksheet-sheet-v1",
+    "sheetToParent": [
+      {
+        "kind": "resize",
+        "shape": "{ protocol, kind: \"resize\", type: \"resize\", height: number }",
+        "description": "Posted on load, resize and DOM changes so the shell can size the iframe without inner scrollbars (Tacksheet shells honour up to 100,000 px)."
+      },
+      {
+        "kind": "viewport.watch",
+        "shape": "{ protocol, kind: \"viewport.watch\", type: \"viewport.watch\" }",
+        "description": "Posted once on load by an embedded sheet: asks the shell to report its visible window (viewport) on every scroll and resize, since the sheet never scrolls itself."
+      },
+      {
+        "kind": "feedback.status",
+        "shape": "{ protocol, kind: \"feedback.status\", type: \"feedback.status\" }",
+        "description": "Asks whether the shell accepts reader feedback right now."
+      },
+      {
+        "kind": "feedback.submit",
+        "shape": "{ protocol, kind: \"feedback.submit\", type: \"feedback.submit\", token: string, payload: object, expectedRevision: number }",
+        "description": "Hands a reader submission to the shell. The shell shows its own Send dialog (with the terms while this reader has not accepted them) and POSTs only after the reader presses Send there; the sheet can neither accept the terms nor skip the dialog. Free text is limited to 4,000 characters and is refused whole (text_too_long, with limit), never shortened. expectedRevision is the responseRevision last heard from the shell. Token matches the async result."
+      },
+      {
+        "kind": "file.open",
+        "shape": "{ protocol, kind: \"file.open\", type: \"file.open\", name: string }",
+        "description": "Asks the shell to show a download/open button for an allowlisted same-version file."
+      },
+      {
+        "kind": "file.fetch",
+        "shape": "{ protocol, kind: \"file.fetch\", type: \"file.fetch\", token: string, name: string }",
+        "description": "Asks the shell for a same-review file’s bytes (sheets have connect-src ‘none’ and cannot fetch). Name is the file within the version, without any ./files/ prefix. Token matches the async result. The kit keeps two in flight and retries busy answers."
+      }
+    ],
+    "parentToSheet": [
+      {
+        "kind": "feedback.status.result",
+        "shape": "{ protocol, kind: \"feedback.status.result\", type: \"feedback.status.result\", accepting: boolean, schemaRevision: number, responseRevision: number, mine?: boolean, accepted?: boolean, reason?: \"owner_preview\" }",
+        "description": "Shell answer to feedback.status, and pushed again after every saved reply. responseRevision counts this browser’s saved replies; accepted (read-only) says whether this reader already accepted the current terms, so a sheet can word its button; reason owner_preview marks the owner’s own preview."
+      },
+      {
+        "kind": "viewport",
+        "shape": "{ protocol, kind: \"viewport\", type: \"viewport\", top: number, height: number }",
+        "description": "Shell answer to viewport.watch, posted on every scroll, resize and frame resize and when the frame comes into view: the page’s visible window in the sheet’s own CSS pixels. top is negative while the sheet starts lower down the page. tk-scrolly uses it to keep its chart beside the step being read."
+      },
+      {
+        "kind": "feedback.submit.result",
+        "shape": "{ protocol, kind: \"feedback.submit.result\", type: \"feedback.submit.result\", token: string, ok: boolean, responseRevision?: number, error?: string, limit?: number }",
+        "description": "Shell answer to feedback.submit, matched by token. error is cancelled when the reader closes the dialog, busy while another dialog is open, rate_limited after many in a minute, and text_too_long (with limit) for an over-long reply."
+      },
+      {
+        "kind": "file.fetch.result",
+        "shape": "{ protocol, kind: \"file.fetch.result\", type: \"file.fetch.result\", token: string, ok: boolean, name?: string, mediaType?: string, size?: number, bytes?: ArrayBuffer, error?: string }",
+        "description": "Shell answer to file.fetch, matched by token. Bytes travel as a transferred ArrayBuffer; the kit turns them into a blob: URL (media) or parses them (GLB). ok:false carries error instead."
+      }
+    ]
+  },
+  "defaultTheme": "riso",
+  "materials": {
+    "tapes": [
+      {
+        "name": "kraft",
+        "color": "#C9B48F",
+        "alpha": 0.92,
+        "blend": "multiply"
+      },
+      {
+        "name": "frost",
+        "color": "#F6F3EC",
+        "alpha": 0.72,
+        "blend": "normal"
+      },
+      {
+        "name": "vermilion",
+        "color": "#E64B35",
+        "alpha": 0.86,
+        "blend": "multiply"
+      },
+      {
+        "name": "cobalt",
+        "color": "#2B3F8D",
+        "alpha": 0.9,
+        "blend": "multiply"
+      },
+      {
+        "name": "plum",
+        "color": "#6B2F5E",
+        "alpha": 0.9,
+        "blend": "multiply"
+      },
+      {
+        "name": "sunflower",
+        "color": "#F2B33D",
+        "alpha": 0.86,
+        "blend": "multiply"
+      },
+      {
+        "name": "cornflower",
+        "color": "#9DB0F0",
+        "alpha": 0.86,
+        "blend": "multiply"
+      },
+      {
+        "name": "blush",
+        "color": "#F2A7A0",
+        "alpha": 0.84,
+        "blend": "multiply"
+      }
+    ],
+    "tapePatterns": [
+      "plain",
+      "grid",
+      "dots",
+      "stripes",
+      "kraft"
+    ],
+    "titleInks": {
+      "cobalt": "#2B3F8D",
+      "black": "#1E1E1E",
+      "cream": "#F4EEE0",
+      "vermilion": "#E64B35",
+      "plum": "#6B2F5E"
+    },
+    "inks": {
+      "cobalt": {
+        "day": "#2B3F8D",
+        "night": "#9DB0F0"
+      },
+      "vermilion": {
+        "day": "#E64B35",
+        "night": "#FF6B4F"
+      },
+      "plum": {
+        "day": "#6B2F5E",
+        "night": "#D896C8"
+      },
+      "sunflower": {
+        "day": "#F2B33D",
+        "night": "#F2B33D"
+      },
+      "cornflower": {
+        "day": "#9DB0F0",
+        "night": "#9DB0F0"
+      },
+      "black": {
+        "day": "#1E1E1E",
+        "night": "#F1E9D6"
+      }
+    },
+    "contrast": "Tape titles: the ink must reach 4.5:1 against the tape as it lands on the page (3:1 at 24px and up, or 18.66px bold); a failing ink is replaced by cobalt, near-black or cream."
+  }
+}

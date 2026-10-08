@@ -1,0 +1,18 @@
+02-fluid-sweep: 12 threads per side (persistent pool), 60 frames per period, 2 RK4 substeps per frame
+quality (original clock, load-independent): overlap lerp 105.2% exp 89.2% with 0.0% | drift lerp 0.333 exp 5.58e-13 with 7.3e-12  (2.4 s)
+n=    1000/region (    5557 pts)  WITHOUT exp    0.0313 ms  lerp    0.0312  WITH    0.1857 ms  ratio 0.169  frames 6000
+n=    4000/region (   14539 pts)  WITHOUT exp    0.0410 ms  lerp    0.0408  WITH    0.4682 ms  ratio 0.0876  frames 6000
+n=   16000/region (   50410 pts)  WITHOUT exp    0.0646 ms  lerp    0.0636  WITH    1.4948 ms  ratio 0.0432  frames 6000
+n=   64000/region (  194238 pts)  WITHOUT exp    0.1267 ms  lerp    0.1253  WITH    5.6552 ms  ratio 0.0224  frames 6000
+n=  256000/region (  769852 pts)  WITHOUT exp    0.7770 ms  lerp    0.7772  WITH   22.2060 ms  ratio 0.035  frames 2040
+n= 1024000/region ( 3073134 pts)  WITHOUT exp    3.1866 ms  lerp    3.2081  WITH   87.7710 ms  ratio 0.0363  frames 480
+
+n            WITHOUT ms      WITH ms     ratio         lerp  frames(wo/w)
+1000             0.0313       0.1857     0.169       0.0312  3000/6000
+4000              0.041       0.4682    0.0876       0.0408  3000/6000
+16000            0.0646        1.495    0.0432       0.0636  3000/6000
+64000            0.1267        5.655    0.0224       0.1253  3000/6000
+256000            0.777        22.21     0.035       0.7772  1020/2040
+1024000           3.187        87.77    0.0363        3.208  240/480
+fit exponents: without 0.672  with 0.901
+wrote <repo>\demos\L5-sweeps\02-fluid-sweep/out/ladder.json  (total 126.4 s)

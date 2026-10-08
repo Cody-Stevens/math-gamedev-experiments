@@ -1,0 +1,13 @@
+[05-crowd-hub] 1500 frames @ 60 fps, no video -> <repo>/demos/05-crowd-hub/out/clean
+[05-crowd-hub] frame 318/1500  L 0.096 ms  R 0.216 ms  (5.0 s)
+[05-crowd-hub] frame 579/1500  L 0.073 ms  R 0.187 ms  (10.0 s)
+[05-crowd-hub] frame 852/1500  L 0.165 ms  R 0.250 ms  (15.0 s)
+[05-crowd-hub] frame 1131/1500  L 0.165 ms  R 0.225 ms  (20.0 s)
+[05-crowd-hub] frame 1422/1500  L 0.082 ms  R 0.194 ms  (25.0 s)
+[05-crowd-hub] frame 1500/1500  L 0.080 ms  R 0.218 ms  (26.5 s)
+[05-crowd-hub] done: 1500 frames in 26.5 s
+  LEFT   frozen labels, hub moved                 median 0.082 ms/frame  p95 0.262  (12,240 fps compute-only)
+  RIGHT  recomputed optimal (Brenier) labels      median 0.201 ms/frame  p95 0.308  (4,965 fps compute-only)
+  speedup (median compute): 0.41x
+  poster:  <repo>/demos/05-crowd-hub/out/clean/poster.png
+  results: <repo>/demos/05-crowd-hub/out/clean/results.json

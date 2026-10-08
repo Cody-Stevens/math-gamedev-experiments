@@ -1,0 +1,31 @@
+L4-economy-ladder sweep: 240 frames/stage, dt = 0.50 (t = 0 -> 120), 1 thread per side, jit 1.50, seed 149
+weakly reversible: WITHOUT no, WITH yes
+      N |  median ms/frame W/O  WITH  ratio | mean ms W/O   WITH  | steps/frame W/O WITH | dead-or-runaway at t=120
+      1 |     0.0037     0.0002     18.7x |     0.0129     0.0004 |        66         2 | 100.0%   0.0%
+      4 |     0.0430     0.0008     53.7x |     0.0513     0.0017 |       262         9 | 100.0%   0.0%
+     16 |     0.2072     0.0032     64.7x |     0.2105     0.0098 |      1048        46 | 100.0%   0.0%
+     64 |     0.8128     0.0129     63.0x |     0.8313     0.0356 |      4202       171 | 100.0%   0.0%
+    256 |     3.0803     0.0531     58.0x |     3.3307     0.1397 |     16594       680 |  99.6%   0.0%
+   1024 |    12.3614     0.2180     56.7x |    13.4458     0.5846 |     66417      2745 |  99.4%   0.0%
+   4096 |    46.2647     0.8697     53.2x |    52.4318     2.3100 |    266446     10974 |  99.7%   0.0%
+  16384 |   201.9977     3.6054     56.0x |   218.2979     9.1867 |   1063265     43695 |  99.6%   0.0%
+  65536 |  (W/O not run)    16.5356  WITH-only extension |    38.1799 |    175018 |   0.0%
+time-horizon axis, N = 256 towns, dt = 0.50 per frame (W/O vs WITH):
+  halt 1e12   t in (     0,    10]: ms per sim-time     3.5686 vs    2.4430 (   1.5x) | steps/town/sim-time    60.37 vs    35.83 | dead-or-runaway   0.0% vs   0.0%
+  halt 1e12   t in (    10,   100]: ms per sim-time     9.9889 vs    0.1892 (  52.8x) | steps/town/sim-time   158.94 vs     2.66 | dead-or-runaway  97.3% vs   0.0%
+  halt 1e12   t in (   100,  1000]: ms per sim-time     0.0766 vs    0.1344 (   0.6x) | steps/town/sim-time     1.20 vs     2.00 | dead-or-runaway 100.0% vs   0.0%
+  halt 1e12   t in (  1000, 10000]: ms per sim-time     0.0008 vs    0.1353 (   0.0x) | steps/town/sim-time     0.00 vs     2.00 | dead-or-runaway 100.0% vs   0.0%
+  halt never  t in (     0,    10]: ms per sim-time     3.7133 vs    2.4605 (   1.5x) | steps/town/sim-time    60.37 vs    35.83 | dead-or-runaway   0.0% vs   0.0%
+  halt never  t in (    10,   100]: ms per sim-time    26.1005 vs    0.1811 ( 144.1x) | steps/town/sim-time   430.57 vs     2.66 | dead-or-runaway  97.3% vs   0.0%
+  halt never  t in (   100,  1000]: ms per sim-time     8.6867 vs    0.1369 (  63.4x) | steps/town/sim-time   140.57 vs     2.00 | dead-or-runaway 100.0% vs   0.0%
+  halt never  t in (  1000, 10000]: ms per sim-time     0.1235 vs    0.1351 (   0.9x) | steps/town/sim-time     2.00 vs     2.00 | dead-or-runaway 100.0% vs   0.0%
+fixed-step explicit midpoint (RK2), N = 256 towns, dt = 0.50 per frame, to t = 1000 (W/O vs WITH):
+  fixed RK2 h=0.5      : broken (neg/non-finite) 100.0% vs  71.5% | broke after t=10  19.9% vs   2.0% | runaway (finite)   0.0% vs   0.0% | ms/frame 0.004 vs 0.005
+  fixed RK2 h=0.125    : broken (neg/non-finite)  99.6% vs  31.2% | broke after t=10  48.8% vs   0.0% | runaway (finite)   0.0% vs   0.0% | ms/frame 0.034 vs 0.040
+  fixed RK2 h=0.03125  : broken (neg/non-finite) 100.0% vs  14.1% | broke after t=10  71.5% vs   0.0% | runaway (finite)   0.0% vs   0.0% | ms/frame 0.164 vs 0.183
+  fixed RK2 h=0.0078125: broken (neg/non-finite) 100.0% vs   2.0% | broke after t=10  89.5% vs   0.0% | runaway (finite)   0.0% vs   0.0% | ms/frame 0.478 vs 0.714
+  fixed RK2 h=0.00195312: broken (neg/non-finite) 100.0% vs   0.0% | broke after t=10  99.2% vs   0.0% | runaway (finite)   0.0% vs   0.0% | ms/frame 2.747 vs 3.285
+notes: Hypothesis partly confirmed. N axis (t=0..120 per stage): both sides scale linearly in N (fitted exponents 1.07 / 1.01); for N>=16 the WITHOUT median frame costs 53-65x the WITH median frame (at N=16384 the mean-frame ratio is 24x and the attempted-solver-step ratio 24x), because >99% of WITHOUT towns collapse (Wood below 1e-6, Food and Workers past 1e6, halted at 1e12) and the stiff collapse forces many small steps, while WITH towns settle and take about one step per frame. WITHOUT crosses 16.7 ms between N=1024 (12.4 ms) and N=4096 (46.3 ms); WITH stays under 16.7 ms up to N=16384. WITH-only extension: N=65536 gives 16.54 ms median. Time-horizon axis (N=256): the extra cost is a transient, not growth with simulated time. With the 01-economy halt rule WITHOUT costs 53x WITH per unit time in t=(10,100], then less than WITH once its towns are halted (0.57x in (100,1000], about 0 later). Never halting: 144x in (10,100], 63x in (100,1000], 0.91x in (1000,1e4] (collapsed towns sit at extreme but slowly varying values that the relative-error controller steps through as cheaply as WITH). Fixed-step explicit midpoint (what a game ships; same cost per step on both sides by construction): at every step from h=0.5 to h=1/512 at least 99.6% of WITHOUT towns go negative or non-finite by t=1000 (99.2% after t=10 at h=1/512); WITH towns break only during the start transient from extreme starts (2.0% after t=10 at h=0.5, none after t=10 for h<=0.125, 0.0% in total at h=1/512). Proved by the paper (thm:main, eq:uniform-bounds): WITH trajectories stay in [eps,1/eps] after a transient; eps is not computed. Everything else here (costs, the WITHOUT collapse, fixed-step behaviour) is measured for this network, these seeds and rates, 1 thread per side.
+fit exponents (all n): W/O 1.071, WITH 1.010; n>=64: 0.991, 1.014
+max n within 16.7 ms: W/O 1024 (bracketed: n=4096 over budget), WITH 16384 (never over budget up to the largest measured n)
+wrote L4-economy-ladder/out/ladder.json  (111.8 s)

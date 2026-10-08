@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Colony Ledger: type-check your simulation rules</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; background: #15171b; color: #e8e6df; font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 8px 40px; }
+header { display: flex; align-items: center; gap: 18px; padding: 8px 6px; border-bottom: 2px solid #3a3326; background: linear-gradient(#2a2620, #1d1b18); }
+header h1 { margin: 0; font: 700 24px/1 Georgia, "Times New Roman", serif; letter-spacing: .16em; color: #f0dca8; text-shadow: 0 2px 0 #000; }
+header .tag { color: #b9ae94; font: italic 14px Georgia, serif; }
+header .st { margin-left: auto; color: #8f8e86; font-size: 12px; }
+.bar { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; padding: 6px 4px; font-size: 12px; color: #c9c6bb; }
+.bar label { display: flex; align-items: center; gap: 5px; }
+.bar input[type=range] { width: 90px; accent-color: #c9a227; }
+button { font: 600 12px system-ui, sans-serif; padding: 4px 9px; border-radius: 5px; border: 1px solid #4a463d; background: #2b2924; color: #e8e6df; cursor: pointer; }
+button:hover { border-color: #c9a227; }
+button.on { background: #c9a227; color: #15171b; border-color: #c9a227; }
+#scenes { display: flex; gap: 4px; }
+.maps { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.side { background: #20232a; border-radius: 6px; overflow: hidden; }
+.side .lab { padding: 5px 10px; font: 700 13px system-ui, sans-serif; color: #fff; letter-spacing: .02em; }
+.side.p .lab { background: #eb6834; } .side.n .lab { background: #2a78d6; }
+.side canvas { display: block; width: 100%; aspect-ratio: 628 / 340; cursor: crosshair; }
+.chk { padding: 6px 10px 8px; min-height: 76px; font-size: 12.5px; }
+.side.p .chk { border-top: 3px solid #eb6834; } .side.n .chk { border-top: 3px solid #2a78d6; }
+.ch-h { font-weight: 700; margin-bottom: 2px; }
+.ch-r { margin: 2px 0; }
+.dim { color: #9b988e; font-weight: 400; }
+.num { color: #fff; }
+.verdict { display: inline-block; font: 800 11px system-ui; padding: 1px 6px; border-radius: 3px; margin-right: 6px; }
+.verdict.pass { background: #3d8b4a; color: #fff; } .verdict.fail { background: #c0392b; color: #fff; }
+.fixb { margin-left: 6px; background: #2a78d6; border-color: #2a78d6; color: #fff; padding: 2px 8px; }
+.low { display: grid; grid-template-columns: 1fr 392px; gap: 8px; margin-top: 8px; }
+.panel { background: #20232a; border-radius: 6px; padding: 8px 10px; }
+.panel h3 { margin: 0 0 6px; font: 700 13px Georgia, serif; letter-spacing: .08em; color: #f0dca8; text-transform: uppercase; }
+#editor { display: grid; gap: 8px; }
+.grp { background: #191b20; border-radius: 5px; padding: 5px; }
+.gh { display: flex; justify-content: space-between; font: 700 12px Georgia, serif; color: #f0dca8; padding: 0 2px 4px; }
+.gok { color: #6fb0ff; font: 600 11px system-ui; } .gbad { color: #ff7a6b; font: 600 11px system-ui; }
+.card { border: 1px solid #3a3d45; border-left: 4px solid #2a78d6; border-radius: 4px; padding: 4px 6px; margin-bottom: 4px; background: #262a32; cursor: pointer; }
+.card.bad { border-left-color: #e0453a; background: #33262a; }
+.card.off { border-style: dashed; border-left-color: #555; opacity: .5; }
+.card.added { box-shadow: 0 0 0 1px #6fb0ff inset; }
+.eq { display: flex; flex-wrap: wrap; align-items: center; gap: 2px; font-size: 11.5px; }
+.eq i { color: #888; font-style: normal; padding: 0 1px; }
+.chip { display: inline-block; padding: 0 5px; border-radius: 3px; background: color-mix(in srgb, var(--c) 30%, #20232a); border: 1px solid var(--c); color: #f2f0ea; white-space: nowrap; }
+.arr { color: #f0dca8; padding: 0 4px; font-size: 13px; }
+.meta { display: flex; gap: 8px; font-size: 10.5px; color: #9b988e; margin-top: 2px; }
+.meta .nm { color: #d9d6cc; flex: 1; } .meta em { color: #6fb0ff; font-style: normal; }
+.card.ok .bd { color: #6fb0ff; } .card.bad .bd { color: #ff7a6b; font-weight: 700; }
+#ledger { display: block; width: 100%; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11px; color: #b9b6ab; margin-top: 6px; }
+.legend span::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--c); margin-right: 4px; vertical-align: 0; }
+.explain { max-width: 900px; margin: 22px auto 0; font-size: 15px; color: #d9d6cc; }
+.explain h2 { font: 700 20px Georgia, serif; color: #f0dca8; margin: 0 0 8px; }
+.explain h3 { font-size: 15px; margin: 16px 0 4px; color: #f2f0ea; }
+.explain ul { margin: 4px 0; padding-left: 20px; } .explain li { margin: 3px 0; }
+.explain code { font: 13px ui-monospace, Consolas, monospace; color: #f0dca8; }
+.k-old { color: #eb6834; font-weight: 700; } .k-new { color: #6fb0ff; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>COLONY LEDGER</h1><span class="tag">type-check your simulation rules</span><span class="st" id="status">running</span></header>
+<div class="bar">
+  <span>Scene</span><span id="scenes"></span>
+  <label>Towns <input id="towns" type="range" min="40" max="2000" step="20"><b id="townsv"></b></label>
+  <label>Years / frame <input id="speed" type="range" min="0.25" max="4" step="0.25" value="0.5"><b id="speedv">0.5</b></label>
+  <label>Sweep seeds K <input id="kk" type="range" min="4" max="128" step="4"><b id="kv"></b></label>
+  <label>Sweep horizon <input id="hz" type="range" min="0" max="9" step="1"><b id="hzv"></b>&nbsp;yrs</label>
+  <label>Rate spread &times;<input id="jit" type="range" min="1.1" max="4" step="0.1" value="1.5"><b id="jitv">1.5</b></label>
+  <button id="roll" title="multiply every recipe rate by a random factor in [1/4, 4]">Roll rates</button>
+  <button id="reset">Reset scene</button><button id="pause">Pause</button>
+</div>
+<div class="maps">
+  <div class="side p"><div class="lab">PRIOR BEST: clamps + faucets, Monte-Carlo balance sweep</div><canvas id="mapP" width="628" height="340"></canvas><div class="chk" id="chkP"></div></div>
+  <div class="side n"><div class="lab">NEW: recipe lint at save time (weak reversibility), no clamps</div><canvas id="mapN" width="628" height="340"></canvas><div class="chk" id="chkN"></div></div>
+</div>
+<div class="low">
+  <div class="panel"><h3>Production chains &middot; recipe book (click a card to remove / restore it)</h3><div id="editor"></div></div>
+  <div class="panel"><h3>Town ledger</h3><canvas id="ledger" width="372" height="262"></canvas>
+    <div class="legend"><span style="--c:#5fd36a">healthy</span><span style="--c:#f2b233">clamp or faucet fired</span><span style="--c:#f2e033">below 1 unit</span><span style="--c:#e0453a">a good died out</span><span style="--c:#b36bff">ran away</span></div></div>
+</div>
+
+<section class="explain">
+<h2>Check the recipe book, not just the playtest</h2>
+<p>Every town runs the same recipe book. A recipe is safe when the goods it makes can be turned back into the goods it used, through other recipes. The game checks that rule each time you save, in a few microseconds, and names any recipe with no way back; the Fix button adds one. When every recipe passes, a proven result says no good can die out or pile up forever, at any recipe speeds. The usual approach caps every stockpile, sends relief when one runs dry, and plays many test towns for a set number of years. That keeps numbers on screen, but broken towns sit stuck at the caps, and a short test can miss a slow failure.</p>
+<h3>What's measured here</h3>
+<ul>
+<li><span class="k-new">NEW</span>: lint time per save (<code>performance.now()</code> over 500 calls); share of towns where a good died out (&lt; 1e-6), ran away (&gt; 1e6) or sits below 1 unit, running with no clamps.</li>
+<li><span class="k-old">PRIOR BEST</span>: sweep time and flagged seeds for K random towns &times; H years; share of towns with a clamp or faucet firing now, and share of all town-time spent pinned.</li>
+<li>Sim cost per frame for each side (median of the last 60 frames). Both sides use the same log-space RK4 step rule from <code>econ.js</code> and the same towns (rates and starts per town).</li>
+</ul>
+<h3>Where the prior technique still wins / limits</h3>
+<ul>
+<li><code>?scene=starve</code>: the lint passes, but farms are so slow that every town sits below 1 unit of food. The proof only says amounts stay above <i>some</i> level; it does not say how high. The sweep flags this at once (bench: 14 of 64 seeds within 1 year).</li>
+<li><code>?scene=tiny</code>: integer stockpiles of a few units. The proof is about smooth amounts, so it does not apply; about a third of towns have an empty stockpile at any moment, and the faucet hides that.</li>
+<li>Failing the lint means "no guarantee", not "will collapse": in the bench, removing any one of the nine colony recipes fails the lint, yet only 2 of those 9 books lost any town by year 1,000 (one lost every town, the other about 15%).</li>
+<li>The proof covers fixed positive rates; rates the player changes during a run, and how long the start-up wobble lasts, are not covered. A sweep can also test things the lint never looks at, such as pacing.</li>
+<li>A long enough sweep also catches the broken books (<code>?scene=slowrot</code> needs about 20 years instead of 5), but it costs K &times; H simulated town-years per save and only ever covers the rates it tried.</li>
+</ul>
+<h3>Presets (<code>?scene=</code>)</h3>
+<ul>
+<li><code>broken</code> (default): crowding and salvage removed. Lint fails on 4 recipes; one click on Fix restores exactly those two.</li>
+<li><code>fixed</code>: all nine recipes. Both sides stay healthy; the sweep agrees but costs far more than the lint.</li>
+<li><code>plague</code>: a sick/immune plague on workers (catch, recover, immunity fades). Lint fails; without clamps the plague burns out in some towns. Fix adds "nursing" and "traders carry plague in".</li>
+<li><code>endemic</code>: the plague after the fix. It is the same theorem applied to the plague: the plague never dies out and never takes everyone.</li>
+<li><code>slowrot</code>: the broken book with every rate &times;0.2. The default 10-year sweep passes it; the lint does not.</li>
+<li><code>starve</code>, <code>tiny</code>: the regimes above where the prior technique is the useful one.</li>
+<li>Other parameters: <code>?frames=N</code> stops after N frames, <code>?towns=N</code>, <code>?k=K</code>, <code>?h=H</code> (one of 1, 2, 5, 10, 20, 40, 80, 160, 320, 640).</li>
+</ul>
+<h3>Proved vs measured</h3>
+<ul>
+<li>Proved (Family 149, <i>Uniform Permanence in Weakly Reversible Mass-Action Systems</i>, thm:main): if the lint passes, then for any fixed positive rates every good eventually stays between &epsilon; and 1/&epsilon; for some &epsilon; &gt; 0 that the paper does not compute. The model is the continuous mass-action economy.</li>
+<li>Measured here: every timing, every percentage, and the collapse of the broken books. Nothing here says that every book that fails the lint collapses.</li>
+</ul>
+</section>
+</div>
+<script>
+// Colony Ledger core: recipe network, weak-reversibility lint + one-click fix, log-space RK4 town
+// simulation (with or without clamps), integer stockpile mode, and the Monte-Carlo balance sweep.
+// Network, base rates and the lint rule come from panel/web/econ.js (itself from demos/01-economy).
+// Used by index.html (inlined by build.py) and by bench.js (require).
+'use strict';
+const CL_SP = ['Ore', 'Wood', 'Tools', 'Food', 'Workers', 'Sick', 'Immune'];
+const CL_SH = ['O', 'W', 'T', 'F', 'P', 'I', 'R'];
+function clVec(o) { const v = [0, 0, 0, 0, 0, 0, 0]; for (const s in o) v[CL_SH.indexOf(s)] = o[s]; return v; }
+
+// The nine econ.js recipes (same rates) plus a SIRS-style plague on the workers.
+const CL_CATALOG = [
+  { id: 'eat', g: 'village', from: { F: 1, P: 1 }, to: { P: 2 }, k: 1.00, name: 'feed & recruit' },
+  { id: 'crowd', g: 'village', from: { P: 2 }, to: { P: 1 }, k: 0.35, name: 'crowding' },
+  { id: 'farm', g: 'village', from: { P: 1 }, to: { F: 1, P: 1 }, k: 0.60, name: 'farm' },
+  { id: 'craft', g: 'forge', from: { O: 1, W: 1 }, to: { T: 1 }, k: 1.20, name: 'forge tools' },
+  { id: 'melt', g: 'forge', from: { T: 1 }, to: { O: 2 }, k: 0.25, name: 'melt down' },
+  { id: 'trade', g: 'forge', from: { O: 2 }, to: { O: 1, W: 1 }, k: 0.80, name: 'trade ore for wood' },
+  { id: 'salvage', g: 'workshop', from: { T: 1, F: 1, P: 1 }, to: { O: 1, W: 1, P: 1 }, k: 0.90, name: 'salvage' },
+  { id: 'build', g: 'workshop', from: { O: 1, W: 1, P: 1 }, to: { T: 1, P: 2 }, k: 0.50, name: 'craft & recruit' },
+  { id: 'retire', g: 'workshop', from: { T: 1, P: 2 }, to: { T: 1, F: 1, P: 1 }, k: 0.70, name: 'retire to farm' },
+  { id: 'contagion', g: 'plague', from: { P: 1, I: 1 }, to: { I: 2 }, k: 0.90, name: 'contagion' },
+  { id: 'recover', g: 'plague', from: { I: 1 }, to: { R: 1 }, k: 0.50, name: 'recovery' },
+  { id: 'wane', g: 'plague', from: { R: 1 }, to: { P: 1 }, k: 0.15, name: 'immunity fades' },
+];
+// Names and rates the fix uses when the return recipe it needs is a known one.
+const CL_KNOWN_RETURNS = [
+  { from: { P: 2 }, to: { P: 1 }, k: 0.35, name: 'crowding', g: 'village' },
+  { from: { T: 1, F: 1, P: 1 }, to: { O: 1, W: 1, P: 1 }, k: 0.90, name: 'salvage', g: 'workshop' },
+  { from: { I: 2 }, to: { P: 1, I: 1 }, k: 0.30, name: 'nursing (2 sick: 1 gets well)', g: 'plague' },
+  { from: { P: 1 }, to: { I: 1 }, k: 0.02, name: 'traders carry plague in', g: 'plague' },
+];
+const CL_FIX_RATE = 0.4; // rate for a return recipe that is not in the list above (any positive value is covered)
+
+function clRecipe(c, active) {
+  return { id: c.id, g: c.g, from: clVec(c.from), to: clVec(c.to), k: c.k, name: c.name, active: active !== false, added: false };
+}
+function clName(v) { const s = []; v.forEach((c, i) => { if (c) s.push((c > 1 ? c + ' ' : '') + CL_SP[i]); }); return s.join(' + ') || 'nothing'; }
+function clKey(v) { return v.join(','); }
+
+// ---------------------------------------------------------------- scenes (recipe sets + run settings)
+const CL_SCENES = {
+  broken: { label: 'broken chain', off: ['crowd', 'salvage'], plague: false },
+  fixed: { label: 'fixed chain', off: [], plague: false },
+  plague: { label: 'plague (SIRS, fails lint)', off: [], plague: true },
+  endemic: { label: 'plague + 2 return recipes', off: [], plague: true, fix: true },
+  slowrot: { label: 'broken, slow economy (rates x0.2)', off: ['crowd', 'salvage'], plague: false, rateScale: 0.2, speed: 2 },
+  starve: { label: 'lint passes but towns starve', off: [], plague: false, rateMul: { farm: 0.004, retire: 0.004 } },
+  tiny: { label: 'integer stockpiles (small towns)', off: [], plague: false, integer: 4 },
+};
+function clSceneRecipes(name) {
+  const sc = CL_SCENES[name] || CL_SCENES.broken;
+  const rs = CL_CATALOG.filter(c => sc.plague || c.g !== 'plague').map(c => clRecipe(c, !sc.off.includes(c.id)));
+  if (sc.rateMul) rs.forEach(r => { if (sc.rateMul[r.id]) r.k *= sc.rateMul[r.id]; });
+  if (sc.fix) clFix(rs);
+  return rs;
+}
+
+// ---------------------------------------------------------------- the lint
+// A recipe passes iff its output bundle can reach its input bundle through active recipes
+// (weak reversibility, checked recipe by recipe). Same rule as econ.js ecLint.
+function clLint(recipes) {
+  const keys = new Map(), node = v => { const k = clKey(v); if (!keys.has(k)) keys.set(k, keys.size); return keys.get(k); };
+  const act = recipes.filter(r => r.active);
+  const E = act.map(r => [node(r.from), node(r.to)]);
+  const n = keys.size, reach = [];
+  for (let i = 0; i < n; i++) { const row = new Uint8Array(n); row[i] = 1; reach.push(row); }
+  for (let e = 0; e < E.length; e++) reach[E[e][0]][E[e][1]] = 1;
+  for (let k = 0; k < n; k++) for (let i = 0; i < n; i++) if (reach[i][k]) { const ri = reach[i], rk = reach[k]; for (let j = 0; j < n; j++) if (rk[j]) ri[j] = 1; }
+  const ok = new Map(); let bad = 0;
+  act.forEach((r, e) => { const pass = !!reach[E[e][1]][E[e][0]]; ok.set(r, pass); if (!pass) bad++; });
+  return { ok, bad, pass: bad === 0, nComplex: n, reach, node: k => keys.get(k), keys };
+}
+
+// One-click fix: while some recipe a->b lacks a way back, find a bundle c reachable from b that sits in a
+// terminal group (everything c reaches reaches c back) and a bundle u that reaches a and sits in an initial
+// group, then add the recipe c->u. That closes a loop through a->b and merges at least two groups.
+function clFix(recipes) {
+  const added = [];
+  for (let guard = 0; guard < 50; guard++) {
+    const L = clLint(recipes);
+    if (L.pass) break;
+    const r = recipes.find(x => x.active && !L.ok.get(x));
+    const a = L.node(clKey(r.from)), b = L.node(clKey(r.to)), R = L.reach, n = L.nComplex;
+    const terminal = c => { for (let j = 0; j < n; j++) if (R[c][j] && !R[j][c]) return false; return true; };
+    const initial = u => { for (let j = 0; j < n; j++) if (R[j][u] && !R[u][j]) return false; return true; };
+    // breadth-first from b so the nearest terminal bundle is used
+    const seen = new Uint8Array(n), q = [b]; seen[b] = 1; let c = -1;
+    const adj = Array.from({ length: n }, () => []);
+    recipes.forEach(x => { if (x.active) adj[L.node(clKey(x.from))].push(L.node(clKey(x.to))); });
+    while (q.length) { const v = q.shift(); if (terminal(v)) { c = v; break; } adj[v].forEach(w => { if (!seen[w]) { seen[w] = 1; q.push(w); } }); }
+    let u = a; if (!initial(u)) for (let j = 0; j < n; j++) if (R[j][a] && initial(j)) { u = j; break; }
+    const vecOf = id => { for (const [k, v] of L.keys) if (v === id) return k.split(',').map(Number); };
+    const from = vecOf(c), to = vecOf(u);
+    let rec = recipes.find(x => !x.active && clKey(x.from) === clKey(from) && clKey(x.to) === clKey(to));
+    if (rec) rec.active = true;
+    else {
+      const kn = CL_KNOWN_RETURNS.find(x => clKey(clVec(x.from)) === clKey(from) && clKey(clVec(x.to)) === clKey(to));
+      rec = { id: 'fix' + recipes.length, g: kn ? kn.g : r.g, from, to, k: kn ? kn.k : CL_FIX_RATE, name: kn ? kn.name : 'return route', active: true };
+      recipes.push(rec);
+    }
+    rec.added = true; added.push(rec);
+  }
+  return added;
+}
+
+// ---------------------------------------------------------------- compiled network
+function clNet(recipes, rateScale) {
+  const act = recipes.filter(r => r.active);
+  let D = 5; act.forEach(r => { for (let i = 5; i < 7; i++) if (r.from[i] || r.to[i]) D = 7; });
+  const m = act.length, Y = new Float64Array(m * D), DV = new Float64Array(m * D), K = new Float64Array(m), ORD = new Int32Array(m);
+  act.forEach((r, j) => { K[j] = r.k * (rateScale || 1); for (let i = 0; i < D; i++) { Y[j * D + i] = r.from[i]; DV[j * D + i] = r.to[i] - r.from[i]; ORD[j] += r.from[i]; } });
+  return { D, m, Y, DV, K, ORD, recipes: act };
+}
+
+// ---------------------------------------------------------------- deterministic RNG
+function clRng(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+// ---------------------------------------------------------------- towns
+// Every town gets its own rates (base rate x a factor in [1/J, J]) and its own start (log-uniform in
+// [S0, S1] per resource). PRIOR and NEW use the same towns.
+const CL = {
+  FLOOR: 0.01, FAUCET: 0.05, CAP: 20,      // prior-best clamps: floor 1 unit, relief caravan to 5 units, storage cap 2,000 units (1.0 = 100 units)
+  DEAD: 1e-6, RUNAWAY: 1e6,                // "died out" / "ran away" (as demos/L4-economy-ladder/econ.h)
+  STOP_HI: 1e12, STOP_LO: 1e-30,           // stop integrating a town past these (as econ.js)
+  HMAX: 0.05, HMIN: 1e-9, GUARD: 20000,    // econ.js step rule h = min(0.05, 0.05/fastest log-rate); at most GUARD steps per town per frame (as econ.js)
+  S0: 0.3, S1: 3, JITTER: 1.5, STARVE: 0.01,
+};
+function clTowns(net, N, seed, opt) {
+  opt = opt || {};
+  const D = net.D, m = net.m, J = opt.jitter || CL.JITTER, rng = clRng(seed);
+  const T = { N, D, m, y: new Float64Array(N * D), y0: new Float64Array(N * D), k: new Float64Array(N * m), t: 0,
+    status: new Uint8Array(N), stopped: new Uint8Array(N), clampedNow: new Uint8Array(N), clampFrames: new Float64Array(N),
+    deadSp: new Int8Array(N).fill(-1), frames: 0, steps: 0, integer: opt.integer || 0, cnt: null, rng };
+  for (let n = 0; n < N; n++) {
+    for (let j = 0; j < m; j++) T.k[n * m + j] = net.K[j] * Math.exp((rng() * 2 - 1) * Math.log(J));
+    for (let i = 0; i < D; i++) {
+      let v = Math.exp(Math.log(opt.s0 || CL.S0) + rng() * Math.log((opt.s1 || CL.S1) / (opt.s0 || CL.S0)));
+      if (i === 5) v *= 0.05; // a few sick at the start
+      T.y[n * D + i] = T.y0[n * D + i] = Math.log(v);
+    }
+  }
+  if (T.integer) { // counts: 1.0 = V units; every resource starts with at least 1
+    T.cnt = new Float64Array(N * D);
+    for (let q = 0; q < N * D; q++) T.cnt[q] = Math.max(1, Math.round(Math.exp(T.y[q]) * T.integer));
+  }
+  return T;
+}
+
+// log-space derivative: d(log x_i)/dt = sum_r k_r x^{y_r} (y'_r - y_r)_i / x_i
+function clDeriv(net, y, yo, k, ko, out) {
+  const D = net.D, m = net.m, Y = net.Y, DV = net.DV;
+  for (let i = 0; i < D; i++) out[i] = 0;
+  for (let r = 0; r < m; r++) {
+    let e = 0; for (let i = 0; i < D; i++) e += Y[r * D + i] * y[yo + i];
+    const rate = k[ko + r] * Math.exp(e);
+    for (let i = 0; i < D; i++) out[i] += rate * DV[r * D + i];
+  }
+  for (let i = 0; i < D; i++) out[i] *= Math.exp(-y[yo + i]);
+}
+
+const _w = { k1: new Float64Array(7), k2: new Float64Array(7), k3: new Float64Array(7), k4: new Float64Array(7), tmp: new Float64Array(7), bak: new Float64Array(7) };
+// Advance town n from T.t to T.t+dt. clamp=true is PRIOR BEST (clamp to [FLOOR, CAP], faucet refills an empty resource).
+function clAdvance(net, T, n, dt, clamp) {
+  if (T.stopped[n]) return 0;
+  const D = net.D, y = T.y, yo = n * D, ko = n * net.m, { k1, k2, k3, k4, tmp } = _w;
+  const LCAP = Math.log(CL.CAP), LFLOOR = Math.log(CL.FLOOR), LFAU = Math.log(CL.FAUCET), LHI = Math.log(CL.STOP_HI), LLO = Math.log(CL.STOP_LO);
+  let t = 0, steps = 0, hit = 0;
+  const bak = _w.bak;
+  while (t < dt - 1e-12 && steps < CL.GUARD) {
+    for (let i = 0; i < D; i++) bak[i] = y[yo + i];
+    clDeriv(net, y, yo, T.k, ko, k1);
+    let mx = 0; for (let i = 0; i < D; i++) { const a = Math.abs(k1[i]); if (a > mx) mx = a; }
+    const h = Math.min(dt - t, CL.HMAX, Math.max(CL.HMIN, CL.HMAX / Math.max(mx, 1e-9)));
+    for (let i = 0; i < D; i++) tmp[i] = y[yo + i] + 0.5 * h * k1[i]; clDeriv(net, tmp, 0, T.k, ko, k2);
+    for (let i = 0; i < D; i++) tmp[i] = y[yo + i] + 0.5 * h * k2[i]; clDeriv(net, tmp, 0, T.k, ko, k3);
+    for (let i = 0; i < D; i++) tmp[i] = y[yo + i] + h * k3[i]; clDeriv(net, tmp, 0, T.k, ko, k4);
+    for (let i = 0; i < D; i++) y[yo + i] += h / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]);
+    t += h; steps++;
+    if (clamp) {
+      for (let i = 0; i < D; i++) {
+        const v = y[yo + i];
+        if (v > LCAP) { y[yo + i] = LCAP; hit = 1; } else if (v < LFLOOR || v !== v) { y[yo + i] = LFAU; hit = 1; }
+      }
+    } else {
+      let stop = false;
+      for (let i = 0; i < D; i++) { const v = y[yo + i]; if (!(v < LHI && v > LLO)) stop = true; }
+      if (stop) { // keep the last finite state for display; the town is out of range and no longer simulated
+        clStatus(T, n);                                     // direction of the step that left the range
+        const st0 = T.status[n];
+        for (let i = 0; i < D; i++) y[yo + i] = bak[i];     // show the last in-range state
+        T.status[n] = 0; clStatus(T, n);
+        if (!T.status[n]) { T.status[n] = st0; T.stopOnly = (T.stopOnly || 0) + 1; } else T.status[n] |= st0;
+        T.stopped[n] = 1;
+        break; }
+    }
+  }
+  T.clampedNow[n] = hit; if (hit) T.clampFrames[n] += 1;
+  if (!clamp) clStatus(T, n);
+  return steps;
+}
+// status bits: 1 = a resource died out (< DEAD), 2 = a resource ran away (> RUNAWAY); both sticky.
+function clStatus(T, n) {
+  const D = T.D, yo = n * D, LD = Math.log(CL.DEAD), LR = Math.log(CL.RUNAWAY);
+  for (let i = 0; i < D; i++) {
+    const v = T.y[yo + i];
+    if (v < LD) { if (!(T.status[n] & 1)) T.deadSp[n] = i; T.status[n] |= 1; }
+    else if (v > LR) T.status[n] |= 2;
+  }
+}
+
+// Integer stockpiles: exact stochastic simulation (Gillespie). 1.0 = V units. Propensity k V^(1-order) prod n(n-1)..
+// clamp=true: faucet adds 1 unit to any empty resource, cap at CAP*V. Without clamps a town whose Workers hit 0 is dead.
+function clAdvanceInt(net, T, n, dt, clamp) {
+  if (T.stopped[n]) return 0;
+  const D = net.D, m = net.m, V = T.integer, c = T.cnt, o = n * D, ko = n * m, a = _ap.length >= m ? _ap : (_ap = new Float64Array(m));
+  let t = 0, ev = 0, hit = 0; const cap = CL.CAP * V;
+  for (; ;) {
+    let a0 = 0;
+    for (let r = 0; r < m; r++) {
+      let p = T.k[ko + r] * Math.pow(V, 1 - net.ORD[r]);
+      for (let i = 0; i < D; i++) { const need = net.Y[r * D + i]; for (let q = 0; q < need; q++) p *= c[o + i] - q; }
+      a[r] = p > 0 ? p : 0; a0 += a[r];
+    }
+    if (a0 <= 0) { break; }
+    t += -Math.log(1 - T.rng()) / a0;
+    if (t > dt) break;
+    let u = T.rng() * a0, r = 0; while (r < m - 1 && u >= a[r]) { u -= a[r]; r++; }
+    for (let i = 0; i < D; i++) c[o + i] += net.DV[r * D + i];
+    ev++;
+    if (clamp) for (let i = 0; i < D; i++) { if (c[o + i] <= 0) { c[o + i] = 1; hit = 1; } else if (c[o + i] > cap) { c[o + i] = cap; hit = 1; } }
+    if (ev > 20000) break;
+  }
+  for (let i = 0; i < D; i++) T.y[o + i] = Math.log(Math.max(c[o + i], 1e-9) / V);
+  T.clampedNow[n] = hit; if (hit) T.clampFrames[n] += 1;
+  if (!clamp && c[o + 4] <= 0 && !T.status[n]) { T.status[n] = 1; T.deadSp[n] = 4; } // cannot happen here: every recipe that removes a worker needs 2
+  return ev;
+}
+let _ap = new Float64Array(16);
+
+function clFrame(net, T, dt, clamp) {
+  let s = 0;
+  if (T.integer) for (let n = 0; n < T.N; n++) s += clAdvanceInt(net, T, n, dt, clamp);
+  else for (let n = 0; n < T.N; n++) s += clAdvance(net, T, n, dt, clamp);
+  T.t += dt; T.frames++; T.steps += s;
+  return s;
+}
+
+// Summary for the HUD / bench. pinnedNow: clamp fired this frame. timePinned: fraction of town-frames with a clamp firing.
+function clSummary(T) {
+  const N = T.N, D = T.D; let dead = 0, run = 0, bad = 0, pinned = 0, cf = 0, starve = 0; const deadBy = new Array(D).fill(0);
+  for (let n = 0; n < N; n++) {
+    if (T.status[n] & 1) { dead++; deadBy[T.deadSp[n]]++; } if (T.status[n] & 2) run++; if (T.status[n]) bad++;
+    if (T.clampedNow[n]) pinned++;
+    cf += T.clampFrames[n];
+    let lo = Infinity; for (let i = 0; i < Math.min(D, 5); i++) lo = Math.min(lo, T.y[n * D + i]); // goods only, not Sick/Immune
+    if (lo < Math.log(CL.STARVE * 1.0001) || (T.integer && lo < -20)) starve++;
+  }
+  return { N, dead: dead / N, runaway: run / N, deadOrRun: bad / N, healthy: (N - bad) / N, pinnedNow: pinned / N,
+    timePinned: T.frames ? cf / (N * T.frames) : 0, starving: starve / N, deadBy };
+}
+
+// ---------------------------------------------------------------- prior best: Monte-Carlo balance sweep
+// K random towns (rates and starts as clTowns), each run with the shipped clamped simulation for H years in
+// frames of dt; a seed is flagged as soon as any clamp or faucet fires. Returns flagged count and cost.
+function clSweep(recipes, opt) {
+  const net = clNet(recipes, opt.rateScale), K = opt.K, H = opt.H, dt = opt.dt || 0.5;
+  const T = clTowns(net, K, opt.seed || 7, { jitter: opt.jitter, integer: opt.integer });
+  let flagged = 0, years = 0, steps = 0; const firstT = [];
+  for (let n = 0; n < K; n++) {
+    let t = 0;
+    for (; t < H - 1e-9; t += dt) {
+      steps += T.integer ? clAdvanceInt(net, T, n, dt, true) : clAdvance(net, T, n, dt, true);
+      if (T.clampedNow[n]) { flagged++; firstT.push(t + dt); t += dt; break; }
+    }
+    years += t;
+  }
+  return { flagged, K, H, years, steps, firstT };
+}
+
+if (typeof module !== 'undefined' && module.exports) module.exports = { CL_SP, CL_SH, CL_CATALOG, CL_SCENES, CL, clVec, clRecipe, clName, clSceneRecipes, clLint, clFix, clNet, clTowns, clAdvance, clAdvanceInt, clFrame, clSummary, clSweep, clRng };
+
+</script>
+<script>
+// Colony Ledger browser app. Needs core.js (inlined before this by build.py).
+'use strict';
+const Q = new URLSearchParams(location.search);
+const MAXF = +Q.get('frames') || 0;
+const RES_COL = ['#a3a3a3', '#8b5a2b', '#5d6470', '#c9a227', '#b05a8a', '#7fa33a', '#49a6a0'];
+const OLD = '#eb6834', NEW = '#2a78d6', REF = '#7a7873';
+const MW = 628, MH = 340;
+const $ = id => document.getElementById(id);
+
+const st = {
+  scene: CL_SCENES[Q.get('scene')] ? Q.get('scene') : 'broken', recipes: [], net: null,
+  N: +Q.get('towns') || 240, speed: 0.5, K: +Q.get('k') || 32, H: +Q.get('h') || 10, jitter: 1.5,
+  prior: null, neu: null, sel: 0, frame: 0, paused: false, msP: [], msN: [], histP: [], histN: [],
+  lint: null, lintUs: 0, sweep: null, sweepMs: 0, layout: null, faucets: 0,
+};
+
+// ---------------------------------------------------------------- terrain + town layout
+function noise2(seed) {
+  const r = clRng(seed), G = 64, v = new Float32Array(G * G); for (let i = 0; i < v.length; i++) v[i] = r();
+  const at = (x, y) => v[((y % G + G) % G) * G + ((x % G + G) % G)];
+  const sm = t => t * t * (3 - 2 * t);
+  return (x, y) => { const xi = Math.floor(x), yi = Math.floor(y), fx = sm(x - xi), fy = sm(y - yi);
+    return (at(xi, yi) * (1 - fx) + at(xi + 1, yi) * fx) * (1 - fy) + (at(xi, yi + 1) * (1 - fx) + at(xi + 1, yi + 1) * fx) * fy; };
+}
+const nA = noise2(11), nB = noise2(23), nC = noise2(37);
+function height(x, y) { // x,y in map pixels
+  const u = x / MW, w = y / MH;
+  let h = nA(u * 5, w * 3) * 0.55 + nB(u * 11, w * 6) * 0.3 + nC(u * 23, w * 12) * 0.15;
+  h -= 0.34 * Math.exp(-((u - 0.62) ** 2 / 0.006 + (w - 0.55) ** 2 / 0.02)); // a lake
+  h -= 0.25 * Math.exp(-((u - 0.12) ** 2) / 0.0015 - 0 * w) * (0.5 + 0.5 * Math.sin(w * 9)); // a river bend
+  return h;
+}
+let TERRAIN = null;
+function buildTerrain() {
+  const c = document.createElement('canvas'); c.width = MW; c.height = MH; const g = c.getContext('2d'), img = g.createImageData(MW, MH);
+  for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
+    const h = height(x, y), f = nC(x / 9, y / 9), o = (y * MW + x) * 4; let col;
+    if (h < 0.3) col = [38 + h * 60, 78 + h * 90, 112 + h * 100];
+    else if (h < 0.33) col = [196, 182, 132];
+    else if (h < 0.62) { const k = (h - 0.33) / 0.29; col = [92 - 25 * k + f * 14, 128 - 18 * k + f * 16, 64 - 14 * k]; }
+    else { const k = Math.min(1, (h - 0.62) / 0.15); col = [104 + 40 * k, 104 + 34 * k, 86 + 40 * k]; }
+    img.data[o] = col[0]; img.data[o + 1] = col[1]; img.data[o + 2] = col[2]; img.data[o + 3] = 255;
+  }
+  g.putImageData(img, 0, 0);
+  const r = clRng(5); // forests
+  for (let i = 0; i < 1800; i++) { const x = r() * MW, y = r() * MH, h = height(x, y);
+    if (h > 0.4 && h < 0.6 && nB(x / 40, y / 40) > 0.55) { g.fillStyle = `rgba(30,${60 + r() * 30 | 0},34,0.75)`; g.beginPath(); g.arc(x, y, 1.6 + r() * 1.6, 0, 7); g.fill(); } }
+  return c;
+}
+function buildLayout(N) {
+  const pts = [], r = clRng(1234 + N);
+  let cell = Math.sqrt(MW * MH / (N * 1.35));
+  for (let tries = 0; tries < 6 && pts.length < N; tries++) {
+    pts.length = 0;
+    for (let y = cell / 2; y < MH - 4; y += cell) for (let x = cell / 2; x < MW - 4; x += cell) {
+      const px = x + (r() - 0.5) * cell * 0.5, py = y + (r() - 0.5) * cell * 0.5;
+      if (height(px, py) > 0.35 && height(px, py) < 0.7) pts.push([px, py, r()]);
+    }
+    if (pts.length < N) cell *= 0.9;
+  }
+  pts.sort((a, b) => a[2] - b[2]); const P = pts.slice(0, N);
+  // roads: each town to its two nearest neighbours
+  const c = document.createElement('canvas'); c.width = MW; c.height = MH; const g = c.getContext('2d');
+  g.drawImage(TERRAIN, 0, 0); g.strokeStyle = 'rgba(150,120,80,0.55)'; g.lineWidth = Math.max(0.6, cell / 22);
+  P.forEach((p, i) => { const d = P.map((q, j) => [j === i ? 1e9 : (q[0] - p[0]) ** 2 + (q[1] - p[1]) ** 2, j]).sort((a, b) => a[0] - b[0]);
+    for (let k = 0; k < 2; k++) { const q = P[d[k][1]]; g.beginPath(); g.moveTo(p[0], p[1]); g.lineTo(q[0], q[1]); g.stroke(); } });
+  const names = P.map((_, i) => townName(i));
+  return { P, cell, bg: c, names };
+}
+function townName(i) {
+  const a = ['Ash', 'Brook', 'Cold', 'Dun', 'Elm', 'Fen', 'Gold', 'Hale', 'Iron', 'Kings', 'Lark', 'Mill', 'North', 'Oak', 'Pike', 'Red', 'Stone', 'Thorn', 'West', 'Wyn'];
+  const b = ['ford', 'ham', 'wick', 'stead', 'by', 'mere', 'field', 'gate', 'holt', 'ton', 'well', 'bury'];
+  const r = clRng(99 + i); return a[(r() * a.length) | 0] + b[(r() * b.length) | 0];
+}
+
+// ---------------------------------------------------------------- simulation state
+function restart() {
+  const sc = CL_SCENES[st.scene];
+  st.net = clNet(st.recipes, sc.rateScale);
+  const opt = { jitter: st.jitter, integer: sc.integer };
+  st.prior = clTowns(st.net, st.N, 149, opt); st.neu = clTowns(st.net, st.N, 149, opt);
+  st.histP = []; st.histN = []; st.msP = []; st.msN = [];
+  if (st.sel >= st.N) st.sel = 0;
+}
+function save() { // what happens when the designer saves the recipe book
+  const t0 = performance.now(); let L; for (let i = 0; i < 500; i++) L = clLint(st.recipes);
+  st.lintUs = (performance.now() - t0) / 500 * 1000; st.lint = L;
+  const sc = CL_SCENES[st.scene], t1 = performance.now();
+  st.sweep = clSweep(st.recipes, { K: st.K, H: st.H, rateScale: sc.rateScale, jitter: st.jitter, integer: sc.integer, seed: 7 });
+  st.sweepMs = performance.now() - t1;
+  restart(); renderEditor(); renderChecks();
+}
+function setScene(name) {
+  st.scene = name; st.recipes = clSceneRecipes(name); st.speed = CL_SCENES[name].speed || 0.5;
+  $('speed').value = st.speed; $('speedv').textContent = st.speed;
+  document.querySelectorAll('#scenes button').forEach(b => b.classList.toggle('on', b.dataset.s === name));
+  save();
+}
+
+// ---------------------------------------------------------------- recipe editor
+const GROUPS = [['village', 'Village'], ['forge', 'Forge'], ['workshop', 'Workshop'], ['plague', 'Plague (workers)']];
+function chips(v) { const s = []; v.forEach((c, i) => { if (c) s.push(`<span class="chip" style="--c:${RES_COL[i]}">${c > 1 ? c + ' ' : ''}${CL_SP[i]}</span>`); }); return s.join('<i>+</i>'); }
+function fmtRate(k) { return k >= 0.1 ? k.toFixed(2) : k.toPrecision(2); }
+function renderEditor() {
+  const L = st.lint, groups = GROUPS.filter(([g]) => st.recipes.some(r => r.g === g));
+  $('editor').style.gridTemplateColumns = `repeat(${groups.length}, 1fr)`;
+  $('editor').innerHTML = groups.map(([g, title]) => {
+    const rs = st.recipes.filter(r => r.g === g);
+    const ok = rs.every(r => !r.active || L.ok.get(r));
+    return `<div class="grp"><div class="gh"><span>${title}</span><span class="${ok ? 'gok' : 'gbad'}">${ok ? 'loop closed' : 'open chain'}</span></div>` +
+      rs.map(r => { const i = st.recipes.indexOf(r), pass = r.active && L.ok.get(r);
+        const cls = !r.active ? 'off' : pass ? 'ok' : 'bad';
+        return `<div class="card ${cls}${r.added ? ' added' : ''}" data-i="${i}" title="click to ${r.active ? 'remove' : 'restore'} this recipe">
+          <div class="eq">${chips(r.from)}<b class="arr">&#10142;</b>${chips(r.to)}</div>
+          <div class="meta"><span class="nm">${r.name}${r.added ? ' <em>added by fix</em>' : ''}</span><span class="rt">rate ${fmtRate(r.k * (CL_SCENES[st.scene].rateScale || 1))}</span>
+          <span class="bd">${!r.active ? 'removed' : pass ? '&#10003; way back' : '&#10007; no way back'}</span></div></div>`; }).join('') + '</div>';
+  }).join('');
+  document.querySelectorAll('#editor .card').forEach(c => c.onclick = () => { const r = st.recipes[+c.dataset.i]; r.active = !r.active; save(); });
+}
+function renderChecks() {
+  const s = st.sweep, L = st.lint, pass = s.flagged === 0;
+  const ft = s.firstT.length ? Math.min(...s.firstT) : null;
+  $('chkP').innerHTML = `<div class="ch-h">Save-time balance sweep <span class="dim">(Monte-Carlo playtest)</span></div>
+    <div class="ch-r"><span class="verdict ${pass ? 'pass' : 'fail'}">${pass ? 'PASS' : 'FAIL'}</span>
+    ${pass ? `no cap or floor hit in <b>${s.K}</b> random towns &times; <b>${s.H}</b> years` : `<b>${s.flagged}/${s.K}</b> random towns hit a cap or floor (first at year ${ft.toFixed(1)})`}</div>
+    <div class="ch-r dim">cost <b class="num">${st.sweepMs.toFixed(1)} ms</b> for ${Math.round(s.years).toLocaleString()} simulated town-years &middot; a pass covers only these ${s.K} rate sets and ${s.H} years</div>`;
+  const bad = st.recipes.filter(r => r.active && !L.ok.get(r));
+  $('chkN').innerHTML = `<div class="ch-h">Save-time lint <span class="dim">(every recipe needs a way back)</span></div>
+    <div class="ch-r"><span class="verdict ${L.pass ? 'pass' : 'fail'}">${L.pass ? 'PASS' : 'FAIL'}</span>
+    ${L.pass ? 'every recipe can be undone through other recipes: no good dies out or piles up forever, for <b>any</b> fixed positive rates' :
+      `<b>${bad.length}</b> recipe${bad.length > 1 ? 's' : ''} lack a way back: ${bad.slice(0, 2).map(r => r.name).join(', ')}${bad.length > 2 ? ', &hellip;' : ''}
+       <button id="fix" class="fixb">Fix: add return recipes</button>`}</div>
+    <div class="ch-r dim">cost <b class="num">${st.lintUs < 1000 ? st.lintUs.toFixed(1) + ' &micro;s' : (st.lintUs / 1000).toFixed(2) + ' ms'}</b> &middot; ${L.pass ? 'guarantee: continuous amounts, fixed rates, after a start-up period' : 'failing means no guarantee, not certain collapse'}</div>`;
+  if ($('fix')) $('fix').onclick = () => { clFix(st.recipes); save(); };
+}
+
+// ---------------------------------------------------------------- drawing
+const lv = v => Math.max(0, Math.min(1, (Math.log10(v) + 2) / 3)); // 0 at 1 unit, 1 at 1,000 units
+function townState(T, n, side) {
+  const D = T.D, xs = []; for (let i = 0; i < D; i++) xs.push(Math.exp(T.y[n * D + i]));
+  let light, tag;
+  if (side === 'P') {
+    let cap = false, flo = false; for (let i = 0; i < D; i++) { if (xs[i] >= CL.CAP * 0.999) cap = true; if (xs[i] <= CL.FAUCET * 1.001) flo = true; }
+    if (T.clampedNow[n]) { light = '#f2b233'; tag = cap ? 'pinned at storage cap' : 'relief caravan (faucet)'; } else { light = '#5fd36a'; tag = 'running'; }
+    if (T.clampedNow[n] && cap) tag = flo ? 'pinned at cap and floor' : tag;
+  } else {
+    let lo = Infinity; xs.slice(0, 5).forEach(v => { if (!(v >= lo)) lo = v; });
+    if (T.status[n] & 1) { light = '#e0453a'; tag = CL_SP[T.deadSp[n]] + (T.deadSp[n] === 5 ? ': plague burned out' : ' died out'); }
+    else if (T.status[n] & 2) { light = '#b36bff'; tag = 'ran away (over 1e8 units)'; }
+    else if (lo < CL.STARVE) { light = '#f2e033'; tag = T.integer ? 'a stockpile is empty' : 'starving (below 1 unit)'; }
+    else { light = '#5fd36a'; tag = 'healthy'; }
+  }
+  return { xs, light, tag };
+}
+function drawTown(g, x, y, s, S, T, n, side, t) {
+  const xs = S.xs, dead = side === 'N' && (T.status[n] & 1) && T.deadSp[n] !== 5, run = side === 'N' && (T.status[n] & 2);
+  const F = lv(xs[3]), P = lv(xs[4]), O = lv(xs[0]), W = lv(xs[1]), To = lv(xs[2]);
+  if (s >= 13) {
+    // field (food)
+    const fw = s * 0.44, fh = s * 0.26, fx = x - s * 0.5, fy = y + s * 0.08;
+    g.fillStyle = dead ? '#4a4038' : `rgb(${110 + 110 * F | 0},${88 + 80 * F | 0},${40 + 10 * F | 0})`; g.fillRect(fx, fy, fw, fh);
+    g.strokeStyle = 'rgba(0,0,0,0.25)'; g.lineWidth = 0.6; for (let k = 1; k < 4; k++) { g.beginPath(); g.moveTo(fx, fy + fh * k / 4); g.lineTo(fx + fw, fy + fh * k / 4); g.stroke(); }
+    // trees (wood)
+    const nt = dead ? 0 : 1 + Math.round(W * 2);
+    for (let k = 0; k < nt; k++) { g.fillStyle = '#1f4a26'; g.beginPath(); g.arc(x - s * 0.42 + k * s * 0.13, y - s * 0.28, s * 0.08, 0, 7); g.fill(); }
+    // mine (ore)
+    const mr = s * (0.07 + 0.09 * O); g.fillStyle = '#7d7a72'; g.beginPath(); g.arc(x + s * 0.32, y + s * 0.34, mr, Math.PI, 0); g.fill();
+    g.fillStyle = '#111'; g.beginPath(); g.arc(x + s * 0.32, y + s * 0.34, mr * 0.4, Math.PI, 0); g.fill();
+    // forge (tools) + smoke
+    g.fillStyle = dead ? '#555' : '#3b3f47'; g.fillRect(x + s * 0.18, y - s * 0.12, s * 0.2, s * 0.16); g.fillRect(x + s * 0.31, y - s * 0.24, s * 0.05, s * 0.12);
+    if (!dead && To > 0.25) for (let k = 0; k < 2; k++) { const ph = (t * 0.02 + k * 0.5 + n * 0.13) % 1; g.fillStyle = `rgba(210,210,210,${(1 - ph) * 0.5 * To})`; g.beginPath(); g.arc(x + s * 0.34 + ph * s * 0.1, y - s * 0.28 - ph * s * 0.3, s * 0.04 + ph * s * 0.05, 0, 7); g.fill(); }
+    // houses (workers)
+    const nh = run ? 6 : 1 + Math.round(P * 4), hs = s * 0.15;
+    const off = [[-0.08, -0.02], [0.06, 0.04], [-0.22, 0.0], [-0.02, -0.17], [0.1, 0.18], [-0.16, -0.16]];
+    for (let k = 0; k < nh; k++) { const hx = x + off[k][0] * s, hy = y + off[k][1] * s;
+      g.fillStyle = dead ? '#6b6b6b' : '#e9dcc0'; g.fillRect(hx - hs / 2, hy - hs * 0.35, hs, hs * 0.7);
+      if (!dead) { g.fillStyle = '#7a3b2c'; g.beginPath(); g.moveTo(hx - hs * 0.62, hy - hs * 0.32); g.lineTo(hx, hy - hs * 0.85); g.lineTo(hx + hs * 0.62, hy - hs * 0.32); g.fill(); } }
+    if (run) { g.strokeStyle = 'rgba(179,107,255,0.8)'; g.lineWidth = 1.5; g.beginPath(); g.arc(x, y, s * 0.55, 0, 7); g.stroke(); }
+    if (xs.length > 5 && !((T.status[n] & 1) && T.deadSp[n] === 5)) { // plague haze
+      const f = Math.min(1, Math.sqrt(xs[5] / (xs[4] + xs[5] + 1e-12)) * 2.2); if (f > 0.05) {
+        const gr = g.createRadialGradient(x, y, 0, x, y, s * 0.6);
+        gr.addColorStop(0, `rgba(127,163,58,${0.65 * f})`); gr.addColorStop(1, 'rgba(127,163,58,0)'); g.fillStyle = gr; g.fillRect(x - s * 0.6, y - s * 0.6, s * 1.2, s * 1.2);
+        g.fillStyle = '#9fd04a'; g.fillRect(x - s * 0.5, y - s * 0.7, 1.5, s * 0.4); g.fillRect(x - s * 0.5, y - s * 0.7, s * 0.24, s * 0.15); // plague flag
+      } }
+  } else { g.fillStyle = dead ? '#6b6b6b' : '#e9dcc0'; g.fillRect(x - s * 0.25, y - s * 0.15, s * 0.5, s * 0.35); }
+  // light
+  const lr = Math.max(2, s * 0.1), lx = x + s * 0.42, ly = y - s * 0.38;
+  g.fillStyle = S.light; g.shadowColor = S.light; g.shadowBlur = 6; g.beginPath(); g.arc(lx, ly, lr, 0, 7); g.fill(); g.shadowBlur = 0;
+  g.strokeStyle = 'rgba(0,0,0,0.6)'; g.lineWidth = 0.8; g.stroke();
+}
+function drawMap(cv, T, side) {
+  const g = cv.getContext('2d'), Ly = st.layout, s = Math.min(30, Ly.cell * 0.8);
+  g.drawImage(Ly.bg, 0, 0);
+  const cnt = { green: 0 };
+  for (let n = 0; n < st.N; n++) { const p = Ly.P[n], S = townState(T, n, side); drawTown(g, p[0], p[1], s, S, T, n, side, st.frame); }
+  const p = Ly.P[st.sel]; g.strokeStyle = '#fff'; g.lineWidth = 2; g.setLineDash([4, 3]); g.beginPath(); g.arc(p[0], p[1], s * 0.75, 0, 7); g.stroke(); g.setLineDash([]);
+  // HUD
+  const S = clSummary(T), ms = med(side === 'P' ? st.msP : st.msN), hist = side === 'P' ? st.histP : st.histN;
+  const rows = side === 'P'
+    ? [['pinned at cap/floor now', S.pinnedNow, '#f2b233'], ['share of town-time pinned', S.timePinned, '#f2b233'], ['died out / ran away', 0, '#e0453a']]
+    : [['a good died out' + (S.dead ? ' (mostly ' + CL_SP[S.deadBy.indexOf(Math.max(...S.deadBy))] + ')' : ''), S.dead, '#e0453a'], ['ran away (> 1e6)', S.runaway, '#b36bff'], [T.integer ? 'an empty stockpile now' : 'below 1 unit (starving)', S.starving, '#f2e033']];
+  g.fillStyle = 'rgba(16,18,22,0.78)'; g.fillRect(8, 8, 236, 104); g.strokeStyle = side === 'P' ? OLD : NEW; g.lineWidth = 1.5; g.strokeRect(8.5, 8.5, 235, 103);
+  g.font = '600 12px system-ui, sans-serif'; g.fillStyle = '#f2f0ea';
+  g.fillText(`Year ${st.prior.t.toFixed(1)} · ${st.N} towns`, 16, 26);
+  g.font = '12px system-ui, sans-serif';
+  rows.forEach(([lab, v, c], i) => { g.fillStyle = c; g.fillRect(16, 37 + i * 17, 8, 8); g.fillStyle = '#d9d6cc'; g.fillText(lab, 30, 45 + i * 17); g.fillStyle = '#fff'; g.textAlign = 'right'; g.fillText((v * 100).toFixed(1) + '%', 236, 45 + i * 17); g.textAlign = 'left'; });
+  let live = 0; for (let n = 0; n < st.N; n++) if (!T.stopped[n]) live++;
+  g.fillStyle = '#d9d6cc'; g.fillText(`sim cost (${live} towns live)`, 16, 100); g.fillStyle = '#fff'; g.textAlign = 'right'; g.fillText(isFinite(ms) ? ms.toFixed(2) + ' ms / frame' : '-', 236, 100); g.textAlign = 'left';
+  // trouble sparkline
+  const sx = MW - 168, sy = 8; g.fillStyle = 'rgba(16,18,22,0.78)'; g.fillRect(sx, sy, 160, 52);
+  g.fillStyle = '#d9d6cc'; g.font = '11px system-ui, sans-serif'; g.fillText(side === 'P' ? 'towns pinned, over time' : 'towns in trouble, over time', sx + 6, sy + 13);
+  g.strokeStyle = side === 'P' ? OLD : NEW; g.lineWidth = 1.5; g.beginPath();
+  hist.forEach((v, i) => { const X = sx + 6 + i / Math.max(1, hist.length - 1) * 148, Y = sy + 47 - v * 28; i ? g.lineTo(X, Y) : g.moveTo(X, Y); }); g.stroke();
+  g.strokeStyle = 'rgba(255,255,255,0.2)'; g.lineWidth = 1; g.beginPath(); g.moveTo(sx + 6, sy + 47.5); g.lineTo(sx + 154, sy + 47.5); g.moveTo(sx + 6, sy + 19.5); g.lineTo(sx + 154, sy + 19.5); g.stroke();
+  g.fillStyle = '#8f8e86'; g.fillText('100%', sx + 128, sy + 30);
+}
+function med(a) { if (!a.length) return NaN; const s = a.slice().sort((x, y) => x - y); return s[s.length >> 1]; }
+function fmtUnits(v) { const u = v * 100; if (!isFinite(u)) return u > 0 ? '∞' : '0'; if (u > 1e12) return '> 1e12'; if (u < 0.01) return u.toExponential(0); if (u < 10) return u.toFixed(2); if (u < 1e5) return Math.round(u).toLocaleString(); return u.toExponential(1); }
+function drawLedger() {
+  const cv = $('ledger'), g = cv.getContext('2d'), W = cv.width, H = cv.height, n = st.sel, D = st.prior.D;
+  g.fillStyle = '#20232a'; g.fillRect(0, 0, W, H);
+  const SP = townState(st.prior, n, 'P'), SN = townState(st.neu, n, 'N');
+  g.fillStyle = '#f2f0ea'; g.font = '600 15px Georgia, serif'; g.fillText(st.layout.names[n], 12, 22);
+  g.font = '11px system-ui, sans-serif'; g.fillStyle = '#8f8e86'; g.fillText(`town #${n} · own random rates · click a town on either map`, 12, 38);
+  g.fillStyle = OLD; g.fillText('PRIOR: ' + SP.tag, 12, 54); g.fillStyle = '#7fb0ee'; g.fillText('NEW: ' + SN.tag, 200, 54);
+  const L = 92, R = W - 70, X = v => L + Math.max(0, Math.min(1, (Math.log10(v) + 4) / 8)) * (R - L); // 1e-4 .. 1e4
+  const top = 66, rowH = Math.min(30, (H - top - 22) / D);
+  // floor / cap guides
+  g.strokeStyle = 'rgba(235,104,52,0.5)'; g.setLineDash([3, 3]);
+  [CL.FLOOR, CL.CAP].forEach(v => { g.beginPath(); g.moveTo(X(v) + 0.5, top - 4); g.lineTo(X(v) + 0.5, top + rowH * D); g.stroke(); }); g.setLineDash([]);
+  g.fillStyle = '#8f8e86'; g.font = '10px system-ui'; g.textAlign = 'center';
+  g.fillText('floor 1', X(CL.FLOOR), top + rowH * D + 12); g.fillText('cap 2,000', X(CL.CAP), top + rowH * D + 12);
+  g.textAlign = 'left'; g.fillText('0.01', L, top + rowH * D + 12); g.textAlign = 'right'; g.fillText('1e6 units', R, top + rowH * D + 12); g.textAlign = 'left';
+  for (let i = 0; i < D; i++) {
+    const y = top + i * rowH; g.fillStyle = RES_COL[i]; g.fillRect(12, y + 4, 10, 10);
+    g.fillStyle = '#e8e6df'; g.font = '12px system-ui'; g.fillText(CL_SP[i], 28, y + 13);
+    [[SP.xs[i], OLD, 0], [SN.xs[i], NEW, 1]].forEach(([v, c, k]) => { const by = y + 2 + k * (rowH * 0.42);
+      g.fillStyle = 'rgba(255,255,255,0.07)'; g.fillRect(L, by, R - L, rowH * 0.36); g.fillStyle = c; g.fillRect(L, by, isFinite(v) ? X(v) - L : R - L, rowH * 0.36);
+      g.fillStyle = '#e8e6df'; g.font = '10px ui-monospace, Consolas, monospace'; g.fillText(fmtUnits(v), R + 6, by + rowH * 0.33); });
+  }
+}
+function draw() { drawMap($('mapP'), st.prior, 'P'); drawMap($('mapN'), st.neu, 'N'); drawLedger(); }
+
+// ---------------------------------------------------------------- loop
+function step() {
+  const dt = st.speed;
+  const a = performance.now(); clFrame(st.net, st.prior, dt, true);
+  const b = performance.now(); clFrame(st.net, st.neu, dt, false);
+  const c = performance.now();
+  st.msP.push(b - a); st.msN.push(c - b); if (st.msP.length > 60) { st.msP.shift(); st.msN.shift(); }
+  const sp = clSummary(st.prior), sn = clSummary(st.neu);
+  st.histP.push(sp.pinnedNow); st.histN.push(sn.deadOrRun); if (st.histP.length > 400) { st.histP.shift(); st.histN.shift(); }
+}
+function pickTown() { // show a town where the two sides differ, nearest the map centre
+  if (st.userPicked) return;
+  let best = -1, bd = Infinity;
+  for (let n = 0; n < st.N; n++) { const p = st.layout.P[n], d = (p[0] - MW * 0.5) ** 2 + (p[1] - MH * 0.5) ** 2;
+    if ((st.neu.status[n] || st.prior.clampedNow[n]) && d < bd) { bd = d; best = n; } }
+  if (best >= 0) st.sel = best;
+}
+function tick() {
+  if (!st.paused) step();
+  st.frame++;
+  if (st.frame === 200) pickTown();
+  draw();
+  requestAnimationFrame(tick);
+}
+function runFrames() { // ?frames=N: simulate N frames synchronously (real wall-clock timing), draw once, stop
+  for (let f = 0; f < MAXF; f++) { step(); st.frame++; }
+  pickTown(); draw();
+  $('status').textContent = `stopped after ${MAXF} frames (?frames=${MAXF})`;
+}
+
+// ---------------------------------------------------------------- controls
+function init() {
+  TERRAIN = buildTerrain(); st.layout = buildLayout(st.N);
+  $('scenes').innerHTML = Object.entries(CL_SCENES).map(([k, s]) => `<button data-s="${k}" title="${s.label}">${k}</button>`).join('');
+  document.querySelectorAll('#scenes button').forEach(b => b.onclick = () => setScene(b.dataset.s));
+  const bind = (id, f) => { $(id).oninput = () => { f(+$(id).value); }; };
+  $('towns').value = st.N; $('townsv').textContent = st.N;
+  bind('towns', v => { st.N = v; $('townsv').textContent = v; st.layout = buildLayout(v); st.sel = 0; restart(); });
+  bind('speed', v => { st.speed = v; $('speedv').textContent = v; });
+  const HS = [1, 2, 5, 10, 20, 40, 80, 160, 320, 640];
+  $('hz').value = Math.max(0, HS.indexOf(st.H)); $('hzv').textContent = st.H;
+  $('hz').onchange = () => { st.H = HS[+$('hz').value]; $('hzv').textContent = st.H; save(); }; $('hz').oninput = () => { $('hzv').textContent = HS[+$('hz').value]; };
+  $('kk').value = st.K; $('kv').textContent = st.K;
+  $('kk').onchange = () => { st.K = +$('kk').value; save(); }; $('kk').oninput = () => { $('kv').textContent = $('kk').value; };
+  $('jit').onchange = () => { st.jitter = +$('jit').value; save(); }; $('jit').oninput = () => { $('jitv').textContent = (+$('jit').value).toFixed(1); };
+  $('roll').onclick = () => { const r = clRng((Math.random() * 1e9) | 0); st.recipes.forEach(x => x.k *= Math.exp((r() * 2 - 1) * Math.log(4))); save(); };
+  $('reset').onclick = () => setScene(st.scene);
+  $('pause').onclick = () => { st.paused = !st.paused; $('pause').textContent = st.paused ? 'Resume' : 'Pause'; };
+  const pick = e => { const cv = e.currentTarget, r = cv.getBoundingClientRect(), x = (e.clientX - r.left) * MW / r.width, y = (e.clientY - r.top) * MH / r.height;
+    let best = 0, bd = Infinity; st.layout.P.forEach((p, i) => { const d = (p[0] - x) ** 2 + (p[1] - y) ** 2; if (d < bd) { bd = d; best = i; } }); st.sel = best; st.userPicked = true; draw(); };
+  $('mapP').onclick = pick; $('mapN').onclick = pick;
+  setScene(st.scene);
+  if (MAXF) runFrames(); else requestAnimationFrame(tick);
+}
+init();
+
+</script>
+</body>
+</html>

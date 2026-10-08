@@ -1,0 +1,31 @@
+> **Exploratory test, not peer-reviewed or independently verified.** See the [disclaimer](../../README.md).
+
+# Colony Ledger: type-check your simulation rules
+
+**Scenario.** A map of 240 towns (slider up to 2,000). Every town runs the same recipe book: the nine `panel/web/econ.js` recipes (village, forge, workshop), plus an optional sick/immune plague on workers. Each town gets its own rates (base rate × a random factor in [1/1.5, 1.5]) and its own start. The left map is PRIOR BEST and the right map is NEW. Both maps hold the same towns and use the same log-space RK4 step rule from econ.js (`h = min(0.05, 0.05 / fastest log-rate)`). Clicking a recipe card removes it or puts it back.
+
+**PRIOR BEST: clamps + faucets, Monte-Carlo balance sweep.** Every stockpile is clamped to [1, 2,000] units. When a stockpile runs empty, a relief caravan refills it to 5 units. On save, a sweep plays K random towns for H years and fails if any clamp or caravan fires. City-builders ship exactly this kind of safety net: storage caps, minimum-income faucets and automated soak tests. It runs on the same towns and integrator as NEW, so the comparison is fair.
+
+**NEW: lint at save time, then run with no clamps.** The lint checks that each recipe's output bundle can reach its input bundle through other active recipes (weak reversibility, the same rule as `ecLint`). It names every recipe that has no way back. **Fix** adds return recipes by linking a terminal group of the recipe graph back to an initial group. On `broken` it restores exactly *crowding* and *salvage*. On the plague it adds `2 Sick -> Workers + Sick` and `Workers -> Sick`.
+**Proved** (Family 149, *Uniform Permanence in Weakly Reversible Mass-Action Systems*, `thm:main` / `eq:uniform-bounds`): if the lint passes, then for any fixed positive rates every good eventually stays in [ε, 1/ε], for some ε > 0 that the paper does not compute. The proof covers the continuous mass-action model only. The endemic plague uses the same theorem: pure SIRS fails the lint (3 recipes), the colony plus SIRS fails it too, and both pass after the two added recipes (bench section 1). **Measured only:** every timing and percentage below, and the collapse of the books that fail. **Not covered:** integer stockpiles, small random numbers, rates the player changes mid-run, and how long the start-up wobble lasts. Failing the lint means "no guarantee", not "certain collapse".
+
+| `node bench.js` (Node 22, 1 thread) | result |
+|---|---|
+| lint, per save | 1.5 to 4.3 µs; independent of rates and horizon |
+| sweep K=64, `broken` | 0/64 flagged at H = 1 and 2 years; first catch at H = 5 (3/64); 42/64 at 10; cost 5 to 10 ms |
+| sweep K=64, `slowrot` (rates ×0.2) | 0/64 up to H = 10; 1/64 at 20; 26/64 at 40 |
+| sweep K=64, *melt down* removed | 2/64 at H = 20, 3/64 from 40 to 320, 16/64 at 640 (434 ms); NEW shows no collapse by t = 1,000, only a slow drift; the lint fails it at once |
+| sweep K=64, `fixed` | 0/64 at every H (no false alarms); 552 ms for H = 640, ≈ 41,000 town-years |
+| 240 towns, t = 120, `broken` | NEW: 100% ran away, 89.2% lost a good (mostly Wood). PRIOR: 0% dead, but 100% pinned now and 92.3% of town-time pinned |
+| `plague` / `endemic` | NEW: plague burned out in 31.7% / 0% of towns. PRIOR: caravans re-seed it (7.5% / 1.3% pinned now) |
+| `starve` (lint PASS) | NEW: 100% of towns below 1 unit of food. The sweep flags it within 1 year (14/64) |
+| single recipe removed (9 books) | the lint fails all 9; by t = 1,000 only 2 lose any town (*trade* 100%, *crowding* ≈ 15%) |
+| sim ms/frame, N = 240 / 1,000 / 4,000, `fixed` | NEW 1.50 / 6.87 / 25.1; PRIOR 1.49 / 6.34 / 25.2 (the same integrator, so the same cost) |
+
+**Browser** (headless Chrome, `?frames=240`, timer resolution about 0.1 ms): on `broken` the lint takes 3.4 µs and the sweep (K=32, H=10) takes 7.7 ms for 266 town-years. PRIOR runs at 1.9 ms/frame with 100% of towns pinned. NEW shows 100% ran away and 85.8% died out; every town has stopped, so its cost is 0 ms. On `fixed` both sides run at 2.2 ms/frame (240 towns) and 9.0 / 9.1 ms (1,000 towns). The lint takes 6.6 µs and the sweep takes 11.2 ms. The broken-run gap (85.8% in Chrome vs 89.2% in Node) comes from identical code giving different last-bit floating-point results in the two engines during the stiff blow-up; the healthy scenes match exactly. In `broken`, 27 of 240 towns jump past 1e12 within a single RK4 step, so their label comes from the direction of that step (bench section 3).
+
+**Verdict.** The lint costs a few microseconds against 5 to 550 ms for a sweep (thousands of times cheaper), names the recipe at fault, and its pass holds for every positive rate and every horizon. A sweep's pass covers only the seeds and years it ran, and a 10-year sweep passes `slowrot`. Clamps keep the screen tidy but hide a dead economy: on `broken`, towns are pinned 92% of the time. The prior technique still wins in three places. On `starve` the lint passes while every town starves, because the proof gives no level for ε. On `tiny` (integer stockpiles of 4 units per 1.0) the proof does not apply: about a third of towns have an empty stockpile at any moment, and caravans paper over it. And a sweep can test pacing and fun, which the lint never checks. Ship both: lint on every save, and run a sweep for tuning.
+
+**Reproduce** (from this folder): `python build.py` inlines `core.js` and `app.js` into `index.html`. `node bench.js` takes about 3 minutes; `--quick` gives a subset. Presets: `?scene=broken|fixed|plague|endemic|slowrot|starve|tiny`, plus `&towns=N&k=K&h=H&frames=N`. Screenshot:
+`"C:/Program Files/Google/Chrome/Application/chrome.exe" --headless=new --hide-scrollbars --window-size=1280,1000 --virtual-time-budget=15000 --user-data-dir="$TEMP/3-colony-ledger-chrome" --screenshot="<repo>/games/3-colony-ledger/shot.png" "file:///<repo>/games/3-colony-ledger/index.html?frames=240&scene=broken"`
+With `?frames=N` the page simulates N frames synchronously at load (so `performance.now()` measures real time under headless virtual time), draws once and stops. Related C++ measurements: `demos/L4-economy-ladder/out/sweep.log` shows that with fixed-step RK2, ≥ 99.6% of the 7-recipe towns break at every step size tried.

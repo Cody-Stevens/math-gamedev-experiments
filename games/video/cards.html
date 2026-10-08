@@ -1,0 +1,22 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+html,body{margin:0;width:1280px;height:720px;background:#0f0e0c;color:#f3eee4;font-family:"Segoe UI",sans-serif;overflow:hidden}
+.c{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 90px}
+h1{font:800 64px/1.08 "Segoe UI";margin:0 0 26px}
+p{font:30px/1.4 "Segoe UI";color:#cfc7b8;margin:0 0 14px}
+.o{color:#ff8a57;font-weight:800}.n{color:#5ea3ff;font-weight:800}
+.l{font:24px "Segoe UI";color:#8f8778;margin-top:30px}
+</style></head><body>
+<div class="c" id="intro">
+  <h1>5 new math proofs,<br>5 practical game-dev tricks</h1>
+  <p>Each one tested in a tiny game, side by side:</p>
+  <p><span class="o">Orange = the best technique used today</span><br><span class="n">Blue = built on the new proof</span></p>
+  <div class="l">Papers: github.com/openai/math</div>
+</div>
+<div class="c" id="outro" style="display:none">
+  <h1 style="font-size:50px">The math doesn't make computers faster.<br>It hands you an answer you'd otherwise<br>have to guess, tune or playtest.</h1>
+  <p>A playbook · a rule you can check · a scaling law · a proven step count · a known best shape</p>
+  <div class="l">All five papers: github.com/openai/math (preprints folder)</div>
+</div>
+<script>if (location.hash === '#outro') { intro.style.display = 'none'; outro.style.display = 'flex'; }</script>
+</body></html>

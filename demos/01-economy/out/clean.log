@@ -1,0 +1,12 @@
+[01-economy] 1560 frames @ 60 fps, no video -> <repo>/demos/01-economy/out/clean
+[01-economy] frame 533/1560  L 0.019 ms  R 0.003 ms  (5.0 s)
+[01-economy] frame 881/1560  L 0.042 ms  R 0.003 ms  (10.0 s)
+[01-economy] frame 1176/1560  L 0.028 ms  R 0.003 ms  (15.0 s)
+[01-economy] frame 1440/1560  L 0.006 ms  R 0.004 ms  (20.1 s)
+[01-economy] frame 1560/1560  L 0.001 ms  R 0.005 ms  (22.6 s)
+[01-economy] done: 1560 frames in 22.6 s
+  LEFT   recipes with 2 return reactions removed  median 0.017 ms/frame  p95 0.048  (59,880 fps compute-only)
+  RIGHT  weakly reversible recipe graph           median 0.003 ms/frame  p95 0.005  (370,370 fps compute-only)
+  speedup (median compute): 6.19x
+  poster:  <repo>/demos/01-economy/out/clean/poster.png
+  results: <repo>/demos/01-economy/out/clean/results.json

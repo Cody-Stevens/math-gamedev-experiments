@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Slime Lab · wrap-around containment cell</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root { --prior:#eb6834; --new:#2a78d6; --ref:#7a7873; --slime:#7dff6a; --bg:#0a0e10; --card:#10181c; --ink:#e4ede8; --ink2:#a9b8b1; --ink3:#6e7d77; --line:#22313a; }
+* { box-sizing:border-box; }
+body { margin:0; background:radial-gradient(ellipse at 50% -20%, #18292e 0%, #0a0e10 60%) fixed; color:var(--ink); font:14px/1.45 "Segoe UI", system-ui, sans-serif; }
+.wrap { width:1264px; margin:0 auto; padding:8px 0 40px; }
+header { display:flex; align-items:center; gap:16px; height:56px; padding:0 16px; border:1px solid var(--line); border-radius:10px;
+  background:linear-gradient(180deg,#16242b,#0e161a); box-shadow:0 0 0 1px #000 inset; }
+.logo { font:900 27px/1 "Segoe UI", sans-serif; letter-spacing:5px; color:var(--slime); text-shadow:0 0 14px rgba(125,255,106,.6), 0 0 2px #fff6; }
+.logo small { font-size:11px; letter-spacing:2px; color:#9fb; opacity:.75; margin-left:8px; vertical-align:middle; }
+.sub { color:var(--ink2); font-size:13px; flex:1; }
+.lamp { width:10px; height:10px; border-radius:50%; background:var(--slime); box-shadow:0 0 10px var(--slime); animation:blink 1.6s infinite; }
+@keyframes blink { 50% { opacity:.25; } }
+.scenes { display:flex; gap:5px; }
+.scenes button, .ctl button { background:#18252b; color:var(--ink); border:1px solid #2c3f48; border-radius:6px; padding:5px 10px; font:600 12px "Segoe UI",sans-serif; cursor:pointer; }
+.scenes button.on { border-color:var(--slime); color:var(--slime); box-shadow:0 0 8px rgba(125,255,106,.35) inset; }
+.stage { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; }
+.view { position:relative; border-radius:10px; overflow:hidden; background:#05080a; border:2px solid; }
+.view.prior { border-color:var(--prior); } .view.new { border-color:var(--new); }
+.tag { position:absolute; left:0; top:0; right:0; padding:6px 12px; font:700 13px "Segoe UI",sans-serif; letter-spacing:.3px; z-index:2;
+  background:linear-gradient(90deg, rgba(0,0,0,.75), rgba(0,0,0,0)); }
+.prior .tag { color:var(--prior); } .new .tag { color:#6fa8ff; }
+.tag b { color:#fff; font-weight:700; }
+canvas.scene { display:block; width:624px; height:430px; }
+.hud { position:absolute; left:10px; bottom:10px; z-index:2; min-width:300px; padding:8px 11px; border-radius:8px; background:rgba(4,10,12,.72);
+  border:1px solid rgba(255,255,255,.08); font:12.5px/1.5 Consolas, "Cascadia Mono", monospace; color:#d8e6df; backdrop-filter:blur(2px); }
+.hud .k { color:var(--ink3); display:inline-block; width:74px; }
+.hud .good { color:var(--slime); } .hud .bad { color:#ff8a65; } .hud .dim { color:var(--ink3); }
+.hud .bar { height:5px; border-radius:3px; background:#1d2a30; margin:3px 0 4px; overflow:hidden; }
+.hud .bar i { display:block; height:100%; background:var(--slime); box-shadow:0 0 6px var(--slime); }
+.badge { position:absolute; right:10px; top:34px; z-index:2; font:700 11px Consolas, monospace; padding:3px 7px; border-radius:5px; background:rgba(0,0,0,.6); }
+.ctl { display:flex; align-items:center; gap:10px; margin-top:10px; padding:9px 14px; border:1px solid var(--line); border-radius:10px; background:var(--card); flex-wrap:wrap; }
+.ctl label { color:var(--ink2); font-size:13px; }
+.ctl input[type=range] { width:220px; accent-color:var(--slime); vertical-align:middle; }
+.ctl .pour { background:linear-gradient(180deg,#2f7d2a,#1d5419); border-color:#5fd35a; color:#eaffe6; padding:6px 16px; }
+.ctl .val { font:700 14px Consolas, monospace; color:var(--slime); width:54px; display:inline-block; }
+.ctl select { background:#18252b; color:var(--ink); border:1px solid #2c3f48; border-radius:6px; padding:4px; }
+.ctl .sep { width:1px; height:24px; background:var(--line); }
+.cards { display:grid; grid-template-columns:1.25fr 1fr 1fr; gap:12px; margin-top:10px; }
+.card { border:1px solid var(--line); border-radius:10px; background:var(--card); padding:9px 12px 10px; }
+.card h3 { margin:0 0 4px; font:700 12px "Segoe UI",sans-serif; letter-spacing:1.2px; text-transform:uppercase; color:var(--ink2); }
+.card canvas { display:block; width:100%; height:150px; }
+.card table { width:100%; border-collapse:collapse; font:12px Consolas, monospace; }
+.card td, .card th { padding:2px 4px; border-bottom:1px solid #1b272d; text-align:right; } .card th { color:var(--ink3); font-weight:400; }
+.card td:first-child, .card th:first-child { text-align:left; }
+.legend { font-size:11.5px; color:var(--ink3); margin-top:3px; }
+.legend i { display:inline-block; width:14px; height:3px; vertical-align:middle; margin:0 4px 0 8px; }
+.explain { margin-top:16px; display:grid; grid-template-columns:1.1fr 1fr; gap:18px; }
+.explain h2 { margin:0 0 6px; font:700 18px "Segoe UI",sans-serif; color:var(--slime); }
+.explain h4 { margin:10px 0 4px; font:700 13px "Segoe UI",sans-serif; color:var(--ink); }
+.explain p, .explain li { color:var(--ink2); font-size:13.5px; }
+.explain ul { margin:0; padding-left:18px; }
+.explain code { color:#cfe; }
+.foot { color:var(--ink3); font-size:12px; margin-top:12px; }
+.c-prior { color:var(--prior); } .c-new { color:#6fa8ff; } .c-ref { color:#a9a69f; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="lamp"></div>
+    <div class="logo">SLIME LAB<small>CELL 7 · WRAP-AROUND CONTAINMENT</small></div>
+    <div class="sub">Opposite walls are glued: slime that leaves through one glass panel comes back through the opposite one.</div>
+    <div class="scenes" id="scenes"></div>
+  </header>
+
+  <div class="stage">
+    <div class="view prior">
+      <div class="tag" id="tagA">PRIOR BEST: <b>coarse-to-fine threshold dynamics (MBO)</b></div>
+      <canvas class="scene" id="cvA" width="624" height="430"></canvas>
+      <div class="badge" id="badgeA"></div>
+      <div class="hud" id="hudA"></div>
+    </div>
+    <div class="view new">
+      <div class="tag" id="tagB">NEW: <b>closed-form minimizer (Family 354)</b></div>
+      <canvas class="scene" id="cvB" width="624" height="430"></canvas>
+      <div class="badge" id="badgeB"></div>
+      <div class="hud" id="hudB"></div>
+    </div>
+  </div>
+
+  <div class="ctl">
+    <label>Fill</label><input type="range" id="fill" min="1" max="98" step="1" value="25"><span class="val" id="fillV">25%</span>
+    <button class="pour" id="pour">POUR +5%</button>
+    <button id="drain">DRAIN −5%</button>
+    <div class="sep"></div>
+    <button id="cold">Cold restart (new noise)</button>
+    <label>Grid</label><select id="grid"><option>32</option><option selected>48</option><option>64</option></select>
+    <label><input type="checkbox" id="pillar"> Pillar</label>
+    <label><input type="checkbox" id="orbit" checked> Orbit</label>
+    <div class="sep"></div>
+    <span id="rendInfo" style="color:var(--ink3);font-size:12px"></span> <span id="frameNo" style="color:var(--ink3);font-size:12px"></span>
+  </div>
+
+  <div class="cards">
+    <div class="card"><h3 id="convTitle">Surface over solver time (since the last change)</h3><canvas id="conv" width="560" height="150"></canvas>
+      <div class="legend" id="convLegend"></div></div>
+    <div class="card"><h3>Shape map (proved, Family 354)</h3><canvas id="map" width="440" height="150"></canvas>
+      <div class="legend" id="mapLegend">grey: best possible surface I(fill) · dot: this cell</div></div>
+    <div class="card"><h3>Stress test · cold starts at this grid</h3>
+      <div id="stress"><button id="stressBtn" style="background:#18252b;color:var(--ink);border:1px solid #2c3f48;border-radius:6px;padding:5px 10px;cursor:pointer">Run 9 cold starts (fill 10/25/40% × 3 noises)</button>
+      <p style="color:var(--ink3);font-size:12px;margin:6px 0 0">Measured here, in this browser. Node numbers with more seeds: <code>node bench.js</code> (README).</p></div></div>
+  </div>
+
+  <div class="explain">
+    <div>
+      <h2>Why the right side is instant</h2>
+      <p>Slime pulls itself into the shape with the least surface. In this cell the walls wrap around, so the glass shows repeating copies,
+      and a blob can join up with itself through a wall. The usual way to find the settled shape is to simulate it: smear the slime a little,
+      keep the most crowded spots, repeat until nothing moves, first on a coarse grid and then a fine one. A new paper proves which shape always
+      wins for each amount of slime: a ball, then a tube that runs through the walls, then a flat layer, then the same shapes as air holes.
+      So the right side just draws that shape once. The pillar scene is outside the paper.</p>
+    </div>
+    <div>
+      <h4>What's measured here</h4>
+      <ul>
+        <li><b>Solver ms</b>: <code>performance.now()</code> around the solver's own work only (left: every blur + keep-the-top step; right: three warm-up builds, then the mean of a timed batch of builds). Drawing, the area check and shape naming are not timed.</li>
+        <li><b>Surface</b>: one estimator for both sides (blur the voxels by one voxel, add up the slope). Its error on the exact shape shows on the right as a small ± next to 0 %.</li>
+        <li><b>Best possible</b> (<span class="c-ref">REFERENCE</span>): the paper's formula I(fill). The left solver cannot know it is done without it; we only use it to stop the clock.</li>
+      </ul>
+      <h4>Where the prior technique still wins / limits</h4>
+      <ul>
+        <li><b>Anything the paper doesn't cover</b>: a pillar, a non-cubic cell, gravity. Only the simulation can answer there (scenes <code>pillar</code>, <code>pillar-drop</code>; the warm start is a measured guess, not a theorem).</li>
+        <li>It gives you an animation of the slime flowing for free; the formula only gives the end state.</li>
+        <li>With a tuned coarse stage, the simulation is already fast and rarely stuck at these grid sizes; the gain is a constant factor (about ×10–15 here) plus a guarantee.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot">Presets: <code>?scene=ball</code> · <code>tube</code> · <code>slab</code> · <code>bubble</code> · <code>stuck</code> (32³, a noise that traps the prior) · <code>pillar</code> · <code>pillar-drop</code>. Also <code>?frames=N</code> (stop after N frames), <code>?grid=32|48|64</code>, <code>?renderer=cpu</code>.
+  Paper: Family 354, "The Isoperimetric Conjecture for the Cubic Flat Three-Torus", Theorem intro:main.</div>
+</div>
+
+<script src="core.js"></script>
+<script>
+'use strict';
+const C = SlimeCore;
+const Q = new URLSearchParams(location.search);
+const FRAMES = Q.has('frames') ? Math.max(1, +Q.get('frames')) : Infinity;
+const PILLAR = { r: 0.12, cx: 0.5, cz: 0.5 };
+const SIG = 1 / 16, COARSE_SIG = 1 / 6;           // same settings as bench.js
+const SCENES = {
+  ball:          { V: 0.08, pillar: false, label: 'ball' },
+  tube:          { V: 0.25, pillar: false, label: 'tube' },
+  slab:          { V: 0.42, pillar: false, label: 'slab' },
+  bubble:        { V: 0.93, pillar: false, label: 'bubble' },
+  stuck:         { V: 0.25, pillar: false, N: 32, seed: 1333, label: 'stuck' },
+  pillar:        { V: 0.25, pillar: true, label: 'pillar' },
+  'pillar-drop': { V: 0.10, pillar: true, label: 'pillar-drop' },
+};
+const G = { N: 48, V: 0.25, pillar: false, seed: 1037, scene: 'tube', frame: 0, pourTo: null, orbit: true, t: 0 };
+
+// ------------------------------------------------------------------ renderers
+const VS = `#version 300 es
+void main(){ vec2 p = vec2((gl_VertexID << 1) & 2, gl_VertexID & 2); gl_Position = vec4(p * 2.0 - 1.0, 0.0, 1.0); }`;
+const FS = `#version 300 es
+precision highp float; precision highp sampler3D;
+uniform sampler3D uVol; uniform vec2 uRes; uniform vec3 uEye, uFwd, uRight, uUp, uAccent;
+uniform float uN, uPR, uPour, uTime; uniform vec2 uPC;
+out vec4 outColor;
+const vec3 SL = vec3(0.32, 1.0, 0.36);
+float dens(vec3 p) { return texture(uVol, p).r; }
+vec2 boxI(vec3 ro, vec3 rd, out int ax) {
+  vec3 inv = 1.0 / rd, t0 = (vec3(-1.0, 0.0, -1.0) - ro) * inv, t1 = (vec3(2.0, 1.0, 2.0) - ro) * inv;
+  vec3 mn = min(t0, t1), mx = max(t0, t1);
+  float a = max(max(mn.x, mn.y), mn.z); ax = a == mn.x ? 0 : a == mn.y ? 1 : 2;
+  return vec2(a, min(min(mx.x, mx.y), mx.z));
+}
+vec3 envc(vec3 d) {
+  float u = d.y;
+  vec3 c = mix(vec3(0.012, 0.018, 0.022), vec3(0.05, 0.08, 0.09), smoothstep(-0.4, 0.7, u));
+  if (u > 0.05) { vec2 q = d.xz / u; float s = smoothstep(0.09, 0.02, abs(fract(q.x * 0.35) - 0.5)) * step(abs(q.y), 7.0);
+    c += vec3(0.75, 0.95, 1.0) * s * smoothstep(0.05, 0.5, u); }
+  return c;
+}
+vec3 floorCol(vec3 ro, vec3 rd) {
+  if (rd.y > -1e-4) return envc(rd) * 0.7;
+  float t = (-0.03 - ro.y) / rd.y; vec3 p = ro + rd * t;
+  vec2 g = abs(fract(p.xz * 2.0) - 0.5);
+  vec3 c = mix(vec3(0.04, 0.05, 0.055), vec3(0.085, 0.1, 0.105), smoothstep(0.46, 0.5, max(g.x, g.y)));
+  vec2 cl = clamp(p.xz, vec2(-1.1), vec2(2.1)); float dd = length(p.xz - cl);
+  if (dd <= 0.0) { vec2 e = min(p.xz + 1.1, 2.1 - p.xz); float edge = min(e.x, e.y); c = vec3(0.06, 0.07, 0.075);
+    if (edge < 0.08) { float st = step(0.5, fract((p.x + p.z) * 5.0)); c = mix(vec3(0.03), vec3(0.85, 0.62, 0.06), st); } }
+  c += vec3(0.06, 0.3, 0.08) * 0.6 * exp(-dd * 2.0);
+  return mix(envc(rd) * 0.7, c, exp(-0.05 * t));
+}
+vec4 panel(vec3 q, int ax, vec3 rd) {
+  vec2 uv = ax == 0 ? q.yz : ax == 1 ? q.xz : q.xy;
+  vec2 e = abs(uv - floor(uv + 0.5)); float edge = min(e.x, e.y);
+  float frame = 1.0 - smoothstep(0.006, 0.014, edge);
+  float central = (all(greaterThan(q, vec3(-0.02))) && all(lessThan(q, vec3(1.02)))) ? 1.0 : 0.0;
+  vec3 nrm = ax == 0 ? vec3(1, 0, 0) : ax == 1 ? vec3(0, 1, 0) : vec3(0, 0, 1);
+  float fr = pow(1.0 - abs(dot(nrm, rd)), 4.0);
+  vec3 glass = envc(reflect(rd, nrm)) * 1.4 + vec3(0.04, 0.10, 0.12);
+  float a = 0.04 + 0.35 * fr;
+  vec3 fc = mix(vec3(0.38, 0.43, 0.46), uAccent * 1.4, central);
+  return vec4(mix(glass, fc, frame), mix(a, 0.92, frame));
+}
+void main() {
+  vec3 L = normalize(vec3(-0.45, 0.85, 0.35));
+  vec2 uv = (gl_FragCoord.xy - 0.5 * uRes) / uRes.y;
+  vec3 ro = uEye, rd = normalize(uFwd * 1.75 + uv.x * uRight + uv.y * uUp);
+  vec3 col = vec3(0.0); float T = 1.0; int ax;
+  vec2 tb = boxI(ro, rd, ax);
+  if (tb.x < tb.y && tb.y > 0.0) {
+    float h = 1.0 / uN, t = max(tb.x, 0.0) + 1e-4;
+    vec3 p = ro + rd * t;
+    vec4 pc = panel(p, ax, rd); col += T * pc.a * pc.rgb; T *= 1.0 - pc.a;
+    bool inside = dens(p) > 0.5, pourHit = false;
+    vec3 cellP = floor(p);
+    for (int i = 0; i < 520; i++) {
+      if (t > tb.y || T < 0.02) break;
+      float d = dens(p);
+      if (uPR > 0.0) {
+        vec2 dq = fract(p.xz - uPC + 0.5) - 0.5;
+        if (dot(dq, dq) < uPR * uPR) {
+          vec2 cc = p.xz - dq, oc = ro.xz - cc; float A = dot(rd.xz, rd.xz), B = dot(oc, rd.xz), Cc = dot(oc, oc) - uPR * uPR, disc = B * B - A * Cc;
+          float th = disc > 0.0 ? (-B - sqrt(disc)) / A : t; th = clamp(th, t - 2.0 * h, t);
+          vec3 hp = ro + rd * th, n = normalize(vec3(hp.x - cc.x, 0.0, hp.z - cc.y)), R = reflect(rd, n);
+          vec3 base = vec3(0.34, 0.37, 0.40); float yy = hp.y;
+          if (yy > 0.86 || yy < 0.14) { float st = step(0.5, fract(hp.y * 7.0 + atan(n.z, n.x) * 0.5)); base = mix(vec3(0.05), vec3(0.9, 0.66, 0.1), st); }
+          vec3 c = base * (0.25 + 0.75 * max(dot(n, L), 0.0)) + envc(R) * 0.5 + vec3(1.0) * pow(max(dot(R, L), 0.0), 40.0) * 0.6;
+          col += T * c; T = 0.0; break;
+        }
+      }
+      if (uPour > 0.0 && !pourHit && d < 0.5 && p.x > 0.0 && p.x < 1.0 && p.z > 0.0 && p.z < 1.0) {
+        vec2 w = p.xz - vec2(0.5 + 0.008 * sin(uTime * 11.0 + p.y * 25.0), 0.5);
+        float r2 = dot(w, w); if (r2 < 0.004) col += T * SL * 0.025 * (1.0 - sqrt(r2) / 0.063);
+        if (r2 < 0.0005 * uPour) { col += T * SL * 1.2; T *= 0.25; pourHit = true; }
+      }
+      float dt = inside ? (d > 0.97 ? 1.2 * h : 0.5 * h) : (d < 0.035 ? 1.2 * h : 0.5 * h);
+      float tn = t + dt; vec3 pn = ro + rd * tn;
+      vec3 cn = floor(pn);
+      if (cn != cellP) {
+        for (int a = 0; a < 3; a++) if (cn[a] != cellP[a]) {
+          float tc = (max(cn[a], cellP[a]) - ro[a]) / rd[a]; vec4 q = panel(ro + rd * tc, a, rd);
+          col += T * q.a * q.rgb; T *= 1.0 - q.a;
+        }
+        cellP = cn;
+      }
+      float dn = dens(pn);
+      if ((dn > 0.5) != inside) {
+        float lo = t, hi = tn;
+        for (int b = 0; b < 5; b++) { float m = 0.5 * (lo + hi); if ((dens(ro + rd * m) > 0.5) != inside) hi = m; else lo = m; }
+        vec3 s = ro + rd * hi, e = vec3(0.8 * h, 0.0, 0.0);
+        vec3 gr = vec3(dens(s + e.xyy) - dens(s - e.xyy), dens(s + e.yxy) - dens(s - e.yxy), dens(s + e.yyx) - dens(s - e.yyx));
+        vec3 n = -normalize(gr + 1e-6);
+        if (!inside) {
+          float ndv = max(dot(n, -rd), 0.0), fr = 0.03 + 0.97 * pow(1.0 - ndv, 5.0);
+          vec3 R = reflect(rd, n); float sp = pow(max(dot(R, L), 0.0), 90.0);
+          vec3 sc = SL * (0.12 + 0.42 * max(dot(n, L), 0.0)) + envc(R) * fr * 1.8 + vec3(1.0) * sp * 1.3;
+          float a = 0.28 + 0.6 * fr; col += T * a * sc; T *= 1.0 - a;
+        } else {
+          float sp = pow(max(dot(reflect(rd, -n), L), 0.0), 40.0); col += T * vec3(0.6, 1.0, 0.7) * sp * 0.25;
+        }
+        inside = !inside;
+      }
+      if (inside) { float a = 1.0 - exp(-4.2 * dt); vec3 inner = vec3(0.10, 0.62, 0.18) + vec3(0.05, 0.25, 0.05) * dens(pn); col += T * a * inner; T *= 1.0 - a; }
+      t = tn; p = pn;
+    }
+  }
+  col += T * floorCol(ro, rd);
+  col = col / (1.0 + 0.35 * col);
+  vec2 q = gl_FragCoord.xy / uRes; col *= 0.75 + 0.25 * pow(16.0 * q.x * q.y * (1.0 - q.x) * (1.0 - q.y), 0.25);
+  outColor = vec4(pow(col, vec3(0.4545)), 1.0);
+}`;
+
+function GLRenderer(canvas, accent) {
+  const gl = canvas.getContext('webgl2', { antialias: false, preserveDrawingBuffer: true });
+  if (!gl) throw new Error('no WebGL2');
+  const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
+  const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(pr);
+  if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(pr));
+  const U = {}; for (const n of ['uVol', 'uRes', 'uEye', 'uFwd', 'uRight', 'uUp', 'uAccent', 'uN', 'uPR', 'uPour', 'uTime', 'uPC']) U[n] = gl.getUniformLocation(pr, n);
+  const tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_3D, tex);
+  for (const [p, v] of [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR], [gl.TEXTURE_WRAP_S, gl.REPEAT], [gl.TEXTURE_WRAP_T, gl.REPEAT], [gl.TEXTURE_WRAP_R, gl.REPEAT]]) gl.texParameteri(gl.TEXTURE_3D, p, v);
+  const vao = gl.createVertexArray();
+  const info = gl.getExtension('WEBGL_debug_renderer_info'), rname = info ? gl.getParameter(info.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
+  this.kind = 'WebGL2 · ' + String(rname).replace(/ANGLE \(|\)$/g, '').slice(0, 48);
+  this.slow = /swiftshader|llvmpipe|software/i.test(String(rname));
+  this.N = 0;
+  this.upload = (bytes, N) => { gl.bindTexture(gl.TEXTURE_3D, tex); gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1); gl.texImage3D(gl.TEXTURE_3D, 0, gl.R8, N, N, N, 0, gl.RED, gl.UNSIGNED_BYTE, bytes); this.N = N; };
+  this.draw = (cam, p) => {
+    gl.viewport(0, 0, canvas.width, canvas.height); gl.useProgram(pr); gl.bindVertexArray(vao);
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_3D, tex); gl.uniform1i(U.uVol, 0);
+    gl.uniform2f(U.uRes, canvas.width, canvas.height);
+    gl.uniform3fv(U.uEye, cam.eye); gl.uniform3fv(U.uFwd, cam.fwd); gl.uniform3fv(U.uRight, cam.right); gl.uniform3fv(U.uUp, cam.up);
+    gl.uniform3fv(U.uAccent, accent); gl.uniform1f(U.uN, this.N); gl.uniform1f(U.uPR, p.pillarR); gl.uniform2f(U.uPC, PILLAR.cx, PILLAR.cz);
+    gl.uniform1f(U.uPour, p.pour); gl.uniform1f(U.uTime, p.time);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  };
+}
+
+// canvas-2D fallback: the same ray march on the CPU at low resolution (used only if WebGL2 is unavailable)
+function CpuRenderer(canvas, accent) {
+  const g = canvas.getContext('2d'), W = 200, H = 138, off = document.createElement('canvas'); off.width = W; off.height = H;
+  const og = off.getContext('2d'), img = og.createImageData(W, H);
+  this.kind = 'canvas-2D CPU fallback (' + W + '×' + H + ')'; this.slow = true; this.N = 0;
+  let vol = null, N = 0;
+  this.upload = (bytes, n) => { vol = bytes; N = n; this.N = n; };
+  const dens = (x, y, z) => { // periodic trilinear, voxel centres at (i+.5)/N
+    x = x * N - 0.5; y = y * N - 0.5; z = z * N - 0.5;
+    const x0 = Math.floor(x), y0 = Math.floor(y), z0 = Math.floor(z), fx = x - x0, fy = y - y0, fz = z - z0;
+    const m = v => ((v % N) + N) % N, X0 = m(x0), X1 = m(x0 + 1), Y0 = m(y0) * N, Y1 = m(y0 + 1) * N, Z0 = m(z0) * N * N, Z1 = m(z0 + 1) * N * N;
+    const a = vol[Z0 + Y0 + X0] + (vol[Z0 + Y0 + X1] - vol[Z0 + Y0 + X0]) * fx, b = vol[Z0 + Y1 + X0] + (vol[Z0 + Y1 + X1] - vol[Z0 + Y1 + X0]) * fx;
+    const c = vol[Z1 + Y0 + X0] + (vol[Z1 + Y0 + X1] - vol[Z1 + Y0 + X0]) * fx, d = vol[Z1 + Y1 + X0] + (vol[Z1 + Y1 + X1] - vol[Z1 + Y1 + X0]) * fx;
+    const e = a + (b - a) * fy, f = c + (d - c) * fy; return (e + (f - e) * fz) / 255;
+  };
+  this.draw = (cam, p) => {
+    if (!vol) return;
+    const D = img.data, h = 1 / N, Lx = -0.45, Ly = 0.85, Lz = 0.35, Ln = Math.hypot(Lx, Ly, Lz);
+    for (let py = 0; py < H; py++) for (let px = 0; px < W; px++) {
+      const ux = (px + 0.5 - W / 2) / H, uy = (H / 2 - py - 0.5) / H;
+      let dx = cam.fwd[0] * 1.75 + ux * cam.right[0] + uy * cam.up[0], dy = cam.fwd[1] * 1.75 + ux * cam.right[1] + uy * cam.up[1], dz = cam.fwd[2] * 1.75 + ux * cam.right[2] + uy * cam.up[2];
+      const dl = Math.hypot(dx, dy, dz); dx /= dl; dy /= dl; dz /= dl;
+      const [ox, oy, oz] = cam.eye;
+      let r = 0, gg = 0, b = 0, T = 1;
+      const tx0 = (-1 - ox) / dx, tx1 = (2 - ox) / dx, ty0 = (0 - oy) / dy, ty1 = (1 - oy) / dy, tz0 = (-1 - oz) / dz, tz1 = (2 - oz) / dz;
+      const tmin = Math.max(Math.min(tx0, tx1), Math.min(ty0, ty1), Math.min(tz0, tz1)), tmax = Math.min(Math.max(tx0, tx1), Math.max(ty0, ty1), Math.max(tz0, tz1));
+      if (tmin < tmax && tmax > 0) {
+        let t = Math.max(tmin, 0) + 1e-4, inside = false;
+        for (let i = 0; i < 400 && t < tmax && T > 0.03; i++) {
+          const x = ox + dx * t, y = oy + dy * t, z = oz + dz * t;
+          if (p.pillarR > 0) { let qx = x - PILLAR.cx + 0.5, qz = z - PILLAR.cz + 0.5; qx -= Math.floor(qx); qz -= Math.floor(qz); qx -= 0.5; qz -= 0.5;
+            if (qx * qx + qz * qz < p.pillarR * p.pillarR) { const l = 0.3 + 0.6 * Math.max(0, (qx * Lx + qz * Lz) / p.pillarR / Ln); r += T * 0.4 * l * 255; gg += T * 0.43 * l * 255; b += T * 0.47 * l * 255; T = 0; break; } }
+          const d = dens(x, y, z);
+          const ex = Math.abs(x - Math.round(x)), ey = Math.abs(y - Math.round(y)), ez = Math.abs(z - Math.round(z));
+          if ((ex < 0.012) + (ey < 0.012) + (ez < 0.012) >= 2) { const a = 0.5; r += T * a * 120; gg += T * a * 130; b += T * a * 135; T *= 1 - a; }
+          if ((d > 0.5) !== inside) {
+            inside = !inside;
+            if (inside) { const gx = dens(x + h, y, z) - dens(x - h, y, z), gy = dens(x, y + h, z) - dens(x, y - h, z), gz = dens(x, y, z + h) - dens(x, y, z - h), gn = Math.hypot(gx, gy, gz) || 1;
+              const nx = -gx / gn, ny = -gy / gn, nz = -gz / gn, dif = Math.max(0, (nx * Lx + ny * Ly + nz * Lz) / Ln), ndv = Math.max(0, -(nx * dx + ny * dy + nz * dz)), fr = Math.pow(1 - ndv, 4);
+              const a = 0.35 + 0.5 * fr; r += T * a * (40 + 70 * dif + 150 * fr); gg += T * a * (140 + 110 * dif + 120 * fr); b += T * a * (50 + 40 * dif + 140 * fr); T *= 1 - a; }
+          }
+          const dt = (inside ? (d > 0.97) : (d < 0.035)) ? 1.3 * h : 0.6 * h;
+          if (inside) { const a = 1 - Math.exp(-4.2 * dt); r += T * a * 28; gg += T * a * 165; b += T * a * 50; T *= 1 - a; }
+          t += dt;
+        }
+      }
+      // floor
+      let fr = 14, fg = 18, fb = 20;
+      if (dy < 0) { const t = (-0.03 - oy) / dy, x = ox + dx * t, z = oz + dz * t, gx = Math.abs(x * 2 - Math.round(x * 2)), gz = Math.abs(z * 2 - Math.round(z * 2));
+        const ln = Math.min(gx, gz) < 0.04 ? 1 : 0; fr = 12 + ln * 12; fg = 15 + ln * 14; fb = 16 + ln * 14; }
+      const o = (py * W + px) * 4; D[o] = Math.min(255, r + T * fr); D[o + 1] = Math.min(255, gg + T * fg); D[o + 2] = Math.min(255, b + T * fb); D[o + 3] = 255;
+    }
+    og.putImageData(img, 0, 0); g.imageSmoothingEnabled = true; g.drawImage(off, 0, 0, canvas.width, canvas.height);
+  };
+}
+
+function makeRenderer(cv, accent) {
+  if (Q.get('renderer') !== 'cpu') { try { return new GLRenderer(cv, accent); } catch (e) { console.warn('WebGL2 failed, CPU fallback:', e.message); } }
+  const c2 = cv.cloneNode(true); cv.replaceWith(c2); return new CpuRenderer(c2, accent);
+}
+const RA = makeRenderer(document.getElementById('cvA'), [0.92, 0.41, 0.2]);
+const RB = makeRenderer(document.getElementById('cvB'), [0.16, 0.47, 0.84]);
+if (RA.slow) for (const cv of document.querySelectorAll('canvas.scene')) if (RA instanceof GLRenderer) { cv.width = 312; cv.height = 215; }
+document.getElementById('rendInfo').textContent = RA.kind + (RA.slow && RA instanceof GLRenderer ? ' · half resolution' : '');
+
+// ------------------------------------------------------------------ display buffers
+const disp = {};
+function dispField(chi, N, mask) {
+  if (!disp[N]) { const n = N * N * N; disp[N] = { a: new Float32Array(n), b: new Float32Array(n), out: [new Uint8Array(n), new Uint8Array(n)], flip: 0 }; }
+  const d = disp[N]; d.flip ^= 1; return C.displayField(chi, N, mask, d.out[d.flip], d.a, d.b);
+}
+
+// ------------------------------------------------------------------ the two sides
+let prior = null, neu = null;
+const estCache = {};
+const est = N => estCache[N] || (estCache[N] = new C.AreaEst(N));
+function solverOpts(extra) { return Object.assign({ N: G.N, V: G.V, seed: G.seed, sigmaPhys: SIG, coarse: true, coarseSigmaPhys: COARSE_SIG, blur: 'box', pillar: G.pillar ? PILLAR : null }, extra || {}); }
+function track(s) { return { s, msAt: 0, itAt: 0, hitMs: null, hitIt: null, hist: [], histC: [], A: NaN, shape: '…', settledMs: null, dirty: true }; }
+function newPrior() { prior = track(new C.Solver(solverOpts())); }
+function sideArea(P) { const s = P.s, cur = s.current(); return est(cur.N).area(cur.chi, cur.mask); }
+function stepSide(P) {
+  const s = P.s; if (s.settled) return false;
+  s.step(); P.dirty = true;
+  P.A = sideArea(P);                                         // untimed check
+  const ms = s.ms - P.msAt + (P.extraMs || 0);
+  if (!G.pillar) {
+    const ex = P.A / C.I_unit(G.V) - 1; (s.stage === 'fine' ? P.hist : P.histC).push([ms, ex]); // coarse-stage areas are measured on the coarse grid: plotted faint, never scored
+    if (P.hitMs == null && s.stage === 'fine' && ex <= 0.02) { P.hitMs = ms; P.hitIt = s.iters - P.itAt; }
+  } else (s.stage === 'fine' ? P.hist : P.histC).push([ms, P.A]);
+  if (s.settled) P.settledMs = ms;
+  return true;
+}
+function buildNew(reps) {
+  const N = G.N, n = N * N * N, k = Math.round(G.V * n);
+  if (G.pillar) { // speculative: place the theorem's shape next to the pillar, then polish with the same MBO
+    const w = C.pillarWarmStart(N, G.V, PILLAR, 'placed');
+    neu = track(new C.Solver(solverOpts({ warmChi: w.chi }))); neu.extraMs = w.ms; neu.warm = w; neu.A = est(N).area(w.chi, neu.s.maskF);
+    neu.hist.push([w.ms, neu.A]); return;
+  }
+  if (!neu || !neu.cf || neu.N !== N) neu = { cf: new C.ClosedForm(N), N };
+  const ph = C.phaseOf(k / n), opt = { c: [0.5, ph === 'slab' ? G.V / 2 : 0.5, 0.5], tubeAxis: 0, slabAxis: 1 };
+  for (let r = 0; r < 3; r++) neu.cf.build(k, opt); const t0 = C.now(); for (let r = 0; r < reps; r++) neu.cf.build(k, opt); // 3 warm-up builds, then a timed batch (Chrome rounds performance.now() to 0.1 ms)
+  neu.ms = (C.now() - t0) / reps; neu.reps = reps; neu.chi = neu.cf.chi; neu.A = est(N).area(neu.chi); neu.dirty = true; neu.k = k;
+  neu.shape = C.classify(neu.chi, N).name;
+}
+function volumeChanged(reps) {
+  const n = G.N ** 3, k = Math.round(G.V * n);
+  prior.s.setK(k); prior.msAt = prior.s.ms; prior.itAt = prior.s.iters; prior.hitMs = null; prior.hitIt = null; prior.hist = []; prior.histC = []; prior.settledMs = null; prior.warmCont = true;
+  buildNew(reps);
+  syncFill();
+}
+function restart(cold) {
+  if (cold) G.seed = 1 + Math.floor(Math.random() * 1e6);
+  newPrior(); buildNew(9); syncFill();
+  document.getElementById('tagB').innerHTML = G.pillar ? 'NEW: <b>closed-form warm start + MBO polish</b> <span style="color:#9ab">(speculative)</span>' : 'NEW: <b>closed-form minimizer (Family 354)</b>';
+  document.getElementById('pillar').checked = G.pillar; document.getElementById('grid').value = String(G.N);
+}
+function loadScene(name) {
+  const sc = SCENES[name] || SCENES.tube; G.scene = name in SCENES ? name : 'tube';
+  G.V = sc.V; G.pillar = sc.pillar; G.N = sc.N || +(Q.get('grid') || 48); G.seed = sc.seed || 1037; G.pourTo = null;
+  for (const b of document.querySelectorAll('#scenes button')) b.classList.toggle('on', b.dataset.s === G.scene);
+  restart(false);
+}
+
+// ------------------------------------------------------------------ HUD + charts
+const f2 = x => x.toFixed(2), f3 = x => x.toFixed(3), pct = x => (x >= 0 ? '+' : '−') + Math.abs(100 * x).toFixed(1) + '%';
+const fms = x => x == null || !isFinite(x) ? '—' : x < 10 ? x.toFixed(2) : x < 100 ? x.toFixed(1) : x.toFixed(0);
+function fillBar() { return `<div class="bar"><i style="width:${(G.V * 100).toFixed(1)}%"></i></div>`; }
+function syncFill() { document.getElementById('fill').value = Math.round(G.V * 100); document.getElementById('fillV').textContent = (G.V * 100).toFixed(0) + '%'; }
+function hud() {
+  const I = C.I_unit(G.V), th = C.theoremShapeName(G.V), s = prior.s;
+  let a = `<span class="k">FILL</span>${(G.V * 100).toFixed(1)}%  <span class="dim">${s.stage === 'coarse' ? '(coarse ' + s.Nc + '³ stage)' : G.N + '³ grid'}</span>${fillBar()}`;
+  a += `<span class="k">SHAPE</span>${prior.shape}`;
+  if (!G.pillar) {
+    const ex = prior.A / I - 1;
+    a += s.stage !== 'fine' ? `<br><span class="k">SURFACE</span><span class="dim">coarse preview, scored after the fine stage starts</span>` : `<br><span class="k">SURFACE</span>${f3(prior.A)} vs best ${f3(I)} <span class="${ex <= 0.02 ? 'good' : 'bad'}">${pct(ex)}</span>`;
+    a += `<br><span class="k">SOLVER</span>${fms(s.ms - prior.msAt)} ms · ${s.iters - prior.itAt} its · ${fms((s.ms - prior.msAt) / Math.max(1, s.iters - prior.itAt))} ms/it`;
+    a += `<br><span class="k">STATUS</span>` + (prior.hitMs != null ? `<span class="good">within 2% at ${fms(prior.hitMs)} ms</span>` : s.settled ? `<span class="bad">STUCK: stopped moving ${pct(ex)} over best</span>` : `<span class="dim">settling… (${prior.warmCont ? 'continuing from previous shape' : 'cold start from noise'})</span>`);
+    if (prior.hitMs != null && !s.settled) a += ' <span class="dim">· still moving</span>';
+  } else {
+    a += `<br><span class="k">SURFACE</span>${f3(prior.A)} <span class="dim">(no proven best with a pillar)</span>`;
+    a += `<br><span class="k">SOLVER</span>${fms(s.ms - prior.msAt)} ms · ${s.iters - prior.itAt} its`;
+    a += `<br><span class="k">STATUS</span>` + (s.settled ? `<span class="good">settled (stopped moving)</span>` : '<span class="dim">settling… cold start from noise</span>');
+  }
+  document.getElementById('hudA').innerHTML = a;
+  let b = `<span class="k">FILL</span>${(G.V * 100).toFixed(1)}%  <span class="dim">${G.N}³ grid</span>${fillBar()}`;
+  if (!G.pillar) {
+    const ex = neu.A / I - 1;
+    b += `<span class="k">SHAPE</span>${neu.shape} <span class="dim">(theorem: ${th})</span>`;
+    b += `<br><span class="k">SURFACE</span>${f3(neu.A)} vs best ${f3(I)} <span class="good">${pct(ex)}</span> <span class="dim">= estimator error</span>`;
+    b += `<br><span class="k">BUILD</span>${fms(neu.ms)} ms <span class="dim">(mean of a batch of ${neu.reps} builds) · 0 its</span>`;
+    b += `<br><span class="k">STATUS</span><span class="good">optimal by theorem, exact voxel count</span>`;
+  } else {
+    const s2 = neu.s, ch = neu.warm.choice;
+    b += `<span class="k">SHAPE</span>${neu.shape} <span class="dim">(start: ${C.phaseOf(G.V)} ${ch.tubeAxis === 2 ? 'across' : ch.slabAxis === 1 ? 'flat' : 'beside'} pillar, offset ${f2(ch.c[0] - PILLAR.cx)})</span>`;
+    const better = prior.s.settled && s2.settled ? (neu.A < prior.A * 0.995 ? '<span class="good">lower than left</span>' : neu.A > prior.A * 1.005 ? '<span class="bad">higher than left</span>' : '<span class="dim">same as left (within 0.5%)</span>') : '';
+    b += `<br><span class="k">SURFACE</span>${f3(neu.A)} ${better}`;
+    b += `<br><span class="k">SOLVER</span>${fms(neu.warm.ms)} ms placing (${neu.warm.tried} tries) + ${fms(s2.ms)} ms · ${s2.iters} its`;
+    b += `<br><span class="k">STATUS</span>` + (s2.settled ? `<span class="good">settled</span> <span class="dim">· a measured guess, not a theorem</span>` : '<span class="dim">polishing…</span>');
+  }
+  document.getElementById('hudB').innerHTML = b;
+  document.getElementById('badgeA').innerHTML = `<span style="color:var(--prior)">${fms(G.pillar ? prior.s.ms - prior.msAt : (prior.hitMs ?? (prior.s.ms - prior.msAt)))} ms</span>`;
+  document.getElementById('badgeB').innerHTML = `<span style="color:#6fa8ff">${fms(G.pillar ? neu.warm.ms + neu.s.ms : neu.ms)} ms</span>`;
+}
+function setupCanvas(cv) { const r = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight; if (cv.width !== Math.round(w * r)) { cv.width = Math.round(w * r); cv.height = Math.round(h * r); } const g = cv.getContext('2d'); g.setTransform(r, 0, 0, r, 0, 0); return { g, w, h }; }
+function drawConv() {
+  const { g, w, h } = setupCanvas(document.getElementById('conv')), L = 44, R = 10, T = 8, B = 22;
+  g.clearRect(0, 0, w, h);
+  const xmin = 0.1, xmax = 2000, X = ms => L + (Math.log10(Math.max(xmin, Math.min(xmax, ms))) - Math.log10(xmin)) / (Math.log10(xmax) - Math.log10(xmin)) * (w - L - R);
+  let Y, yl = [];
+  g.font = '11px Consolas, monospace'; g.textAlign = 'center'; g.fillStyle = '#6e7d77'; g.strokeStyle = '#1d2a30'; g.lineWidth = 1;
+  for (const v of [0.1, 1, 10, 100, 1000]) { g.beginPath(); g.moveTo(X(v), T); g.lineTo(X(v), h - B); g.stroke(); g.fillText(v + ' ms', X(v), h - 7); }
+  if (!G.pillar) {
+    const ymax = 0.4; Y = e => T + (1 - Math.max(-0.02, Math.min(ymax, e)) / ymax) * (h - T - B) ; yl = [0, 0.1, 0.2, 0.3, 0.4];
+    g.textAlign = 'right'; for (const e of yl) { g.beginPath(); g.moveTo(L, Y(e)); g.lineTo(w - R, Y(e)); g.stroke(); g.fillText('+' + Math.round(e * 100) + '%', L - 4, Y(e) + 4); }
+    g.strokeStyle = '#7a7873'; g.setLineDash([4, 3]); g.beginPath(); g.moveTo(L, Y(0.02)); g.lineTo(w - R, Y(0.02)); g.stroke(); g.setLineDash([]);
+    g.fillStyle = '#a9a69f'; g.textAlign = 'left'; g.fillText('REFERENCE: proven best +2%', L + 4, Y(0.02) - 4);
+    g.strokeStyle = '#7a7873'; g.beginPath(); g.moveTo(L, Y(0)); g.lineTo(w - R, Y(0)); g.stroke();
+  } else {
+    const all = prior.hist.concat(neu.hist).map(p => p[1]).filter(isFinite), lo = Math.min(...all, 9), hi = Math.max(...all, 0);
+    const y0 = Math.floor(lo * 10) / 10, y1 = Math.max(y0 + 0.2, Math.ceil(Math.min(hi, lo * 1.6) * 10) / 10);
+    Y = a => T + (1 - (Math.max(y0, Math.min(y1, a)) - y0) / (y1 - y0)) * (h - T - B);
+    g.textAlign = 'right'; for (let v = y0; v <= y1 + 1e-9; v += (y1 - y0) / 4) { g.beginPath(); g.moveTo(L, Y(v)); g.lineTo(w - R, Y(v)); g.stroke(); g.fillText(v.toFixed(2), L - 4, Y(v) + 4); }
+  }
+  const line = (pts, col) => { if (!pts.length) return; g.strokeStyle = col; g.lineWidth = 2; g.beginPath(); pts.forEach((p, i) => i ? g.lineTo(X(p[0]), Y(p[1])) : g.moveTo(X(p[0]), Y(p[1]))); g.stroke();
+    const p = pts[pts.length - 1]; g.fillStyle = col; g.beginPath(); g.arc(X(p[0]), Y(p[1]), 3.5, 0, 7); g.fill(); };
+  g.globalAlpha = 0.45; g.setLineDash([3, 3]); line(prior.histC, '#eb6834'); g.setLineDash([]); g.globalAlpha = 1;
+  line(prior.hist, '#eb6834');
+  if (G.pillar) line(neu.hist, '#2a78d6');
+  else { g.fillStyle = '#2a78d6'; g.beginPath(); g.arc(X(neu.ms), Y(neu.A / C.I_unit(G.V) - 1), 6, 0, 7); g.fill(); g.strokeStyle = '#fff'; g.lineWidth = 1.5; g.stroke(); }
+  document.getElementById('convTitle').textContent = G.pillar ? 'Surface (lower is better) over solver time' : 'Surface above the proven best, over solver time';
+  document.getElementById('convLegend').innerHTML = G.pillar
+    ? '<i style="background:#eb6834"></i>prior: cold start (faint: coarse stage) <i style="background:#2a78d6"></i>new: placed warm start + polish · no proven target exists here'
+    : '<i style="background:#eb6834"></i>prior per iteration (faint: coarse stage) <i style="background:#2a78d6;height:8px;width:8px;border-radius:50%"></i>new: one build <i style="background:#7a7873"></i>reference';
+}
+function drawMap() {
+  const { g, w, h } = setupCanvas(document.getElementById('map')), L = 30, R = 8, T = 16, B = 20, X = v => L + v * (w - L - R), ymax = 2.2, Y = a => T + (1 - a / ymax) * (h - T - B);
+  g.clearRect(0, 0, w, h);
+  const th = [4 * Math.PI / 81, 1 / Math.PI, 1 - 1 / Math.PI, 1 - 4 * Math.PI / 81], bands = [[0, th[0], 'ball'], [th[0], th[1], 'tube'], [th[1], th[2], 'slab'], [th[2], th[3], 'tunnel'], [th[3], 1, 'bubble']];
+  g.font = '11px "Segoe UI", sans-serif'; g.textAlign = 'center';
+  bands.forEach(([a, b, s], i) => { g.fillStyle = i % 2 ? '#132026' : '#0f1a1f'; g.fillRect(X(a), T, X(b) - X(a), h - T - B); g.fillStyle = '#8fa69c'; g.fillText(s, (X(a) + X(b)) / 2, T - 4); });
+  g.fillStyle = '#6e7d77'; g.font = '11px Consolas, monospace'; for (const v of [0, 0.25, 0.5, 0.75, 1]) g.fillText(Math.round(v * 100) + '%', X(v), h - 6);
+  g.textAlign = 'right'; for (const a of [0, 1, 2]) g.fillText(a, L - 5, Y(a) + 4);
+  g.strokeStyle = '#7a7873'; g.lineWidth = 2.5; g.beginPath(); for (let i = 0; i <= 300; i++) { const v = 0.001 + i / 300 * 0.998; i ? g.lineTo(X(v), Y(C.I_unit(v))) : g.moveTo(X(v), Y(C.I_unit(v))); } g.stroke();
+  g.fillStyle = '#7dff6a'; g.beginPath(); g.arc(X(G.V), Y(C.I_unit(G.V)), 5.5, 0, 7); g.fill(); g.strokeStyle = '#000'; g.lineWidth = 1.5; g.stroke();
+  document.getElementById('mapLegend').textContent = G.pillar ? 'the pillar breaks the theorem: this map holds for an empty cell only'
+    : 'grey (REFERENCE): best possible surface I(fill) · dot: this cell';
+}
+
+// stress test: cold starts at this grid, same rule as bench.js (2 % oracle untimed), measured in this browser
+function stress(sync) {
+  const btn = document.getElementById('stressBtn'), box = document.getElementById('stress'); btn.disabled = true;
+  const N = G.N, jobs = []; for (const V of [0.10, 0.25, 0.40]) for (let s = 0; s < 3; s++) jobs.push({ V, seed: 1000 + 37 * s });
+  const res = [];
+  const one = () => {
+    const j = jobs[res.length];
+    const s = new C.Solver({ N, V: j.V, seed: j.seed, sigmaPhys: SIG, coarse: true, coarseSigmaPhys: COARSE_SIG, blur: 'box' }), E = est(N), I = C.I_unit(s.k / s.n);
+    let hit = Infinity, guard = 0;
+    while (guard++ < 460) { s.step(); if (s.stage !== 'fine') continue; if (E.area(s.fine.chi) <= 1.02 * I) { hit = s.ms; break; } if (s.settled) break; }
+    const cf = new C.ClosedForm(N); cf.build(s.k); const t0 = C.now(); for (let r = 0; r < 9; r++) cf.build(s.k);
+    res.push({ V: j.V, hit, cf: (C.now() - t0) / 9 });
+    box.innerHTML = `<p style="color:var(--ink3);margin:2px 0">running ${res.length}/9 …</p>`;
+    if (res.length < jobs.length) { if (!sync) setTimeout(one, 0); } else show();
+  };
+  const show = () => {
+    let t = `<table><tr><th>fill</th><th class="c-prior">prior ms to 2%</th><th>stuck</th><th class="c-new">new ms</th></tr>`;
+    for (const V of [0.10, 0.25, 0.40]) { const r = res.filter(x => x.V === V); t += `<tr><td>${V * 100}%</td><td>${fms(C.median(r.map(x => x.hit)))}</td><td>${r.filter(x => !isFinite(x.hit)).length}/3</td><td>${fms(C.median(r.map(x => x.cf)))}</td></tr>`; }
+    const all = C.median(res.map(x => x.hit)), cfm = C.median(res.map(x => x.cf));
+    t += `<tr><td><b>all</b></td><td><b>${fms(all)}</b></td><td><b>${res.filter(x => !isFinite(x.hit)).length}/9</b></td><td><b>${fms(cfm)}</b></td></tr></table>`;
+    t += `<p style="color:var(--ink3);font-size:12px;margin:5px 0 0">${N}³ grid · medians · stuck = stopped moving above +2%. Ratio ×${isFinite(all) ? (all / cfm).toFixed(0) : '∞'}.</p>`;
+    box.innerHTML = t;
+  };
+  if (sync) { while (res.length < jobs.length) one(); } else setTimeout(one, 30);
+}
+
+// ------------------------------------------------------------------ camera + loop
+function camera(t) {
+  const a = 0.75 + (G.orbit ? 0.09 * t : 0), el = 0.62, D = 6.0, c = [0.5, 0.3, 0.5];
+  const eye = [c[0] + D * Math.cos(el) * Math.sin(a), c[1] + D * Math.sin(el), c[2] + D * Math.cos(el) * Math.cos(a)];
+  const f = [c[0] - eye[0], c[1] - eye[1], c[2] - eye[2]], fl = Math.hypot(...f); f[0] /= fl; f[1] /= fl; f[2] /= fl;
+  const r = [f[2], 0, -f[0]], rl = Math.hypot(...r); r[0] /= -rl; r[2] /= -rl;
+  const u = [r[1] * f[2] - r[2] * f[1], r[2] * f[0] - r[0] * f[2], r[0] * f[1] - r[1] * f[0]];
+  return { eye, fwd: f, right: r, up: u };
+}
+let raf = 0;
+function frame(sync) {
+  G.frame++; G.t += 1 / 60;
+  if (G.pourTo != null) {
+    const dir = Math.sign(G.pourTo - G.V), stepV = 0.0025 * dir;
+    G.V = Math.abs(G.pourTo - G.V) <= 0.0025 ? G.pourTo : G.V + stepV;
+    volumeChanged(3);
+    if (G.V === G.pourTo) G.pourTo = null;
+  }
+  stepSide(prior);
+  if (G.pillar) stepSide(neu);
+  const slowGL = RA.slow;
+  if (prior.dirty) { const cur = prior.s.current(); RA.upload(dispField(cur.chi, cur.N, cur.mask), cur.N); prior.dirty = false; if (G.frame % 6 === 1 || prior.s.settled) prior.shape = C.classify(cur.chi, cur.N, cur.mask).name; }
+  if (neu.dirty) { if (G.pillar) { const cur = neu.s.current(); neu.A = neu.s.iters ? est(cur.N).area(cur.chi, cur.mask) : neu.A; RB.upload(dispField(cur.chi, cur.N, cur.mask), cur.N); if (G.frame % 6 === 1 || neu.s.settled) neu.shape = C.classify(cur.chi, cur.N, cur.mask).name; }
+    else RB.upload(dispField(neu.chi, G.N, null), G.N); neu.dirty = false; }
+  const draw3D = sync ? G.frame >= FRAMES : (!(RA instanceof CpuRenderer) || G.frame % 8 === 1 || G.frame >= FRAMES);
+  if (draw3D && (!slowGL || G.frame % 2 === 1 || G.frame >= FRAMES)) {
+    const cam = camera(G.t), p = { pillarR: G.pillar ? PILLAR.r + 0.004 : 0, pour: G.pourTo != null && G.pourTo > G.V ? 1 : 0, time: G.t };
+    RA.draw(cam, p); RB.draw(cam, p);
+  }
+  if (G.frame % 3 === 1 || G.frame >= FRAMES) { hud(); drawConv(); drawMap(); document.getElementById("frameNo").textContent = "frame " + G.frame; }
+  if (!sync && G.frame < FRAMES) raf = requestAnimationFrame(() => frame(false));
+}
+
+// ------------------------------------------------------------------ controls
+const sc = document.getElementById('scenes');
+for (const name of Object.keys(SCENES)) { const b = document.createElement('button'); b.textContent = name; b.dataset.s = name; b.onclick = () => loadScene(name); sc.appendChild(b); }
+document.getElementById('fill').oninput = e => { G.V = +e.target.value / 100; G.pourTo = null; volumeChanged(9); };
+document.getElementById('pour').onclick = () => { G.pourTo = Math.min(0.98, Math.round((G.V + 0.05) * 1000) / 1000); };
+document.getElementById('drain').onclick = () => { G.pourTo = Math.max(0.01, Math.round((G.V - 0.05) * 1000) / 1000); };
+document.getElementById('cold').onclick = () => restart(true);
+document.getElementById('grid').onchange = e => { G.N = +e.target.value; restart(false); };
+document.getElementById('pillar').onchange = e => { G.pillar = e.target.checked; restart(false); };
+document.getElementById('orbit').onchange = e => { G.orbit = e.target.checked; };
+document.getElementById('stressBtn').onclick = () => stress(false);
+
+loadScene(Q.get('scene') || 'tube');
+if (Q.get('pour') === '1') G.pourTo = Math.min(0.98, G.V + 0.05);
+if (Q.get('stress') === '1') stress(true);
+// ?frames=N: run the N frames synchronously during page load, so headless Chrome's virtual clock (which freezes performance.now()
+// after load) cannot distort the measured milliseconds; then draw the final frame once and stop.
+if (isFinite(FRAMES)) { for (let i = 0; i < FRAMES; i++) frame(true); } else raf = requestAnimationFrame(() => frame(false));
+</script>
+</body>
+</html>

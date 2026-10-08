@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dungeon Daily: fair daily layouts (prior best vs certified Curveball)</title>
+<style>
+  :root { --prior: #eb6834; --prior2: #f29b72; --new: #2a78d6; --ref: #7a7873; --ink: #e9e2d0; --dim: #a39a86; --bg: #121014; --card: #1d1a1f; --edge: #3a3330; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: radial-gradient(ellipse at 50% -10%, #2a2230 0%, #121014 55%) fixed; color: var(--ink); font: 13px/1.35 "Segoe UI", Tahoma, sans-serif; }
+  #app { width: 1256px; margin: 0 auto; padding: 8px 0 30px; }
+  .titlebar { display: flex; align-items: center; gap: 14px; height: 58px; padding: 0 14px; background: linear-gradient(#3a2d26, #241c18); border: 2px solid #5b4636; border-radius: 6px; box-shadow: inset 0 1px 0 #7a604a, 0 3px 10px #0008; }
+  .logo { font: 700 24px/1 Georgia, "Palatino Linotype", serif; letter-spacing: 2px; color: #f3d48a; text-shadow: 0 2px 0 #6b3c12, 0 0 12px #f0a03a55; white-space: nowrap; }
+  .logo b { color: #ffefc4; margin-left: 8px; }
+  .daily { background: #120d0b; border: 1px solid #7a5a3a; border-radius: 4px; padding: 5px 10px; font: 700 15px Georgia, serif; color: #ffd27a; white-space: nowrap; }
+  .scene-name { font: italic 14px Georgia, serif; color: #f0dfbd; flex: 1; white-space: nowrap; overflow: hidden; line-height: 1.25; }
+  .scene-name small { display: block; font: 11.5px "Segoe UI", sans-serif; color: #b9a98a; }
+  .controls { display: flex; gap: 6px; align-items: center; }
+  button, .seg button { background: #3b2f27; color: #f0e3c4; border: 1px solid #7a5f45; border-radius: 4px; padding: 5px 8px; font: 600 12px "Segoe UI", sans-serif; cursor: pointer; }
+  button:hover { background: #4d3d31; }
+  .seg { display: flex; } .seg button { border-radius: 0; margin-left: -1px; } .seg button:first-child { border-radius: 4px 0 0 4px; } .seg button:last-child { border-radius: 0 4px 4px 0; }
+  .seg button.on { background: #f3d48a; color: #2a1c10; }
+  label.ctl { font-size: 12px; color: #d9c7a5; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+  input[type=range] { width: 80px; }
+  .panels { display: flex; gap: 13px; margin-top: 10px; }
+  .panel { width: 410px; background: var(--card); border: 1px solid var(--edge); border-radius: 6px; overflow: hidden; box-shadow: 0 4px 12px #0007; }
+  .ptitle { padding: 6px 10px 5px; border-top: 4px solid; background: #191619; height: 46px; }
+  .ptitle .tag { font: 700 13.5px "Segoe UI", sans-serif; letter-spacing: .2px; }
+  .ptitle .sub { display: block; font-size: 11.5px; color: var(--dim); margin-top: 1px; }
+  canvas.map { display: block; margin: 0 auto; background: #0d0b0c; }
+  .hud { padding: 6px 10px 8px; font-size: 12px; border-top: 1px solid var(--edge); background: linear-gradient(#1a171b, #151216); }
+  .hud .row { display: flex; justify-content: space-between; align-items: baseline; margin: 2px 0; gap: 6px; }
+  .hud .k { color: var(--dim); font-size: 10.5px; letter-spacing: 1px; text-transform: uppercase; }
+  .hud .big { font: 700 19px Consolas, "Courier New", monospace; }
+  .hud .v { font-family: Consolas, monospace; }
+  .meter { position: relative; height: 15px; background: #0b0a0c; border: 1px solid #4a403a; border-radius: 3px; overflow: hidden; flex: 1; }
+  .meter .fill { position: absolute; left: 0; top: 0; bottom: 0; }
+  .meter .noise { position: absolute; top: 0; bottom: 0; background: repeating-linear-gradient(45deg, #fff2, #fff2 3px, transparent 3px, transparent 6px); }
+  .meter span { position: absolute; right: 5px; top: 0; font: 700 11px/15px Consolas, monospace; color: #fff; text-shadow: 0 1px 2px #000; }
+  .guar { font-size: 11.5px; margin-top: 4px; padding: 3px 6px; border-radius: 3px; background: #0f0d10; border-left: 3px solid; }
+  .lower { display: flex; gap: 13px; margin-top: 10px; }
+  .card { background: var(--card); border: 1px solid var(--edge); border-radius: 6px; padding: 6px 8px; }
+  .card canvas { display: block; }
+  .explain { margin-top: 14px; background: #1a171b; border: 1px solid var(--edge); border-radius: 6px; padding: 12px 18px; color: #ddd3bf; }
+  .explain h2 { font: 700 19px Georgia, serif; color: #f3d48a; margin: 0 0 6px; }
+  .explain h3 { font-size: 13px; color: #f0e3c4; margin: 10px 0 3px; }
+  .explain p { margin: 0 0 6px; max-width: 980px; font-size: 13.5px; }
+  .explain ul { margin: 0; padding-left: 20px; } .explain li { margin: 2px 0; }
+  .explain code { color: #ffd27a; }
+  .frozen { color: #ffb38a; font-size: 11px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="titlebar">
+    <div class="logo">DUNGEON<b>DAILY</b></div>
+    <div class="daily">Daily <span id="dayNo">#1</span></div>
+    <div class="scene-name"><span id="sceneName"></span><small id="sceneInfo"></small></div>
+    <div class="controls">
+      <div class="seg" id="sceneBtns"></div>
+      <label class="ctl" id="sqWrap" title="doors in the town square">square <input type="range" id="sq" min="6" max="20" step="1"><b id="sqv"></b></label>
+      <label class="ctl" title="throw away finished layouts where some room cannot be reached; keeps exact/certified methods fair"><input type="checkbox" id="conn"> connected only</label>
+      <button id="nextDay">Next day &#9656;</button>
+      <button id="pause">Pause</button>
+    </div>
+  </header>
+  <div class="panels" id="panels"></div>
+  <div class="lower">
+    <div class="card"><canvas id="hist" width="530" height="210"></canvas></div>
+    <div class="card"><canvas id="cost" width="318" height="210"></canvas></div>
+    <div class="card"><canvas id="exact" width="350" height="210"></canvas></div>
+  </div>
+  <section class="explain">
+    <h2>Why the daily dungeon needs a fair shuffle</h2>
+    <p>Every day the game rebuilds the dungeon from the designer's plan. Each room keeps its number of doors: the boss room always has one, the town square has many. Only which rooms the corridors join changes. "Fair" means every possible wiring is equally likely, so regulars can't learn the plan. The quick shuffle most games use keeps too many of the designer's own corridors. Dealing doors out at random and redealing whenever two corridors clash is perfectly fair and very fast for ordinary rooms, but with several big hubs almost every deal clashes. The new method trades doors between pairs of rooms for a number of rounds proven to be enough. Hubs don't slow it down; more rooms do, steeply.</p>
+    <h3>What's measured here</h3>
+    <ul>
+      <li><b>Time per layout</b>: <code>performance.now()</code> around batches of generator work only (map drawing and statistics are outside the timer), divided by the layouts finished. Each method gets the same time slice per frame.</li>
+      <li><b>Rejected</b>: share of configuration-model deals thrown away because a corridor would loop back into its own room or double up an existing one.</li>
+      <li><b>Fairness meter</b>: 100% minus the distance between the histogram of "template doors kept" and the same histogram from the <span style="color:#bbb">REFERENCE</span> (a long-running double-edge swap chain, 100 swaps per door between samples). The striped part is the expected sampling noise. The exact check (bottom right) computes true distances on an 8-room dungeon small enough to list all 623 layouts.</li>
+      <li>Throwing away disconnected finished layouts ("connected only") keeps the configuration model exactly fair and Curveball within its proof, over connected layouts. Rejecting moves inside a chain would not.</li>
+    </ul>
+    <h3>Where the prior technique still wins / limits</h3>
+    <ul>
+      <li><b>Ordinary dungeons</b> (<code>?scene=normal</code>, <code>?scene=big</code>): the configuration model is exactly fair and hundreds to tens of thousands of times faster than the certified Curveball. Use it.</li>
+      <li><b>One big hub</b> (<code>?scene=square</code>, a 16-door square in 30 rooms): the configuration model still wins, even though it throws away more than 99.9% of its deals.</li>
+      <li><b>Several hubs</b> (<code>?scene=hubs</code>, raise the square slider to 18-20): almost every deal clashes and the configuration model falls behind; Curveball's cost does not change.</li>
+      <li>Certified Curveball's cost grows with about the 4th power of the room count (80 rooms: a loading bar). The proof guarantees fairness, not speed, and only "within 1/4"; the measured distances are far smaller. The quick swap is cheapest but measurably unfair everywhere.</li>
+      <li>Presets: <code>?scene=normal</code> (20 rooms, 1-6 doors), <code>?scene=square</code> (30 rooms, one 16-door square), <code>?scene=hubs</code> (square + two 10-door guild halls; <code>&amp;square=18</code> for more), <code>?scene=big</code> (80 rooms). Also <code>?frames=N</code>, <code>?prewarm=MS</code>, <code>?day=N</code>, <code>?connected=1</code>.</li>
+    </ul>
+  </section>
+</div>
+<script>/*@@CORE@@*/</script>
+<script>
+'use strict';
+const P = new URLSearchParams(location.search);
+const FRAMES = +P.get('frames') || 0, PREWARM = +P.get('prewarm') || 0, BUDGET = +P.get('budget') || 4;
+const DAY_FRAMES = +P.get('dayframes') || 300;
+const KEYS = ['swap', 'config', 'curveball'];
+const METHOD = {
+  swap: { label: 'PRIOR BEST: lazy double-edge swap', col: '#f29b72', sub: () => `1 swap per door (${S.tpl.m} swaps): the common shortcut`,
+    guar: 'No guarantee: the burn-in is a rule of thumb', gcol: '#f29b72' },
+  config: { label: 'PRIOR BEST: configuration model + rejection', col: '#eb6834', sub: () => 'deal door stubs at random, redeal on a loop or double door',
+    guar: 'Exactly fair: every layout is hit by the same number of deals', gcol: '#eb6834' },
+  curveball: { label: 'NEW: certified Curveball', col: '#2a78d6', sub: () => `${S.T.toLocaleString()} pair trades: the count proved enough (Family 131)`,
+    guar: 'Proved: within 1/4 of perfectly fair, any plan, any start', gcol: '#2a78d6' },
+};
+const SCENE_BTN = { normal: 'normal', square: 'square', hubs: 'hubs', big: 'big' };
+let sceneKey = DD.SCENES[P.get('scene')] ? P.get('scene') : 'normal';
+let squareDoors = Math.max(6, Math.min(20, +P.get('square') || 16));
+let connOnly = P.get('connected') === '1';
+const DAY0 = Math.floor((Date.UTC(2026, 9, 8) - Date.UTC(2026, 0, 1)) / 864e5) + 1;
+let dayNo = +P.get('day') || DAY0;
+let frameNo = 0, paused = false, S = null;
+const $ = id => document.getElementById(id);
+
+// ---------------------------------------------------------------- clock check (headless virtual time freezes performance.now)
+const MAX_UNITS = { swap: 4096, config: 32768, curveball: 64 };
+let CLOCK_FROZEN = (() => { const a = performance.now(); let x = 0; for (let i = 0; i < 4e6; i++) x += i * 0.5; window.__cal = x; return performance.now() === a; })();
+
+// ---------------------------------------------------------------- deterministic hash noise for tiles
+const hsh = (x, y, s = 0) => { let h = Math.imul(x * 374761393 + y * 668265263 + s * 2246822519, 1274126177); h ^= h >>> 13; h = Math.imul(h, 1103515245); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
+const shade = (hex, f) => { const n = parseInt(hex.slice(1), 16); const c = k => Math.max(0, Math.min(255, Math.round(((n >> k) & 255) * f))); return `rgb(${c(16)},${c(8)},${c(0)})`; };
+
+// ---------------------------------------------------------------- corridor routing on the tile grid
+const CS = 10; // tiles per room cell: 7x7 room + 3-tile streets
+function routeLayout(tpl, g) {
+  const gw = tpl.cols * CS, gh = tpl.rows * CS, N = gw * gh, blocked = new Uint8Array(N), use = new Float32Array(N);
+  const box = u => { const [c, r] = tpl.pos[u]; return [c * CS + 1, r * CS + 1]; };
+  for (let u = 0; u < tpl.n; u++) { const [x0, y0] = box(u); for (let y = 0; y < 7; y++) for (let x = 0; x < 7; x++) blocked[(y0 + y) * gw + x0 + x] = 1; }
+  const slots = Array.from({ length: tpl.n }, () => ({ N: [0, 0, 0, 0, 0], S: [0, 0, 0, 0, 0], W: [0, 0, 0, 0, 0], E: [0, 0, 0, 0, 0] }));
+  const pick = (u, v) => {
+    const [cu, ru] = tpl.pos[u], [cv, rv] = tpl.pos[v], dx = cv - cu, dy = rv - ru, [x0, y0] = box(u);
+    const H = dx > 0 ? 'E' : 'W', V = dy > 0 ? 'S' : 'N', prefs = Math.abs(dx) >= Math.abs(dy) ? [H, V] : [V, H];
+    for (const s of ['N', 'S', 'E', 'W']) if (!prefs.includes(s)) prefs.push(s);
+    const tx = cv * CS + 4.5, ty = rv * CS + 4.5;
+    for (const side of prefs) {
+      let best = -1, bd = 1e9;
+      for (let k = 0; k < 5; k++) if (!slots[u][side][k]) {
+        const along = side === 'N' || side === 'S' ? x0 + 1 + k + 0.5 - tx : y0 + 1 + k + 0.5 - ty, d = Math.abs(along);
+        if (d < bd) { bd = d; best = k; }
+      }
+      if (best < 0) continue;
+      slots[u][side][best] = 1;
+      const k = best;
+      if (side === 'N') return { wall: [x0 + 1 + k, y0], out: [x0 + 1 + k, y0 - 1], side };
+      if (side === 'S') return { wall: [x0 + 1 + k, y0 + 6], out: [x0 + 1 + k, y0 + 7], side };
+      if (side === 'W') return { wall: [x0, y0 + 1 + k], out: [x0 - 1, y0 + 1 + k], side };
+      return { wall: [x0 + 6, y0 + 1 + k], out: [x0 + 7, y0 + 1 + k], side };
+    }
+    return null;
+  };
+  // A* over street tiles; already-used tiles cost more so parallel corridors spread out
+  const gs = new Float32Array(N), from = new Int32Array(N), seen = new Uint32Array(N); let stamp = 0;
+  const heap = [];
+  const push = (f, t) => { heap.push([f, t]); let i = heap.length - 1; while (i > 0) { const p = (i - 1) >> 1; if (heap[p][0] <= heap[i][0]) break; [heap[p], heap[i]] = [heap[i], heap[p]]; i = p; } };
+  const pop = () => { const top = heap[0], last = heap.pop(); if (heap.length) { heap[0] = last; let i = 0; for (;;) { const l = 2 * i + 1, r = l + 1; let m = i; if (l < heap.length && heap[l][0] < heap[m][0]) m = l; if (r < heap.length && heap[r][0] < heap[m][0]) m = r; if (m === i) break; [heap[m], heap[i]] = [heap[i], heap[m]]; i = m; } } return top; };
+  const astar = (a, b) => {
+    stamp++; heap.length = 0; const s = a[1] * gw + a[0], t = b[1] * gw + b[0];
+    gs[s] = 0; from[s] = -1; seen[s] = stamp; push(0, s);
+    while (heap.length) {
+      const [, cur] = pop(); if (cur === t) break;
+      const cx = cur % gw, cy = (cur / gw) | 0;
+      for (const [nx, ny] of [[cx + 1, cy], [cx - 1, cy], [cx, cy + 1], [cx, cy - 1]]) {
+        if (nx < 0 || ny < 0 || nx >= gw || ny >= gh) continue;
+        const ni = ny * gw + nx; if (blocked[ni]) continue;
+        const ng = gs[cur] + 1 + 1.6 * use[ni];
+        if (seen[ni] === stamp && ng >= gs[ni]) continue;
+        seen[ni] = stamp; gs[ni] = ng; from[ni] = cur; push(ng + Math.abs(nx - b[0]) + Math.abs(ny - b[1]), ni);
+      }
+    }
+    const path = []; for (let c = t; c >= 0; c = from[c]) { path.push(c); if (c === s) break; }
+    return path.reverse();
+  };
+  const E = DD.edgeList(g).map(([u, v]) => [u, v, Math.abs(tpl.pos[u][0] - tpl.pos[v][0]) + Math.abs(tpl.pos[u][1] - tpl.pos[v][1])]);
+  E.sort((p, q) => p[2] - q[2] || p[0] - q[0] || p[1] - q[1]);
+  const cors = [];
+  for (const [u, v] of E) {
+    const du = pick(u, v), dv = pick(v, u); if (!du || !dv) continue;
+    const path = astar(du.out, dv.out);
+    for (const t of path) use[t] += 1;
+    cors.push({ u, v, du, dv, path, kept: !!DD.has(tpl.g, u, v) });
+  }
+  return { gw, gh, use, blocked, cors, box };
+}
+
+// ---------------------------------------------------------------- drawing
+function glowSprite(rgb) {
+  const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d');
+  const gr = x.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, `rgba(${rgb},0.55)`); gr.addColorStop(0.4, `rgba(${rgb},0.18)`); gr.addColorStop(1, `rgba(${rgb},0)`);
+  x.fillStyle = gr; x.fillRect(0, 0, 64, 64); return c;
+}
+const GLOW = glowSprite('255,170,70'), GLOW_BLUE = glowSprite('120,190,255');
+function roleOf(tpl, u) {
+  const R = tpl.roles;
+  if (u === R.boss) return 'boss'; if (u === R.entrance) return 'entrance';
+  const h = R.hubs.indexOf(u); if (h === 0) return tpl.name === 'hubs' ? 'square' : 'hall'; if (h > 0) return 'guild';
+  if (R.treasure.includes(u)) return 'treasure'; return 'room';
+}
+function drawStatic(pn, g, method) {
+  const tpl = S.tpl, rt = routeLayout(tpl, g), { gw, gh, use, blocked, cors, box } = rt;
+  const W = pn.canvas.width, H = pn.canvas.height, ts = Math.min(W / gw, H / gh), ox = (W - ts * gw) / 2, oy = (H - ts * gh) / 2;
+  const c = pn.layer, x = c.getContext('2d');
+  c.width = W; c.height = H;
+  const X = t => Math.round(ox + t * ts), Y = t => Math.round(oy + t * ts);
+  const tile = (tx, ty, col) => { x.fillStyle = col; x.fillRect(X(tx), Y(ty), X(tx + 1) - X(tx), Y(ty + 1) - Y(ty)); };
+  x.fillStyle = '#0d0b0c'; x.fillRect(0, 0, W, H);
+  // rock and corridor floors
+  const isCor = i => use[i] > 0;
+  for (let ty = 0; ty < gh; ty++) for (let tx = 0; tx < gw; tx++) {
+    const i = ty * gw + tx; if (blocked[i]) continue;
+    const r = hsh(tx, ty);
+    if (isCor(i)) { tile(tx, ty, shade('#5d5446', 0.86 + 0.22 * r)); continue; }
+    let near = false; for (let dy = -1; dy <= 1 && !near; dy++) for (let dx = -1; dx <= 1; dx++) { const nx = tx + dx, ny = ty + dy; if (nx >= 0 && ny >= 0 && nx < gw && ny < gh && use[ny * gw + nx] > 0) { near = true; break; } }
+    tile(tx, ty, near ? shade('#3a332b', 0.8 + 0.35 * r) : shade('#1d1916', 0.7 + 0.6 * r));
+    if (!near && r > 0.93 && ts >= 5) { x.fillStyle = '#2c2621'; x.fillRect(X(tx) + ts * 0.3, Y(ty) + ts * 0.3, ts * 0.35, ts * 0.3); }
+  }
+  if (ts >= 5) { // flagstone grout in corridors
+    x.strokeStyle = 'rgba(0,0,0,0.28)'; x.lineWidth = 1; x.beginPath();
+    for (let i = 0; i < gw * gh; i++) if (use[i] > 0) { const tx = i % gw, ty = (i / gw) | 0; x.rect(X(tx) + 0.5, Y(ty) + 0.5, X(tx + 1) - X(tx) - 1, Y(ty + 1) - Y(ty) - 1); }
+    x.stroke();
+  }
+  // which rooms the entrance can reach
+  const comp = DD.components(g).comp, home = comp[tpl.roles.entrance];
+  // rooms
+  for (let u = 0; u < tpl.n; u++) {
+    const [x0, y0] = box(u), role = roleOf(tpl, u);
+    const floor = { room: '#7b705f', entrance: '#7b705f', treasure: '#7b705f', boss: '#4a2020', square: '#a2967e', hall: '#8a7d68', guild: '#86603a' }[role];
+    for (let yy = 0; yy < 7; yy++) for (let xx = 0; xx < 7; xx++) {
+      const wall = xx === 0 || yy === 0 || xx === 6 || yy === 6, r = hsh(x0 + xx, y0 + yy, 3);
+      tile(x0 + xx, y0 + yy, wall ? shade(yy === 0 ? '#8c8273' : '#6a6153', 0.85 + 0.25 * r) : shade(floor, 0.88 + 0.2 * r));
+    }
+    const L = X(x0), T = Y(y0), Rr = X(x0 + 7), B = Y(y0 + 7), cx = (L + Rr) / 2, cy = (T + B) / 2, s = ts;
+    x.strokeStyle = 'rgba(0,0,0,0.5)'; x.lineWidth = 1; x.strokeRect(L + 0.5, T + 0.5, Rr - L - 1, B - T - 1);
+    if (ts >= 5 && role !== 'guild') { x.strokeStyle = 'rgba(0,0,0,0.18)'; x.beginPath(); for (let k = 2; k < 6; k++) { x.moveTo(X(x0 + k) + 0.5, Y(y0 + 1)); x.lineTo(X(x0 + k) + 0.5, Y(y0 + 6)); x.moveTo(X(x0 + 1), Y(y0 + k) + 0.5); x.lineTo(X(x0 + 6), Y(y0 + k) + 0.5); } x.stroke(); }
+    if (role === 'guild') { x.strokeStyle = 'rgba(40,20,5,0.45)'; x.beginPath(); for (let k = 1; k < 10; k++) { const yy = Y(y0 + 1) + k * (5 * s) / 10; x.moveTo(X(x0 + 1), yy); x.lineTo(X(x0 + 6), yy); } x.stroke();
+      x.fillStyle = '#5a2a7a'; x.fillRect(cx - s * 0.9, T + s * 0.95, s * 1.8, s * 1.5); x.fillStyle = '#e8c04a'; x.fillRect(cx - s * 0.35, T + s * 1.25, s * 0.7, s * 0.7);
+      x.fillStyle = '#4e3218'; x.fillRect(cx - s * 1.6, cy + s * 0.4, s * 3.2, s * 1.0); }
+    if (role === 'square') {
+      x.fillStyle = '#cfc5ae'; x.beginPath(); x.arc(cx, cy, s * 1.55, 0, 7); x.fill(); x.fillStyle = '#3f86c6'; x.beginPath(); x.arc(cx, cy, s * 1.2, 0, 7); x.fill();
+      x.fillStyle = '#d9e8f5'; x.beginPath(); x.arc(cx, cy, s * 0.35, 0, 7); x.fill();
+      for (const [ax, ay, col] of [[L + s * 1.2, T + s * 1.2, '#b8322c'], [Rr - s * 2.6, B - s * 2.5, '#2f7d4a']]) { for (let k = 0; k < 4; k++) { x.fillStyle = k % 2 ? '#efe6d2' : col; x.fillRect(ax + k * s * 0.35, ay, s * 0.35, s * 0.8); } }
+    }
+    if (role === 'boss') {
+      x.fillStyle = '#8f1d1d'; x.fillRect(cx - s * 0.7, Y(y0 + 1), s * 1.4, s * 5);
+      x.fillStyle = '#e8e0cc'; x.beginPath(); x.arc(cx, cy - s * 0.2, s * 0.9, 0, 7); x.fill(); x.fillRect(cx - s * 0.5, cy + s * 0.3, s, s * 0.6);
+      x.fillStyle = '#1a0606'; x.beginPath(); x.arc(cx - s * 0.35, cy - s * 0.25, s * 0.24, 0, 7); x.arc(cx + s * 0.35, cy - s * 0.25, s * 0.24, 0, 7); x.fill();
+    }
+    if (role === 'treasure') {
+      x.fillStyle = '#6b4114'; x.fillRect(cx - s * 1.0, cy - s * 0.55, s * 2.0, s * 1.3); x.fillStyle = '#d9ac2e'; x.fillRect(cx - s * 1.0, cy - s * 0.55, s * 2.0, s * 0.45);
+      x.fillStyle = '#ffe58a'; x.fillRect(cx - s * 0.18, cy - s * 0.2, s * 0.36, s * 0.4);
+      for (let k = 0; k < 5; k++) { x.fillStyle = '#f5c842'; x.beginPath(); x.arc(cx - s * 1.6 + hsh(u, k) * s * 3.2, cy + s * 1.2 + hsh(k, u) * s * 0.6, s * 0.17, 0, 7); x.fill(); }
+    }
+    if (role === 'entrance') { for (let k = 0; k < 4; k++) { x.fillStyle = shade('#9a9080', 1 - k * 0.17); x.fillRect(cx - s * 1.2, cy - s * 1.2 + k * s * 0.6, s * 2.4, s * 0.5); } }
+    if (role === 'hall') { x.fillStyle = '#4e3218'; x.fillRect(cx - s * 1.4, cy - s * 0.5, s * 2.8, s * 1.0); }
+  }
+  // corridor centre lines: pale = a template corridor that survived, colour = a new corridor
+  const pc = t => [ox + ((t % gw) + 0.5) * ts, oy + (((t / gw) | 0) + 0.5) * ts];
+  const tc = ([a, b]) => [ox + (a + 0.5) * ts, oy + (b + 0.5) * ts];
+  for (const pass of [0, 1]) for (const cr of cors) {
+    if ((pass === 0) !== cr.kept) continue;
+    x.strokeStyle = cr.kept ? 'rgba(236,222,190,0.75)' : method.col; x.globalAlpha = cr.kept ? 1 : 0.9;
+    x.lineWidth = Math.max(1.2, ts * (cr.kept ? 0.22 : 0.3)); x.lineJoin = 'round'; x.lineCap = 'round';
+    x.beginPath(); const a = tc(cr.du.wall); x.moveTo(a[0], a[1]); for (const t of cr.path) { const p = pc(t); x.lineTo(p[0], p[1]); } const b = tc(cr.dv.wall); x.lineTo(b[0], b[1]); x.stroke();
+  }
+  x.globalAlpha = 1;
+  // doors
+  for (const cr of cors) for (const d of [cr.du, cr.dv]) {
+    const [tx, ty] = d.wall, L = X(tx), T = Y(ty), w = X(tx + 1) - L, h = Y(ty + 1) - T;
+    x.fillStyle = '#2a1708'; x.fillRect(L, T, w, h); x.fillStyle = '#9a6430'; x.fillRect(L + w * 0.15, T + h * 0.15, w * 0.7, h * 0.7);
+    if (ts >= 6) { x.fillStyle = '#e0b050'; x.fillRect(L + w * 0.55, T + h * 0.45, Math.max(1, w * 0.15), Math.max(1, h * 0.15)); }
+  }
+  // sealed rooms + labels
+  const fs = Math.max(8, Math.min(11, ts * 1.25));
+  x.font = `700 ${fs}px "Segoe UI", sans-serif`; x.textAlign = 'center';
+  for (let u = 0; u < tpl.n; u++) {
+    const [x0, y0] = box(u), role = roleOf(tpl, u), L = X(x0), T = Y(y0), Rr = X(x0 + 7), B = Y(y0 + 7), cx = (L + Rr) / 2;
+    if (comp[u] !== home) { x.fillStyle = 'rgba(6,4,10,0.72)'; x.fillRect(L, T, Rr - L, B - T); x.fillStyle = '#ff8f7a'; x.fillText('SEALED', cx, (T + B) / 2 + fs / 3); }
+    const lab = { boss: 'BOSS', entrance: 'START', treasure: ts >= 6 ? 'TREASURE' : '', square: `SQUARE ${DD.deg(g, u)}`, guild: `GUILD ${DD.deg(g, u)}`, hall: ts >= 6 ? `HALL ${DD.deg(g, u)}` : '' }[role];
+    if (lab) { x.fillStyle = 'rgba(0,0,0,0.7)'; const w = x.measureText(lab).width + 6; x.fillRect(cx - w / 2, B - fs - 3, w, fs + 3); x.fillStyle = role === 'boss' ? '#ff6b5a' : role === 'treasure' ? '#ffd65a' : '#f0e6cc'; x.fillText(lab, cx, B - 4); }
+  }
+  // hero route: entrance -> boss (BFS over the layout)
+  const prev = new Int32Array(tpl.n).fill(-2); prev[tpl.roles.entrance] = -1; const q = [tpl.roles.entrance];
+  while (q.length) { const u = q.shift(); for (let v = 0; v < tpl.n; v++) if (DD.has(g, u, v) && prev[v] === -2) { prev[v] = u; q.push(v); } }
+  let route = null;
+  if (prev[tpl.roles.boss] !== -2) {
+    const rooms = []; for (let u = tpl.roles.boss; u !== -1; u = prev[u]) rooms.push(u); rooms.reverse();
+    const centre = u => { const [x0, y0] = box(u); return [ox + (x0 + 3.5) * ts, oy + (y0 + 3.5) * ts]; };
+    route = [centre(rooms[0])];
+    for (let k = 0; k + 1 < rooms.length; k++) {
+      const u = rooms[k], v = rooms[k + 1], cr = cors.find(c => (c.u === u && c.v === v) || (c.u === v && c.v === u));
+      if (!cr) continue;
+      let pts = [tc(cr.du.wall), ...cr.path.map(pc), tc(cr.dv.wall)]; if (cr.u !== u) pts.reverse();
+      route.push(...pts, centre(v));
+    }
+  }
+  const torches = [];
+  for (let u = 0; u < tpl.n; u++) { const [x0, y0] = box(u); torches.push([ox + (x0 + 1.5) * ts, oy + (y0 + 0.55) * ts, u], [ox + (x0 + 5.5) * ts, oy + (y0 + 0.55) * ts, u]); }
+  let len = 0; if (route) for (let k = 1; k < route.length; k++) len += Math.hypot(route[k][0] - route[k - 1][0], route[k][1] - route[k - 1][1]);
+  pn.view = { ts, route, len, torches, comp, home, kept: DD.overlap(g, tpl.g), bossOk: !!route, t0: frameNo };
+}
+function drawPanel(pn) {
+  const x = pn.ctx, W = pn.canvas.width, H = pn.canvas.height, v = pn.view, m = pn.key;
+  x.drawImage(pn.layer, 0, 0);
+  if (!v) return;
+  const ts = v.ts;
+  // torches
+  x.globalCompositeOperation = 'lighter';
+  for (const [tx, ty, u] of v.torches) {
+    if (v.comp[u] !== v.home) continue;
+    const f = 0.75 + 0.25 * Math.sin(frameNo * 0.31 + tx * 0.7 + ty) * Math.sin(frameNo * 0.17 + ty * 1.3), r = ts * 3.2 * f;
+    x.globalAlpha = 0.75; x.drawImage(GLOW, tx - r, ty - r, 2 * r, 2 * r);
+  }
+  x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
+  for (const [tx, ty, u] of v.torches) { if (v.comp[u] !== v.home) continue; x.fillStyle = (frameNo + u) % 7 < 3 ? '#ffd36a' : '#ff9a2e'; x.fillRect(tx - ts * 0.18, ty - ts * 0.32, ts * 0.36, ts * 0.42); }
+  // hero walks entrance -> boss
+  if (v.route && v.route.length > 1) {
+    const speed = 7 * ts / 60, cyc = v.len / speed + 90, t = ((frameNo - v.t0) % cyc) * speed;
+    let d = Math.min(t, v.len), p = v.route[0];
+    for (let k = 1; k < v.route.length; k++) { const a = v.route[k - 1], b = v.route[k], l = Math.hypot(b[0] - a[0], b[1] - a[1]); if (d <= l) { p = [a[0] + (b[0] - a[0]) * d / Math.max(l, 1e-9), a[1] + (b[1] - a[1]) * d / Math.max(l, 1e-9)]; break; } d -= l; p = b; }
+    const r = Math.max(3, ts * 0.75), bob = Math.sin(frameNo * 0.5) * r * 0.12;
+    x.globalCompositeOperation = 'lighter'; x.globalAlpha = 0.6; x.drawImage(GLOW_BLUE, p[0] - r * 3, p[1] - r * 3, r * 6, r * 6); x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
+    x.fillStyle = '#1b2d4a'; x.beginPath(); x.arc(p[0], p[1] + bob, r, 0, 7); x.fill();
+    x.fillStyle = '#c9d6e8'; x.beginPath(); x.arc(p[0], p[1] - r * 0.25 + bob, r * 0.62, 0, 7); x.fill();
+    x.fillStyle = '#ffd36a'; x.fillRect(p[0] + r * 0.7, p[1] - r * 1.1 + bob, Math.max(1, r * 0.22), r * 1.3);
+    if (t >= v.len) { x.font = '700 12px Georgia, serif'; x.textAlign = 'center'; x.fillStyle = '#ffd36a'; x.fillText('BOSS DEFEATED', p[0], p[1] - r * 2); }
+  } else { x.fillStyle = 'rgba(0,0,0,0.65)'; x.fillRect(0, H - 22, W, 22); x.fillStyle = '#ff8f7a'; x.font = '700 12px "Segoe UI", sans-serif'; x.textAlign = 'center'; x.fillText('Boss is sealed off today: this layout is disconnected', W / 2, H - 7); }
+  // generator status
+  const job = S.jobs[m];
+  if (m === 'curveball' && S.T > 300000) {
+    const p = job.progress(); x.fillStyle = 'rgba(0,0,0,0.7)'; x.fillRect(8, 8, W - 16, 22); x.fillStyle = '#16365e'; x.fillRect(10, 10, W - 20, 18);
+    x.fillStyle = '#2a78d6'; x.fillRect(10, 10, (W - 20) * p, 18); x.fillStyle = '#fff'; x.font = '700 11px Consolas, monospace'; x.textAlign = 'left';
+    x.fillText(`certifying next layout: ${(100 * p).toFixed(0)}%  (${Math.round(p * S.T).toLocaleString()} / ${S.T.toLocaleString()} trades)`, 16, 23);
+  }
+  if (m === 'config' && job.progress() > 20000) {
+    x.fillStyle = 'rgba(0,0,0,0.7)'; x.fillRect(8, 8, W - 16, 22); x.fillStyle = '#ffb38a'; x.font = '700 11px Consolas, monospace'; x.textAlign = 'left';
+    x.fillText(`dealing doors... deal #${job.progress().toLocaleString()} for the next layout`, 16, 23);
+  }
+  if (!pn.hasDaily) { x.fillStyle = 'rgba(0,0,0,0.7)'; x.fillRect(0, H / 2 - 16, W, 32); x.fillStyle = '#fff'; x.font = '700 13px Georgia, serif'; x.textAlign = 'center'; x.fillText(`generating Daily #${dayNo}... (showing the designer's plan)`, W / 2, H / 2 + 5); }
+}
+
+// ---------------------------------------------------------------- panels + HUD
+const panels = {};
+function buildPanels() {
+  const host = $('panels'); host.innerHTML = '';
+  for (const m of KEYS) {
+    const M = METHOD[m], d = document.createElement('div'); d.className = 'panel';
+    d.innerHTML = `<div class="ptitle" style="border-color:${M.col}"><span class="tag" style="color:${M.col}">${M.label}</span><span class="sub" id="sub-${m}"></span></div>
+      <canvas class="map" width="404" height="318"></canvas>
+      <div class="hud">
+        <div class="row"><span class="k">Time per layout</span><span><span class="big" id="t-${m}" style="color:${M.col}">...</span> <span class="v" id="tn-${m}" style="color:#a39a86"></span></span></div>
+        <div class="row"><span id="d-${m}"></span><span class="v" id="r-${m}"></span></div>
+        <div class="row"><span class="k">Template doors kept</span><span class="v" id="k-${m}"></span></div>
+        <div class="row"><span class="k" style="width:70px">Fairness</span><div class="meter"><div class="fill" id="mf-${m}"></div><div class="noise" id="mn-${m}"></div><span id="mv-${m}"></span></div></div>
+        <div class="guar" style="border-color:${M.gcol}">${M.guar}</div>
+      </div>`;
+    host.appendChild(d);
+    const canvas = d.querySelector('canvas');
+    panels[m] = { key: m, canvas, ctx: canvas.getContext('2d'), layer: document.createElement('canvas'), view: null, hasDaily: false };
+  }
+}
+const fmtMs = v => !isFinite(v) ? '...' : v >= 100 ? v.toFixed(0) + ' ms' : v >= 1 ? v.toFixed(2) + ' ms' : v >= 0.01 ? v.toFixed(3) + ' ms' : (v * 1000).toFixed(2) + ' µs';
+function noiseTV(p, n1, n2) { // expected histogram distance between two fair samples of these sizes (bootstrap)
+  n1 = Math.min(n1, 40000); n2 = Math.min(n2, 40000); if (n1 < 1 || n2 < 1) return 1;
+  const cdf = []; let s = 0; for (const x of p) cdf.push(s += x);
+  const R = DD.makeRng(4242), draw = n => { const h = new Float64Array(p.length); for (let k = 0; k < n; k++) { const u = R(1e9) / 1e9; let i = 0; while (i < cdf.length - 1 && cdf[i] < u) i++; h[i]++; } return Array.from(h, x => x / n); };
+  let t = 0; for (let r = 0; r < 6; r++) t += DD.histTV(draw(n1), draw(n2)); return t / 6;
+}
+function updateHUD() {
+  $('dayNo').textContent = '#' + dayNo;
+  for (const m of KEYS) {
+    const job = S.jobs[m], st = S.stats[m], ref = S.refStats, cnt = st.count(connOnly), layouts = connOnly ? st.nConn : job.layouts;
+    $('sub-' + m).textContent = METHOD[m].sub();
+    const ms = S.time[m] / Math.max(1, layouts);
+    if (CLOCK_FROZEN) { $('t-' + m).textContent = 'n/a'; $('tn-' + m).innerHTML = '<span class="frozen">clock frozen (headless virtual time)</span>'; }
+    else { $('t-' + m).textContent = layouts ? fmtMs(ms) : '...'; $('tn-' + m).textContent = `avg of ${layouts.toLocaleString()}${connOnly ? ' connected' : ''}`; }
+    const disc = st.n ? 100 * (1 - st.nConn / st.n) : 0;
+    if (m === 'config') { $('d-' + m).innerHTML = `<span class="k">Deals per layout</span> <span class="v">${job.layouts ? (job.attempts / job.layouts).toLocaleString(undefined, { maximumFractionDigits: 1 }) : '...'}</span>`; $('r-' + m).textContent = `rejected ${job.attempts ? (100 * job.rejects / job.attempts).toFixed(job.rejects / job.attempts > 0.999 ? 4 : 1) : '0'}%`; }
+    else if (m === 'swap') { $('d-' + m).innerHTML = `<span class="k">Swaps per layout</span> <span class="v">${S.tpl.m}</span>`; $('r-' + m).textContent = `disconnected ${disc.toFixed(1)}%`; }
+    else { $('d-' + m).innerHTML = `<span class="k">Trades per layout</span> <span class="v">${S.T.toLocaleString()}</span>`; $('r-' + m).textContent = `disconnected ${disc.toFixed(1)}%`; }
+    if (m === 'config') $('r-' + m).textContent += ` · disc. ${disc.toFixed(1)}%`;
+    const refMean = ref.mean(connOnly), mean = st.mean(connOnly), today = panels[m].view ? panels[m].view.kept : '-';
+    const fairTxt = ref.count(connOnly) ? refMean.toFixed(2) : "...";
+    $("k-" + m).textContent = cnt ? `today ${today} · avg ${mean.toFixed(2)} · fair ${fairTxt}` : `today ${today} · fair ${fairTxt}`;
+    const enough = cnt >= 30 && ref.count(connOnly) >= 200;
+    if (enough) {
+      const tv = DD.histTV(st.dist(connOnly), ref.dist(connOnly)), fair = Math.max(0, 1 - tv);
+      if (!S.noise[m] || frameNo - S.noise[m].f > 60) S.noise[m] = { f: frameNo, v: noiseTV(ref.dist(connOnly), cnt, ref.count(connOnly)) };
+      const nz = S.noise[m].v, col = fair > 0.9 ? '#3fae5a' : fair > 0.6 ? '#d8a531' : '#c8432f';
+      $('mf-' + m).style.cssText = `width:${100 * fair}%;background:linear-gradient(90deg,${col}aa,${col})`;
+      $('mn-' + m).style.cssText = `left:${100 * Math.max(0, 1 - nz)}%;width:${100 * Math.min(1, nz)}%`;
+      $('mv-' + m).textContent = `${(100 * fair).toFixed(0)}%  (noise ±${(100 * nz).toFixed(0)}%)`;
+    } else {
+      $('mf-' + m).style.cssText = 'width:0'; $('mn-' + m).style.cssText = 'width:0';
+      $('mv-' + m).textContent = cnt < 30 ? `needs 30 layouts (${cnt} so far)` : 'reference warming up';
+    }
+  }
+  drawHist(); drawCost();
+}
+
+// ---------------------------------------------------------------- charts
+function axisText(x, s, px, py, col = '#a39a86', align = 'left', font = '11px "Segoe UI", sans-serif') { x.fillStyle = col; x.font = font; x.textAlign = align; x.fillText(s, px, py); }
+function drawHist() {
+  const c = $('hist'), x = c.getContext('2d'), W = c.width, H = c.height; x.clearRect(0, 0, W, H);
+  axisText(x, 'Template doors kept per daily layout (share of layouts)', 4, 14, '#f0e3c4', 'left', '700 12.5px "Segoe UI", sans-serif');
+  axisText(x, 'fair = grey bars (REFERENCE); far to the right = copies the designer’s plan', 4, 28, '#a39a86');
+  const ref = S.refStats.dist(connOnly), ds = KEYS.map(m => S.stats[m].dist(connOnly));
+  let hi = 4; [ref, ...ds.filter((d, i) => S.stats[KEYS[i]].count(connOnly) >= 30)].forEach(d => d.forEach((v, k) => { if (v > 0.002) hi = Math.max(hi, k + 1); }));
+  hi = Math.min(hi, S.tpl.m);
+  let ymax = 0.05; [ref, ...ds.filter((d, i) => S.stats[KEYS[i]].count(connOnly) >= 30)].forEach(d => d.forEach(v => ymax = Math.max(ymax, v)));
+  const L = 34, R = W - 8, T = 38, B = H - 34, bx = k => L + (k + 0.5) * (R - L) / (hi + 1), by = v => B - v / ymax * (B - T), bw = (R - L) / (hi + 1);
+  x.strokeStyle = '#3a3330'; x.beginPath(); x.moveTo(L, B + 0.5); x.lineTo(R, B + 0.5); x.stroke();
+  x.fillStyle = 'rgba(122,120,115,0.55)';
+  ref.slice(0, hi + 1).forEach((v, k) => x.fillRect(bx(k) - bw * 0.42, by(v), bw * 0.84, B - by(v)));
+  KEYS.forEach((m, i) => {
+    if (S.stats[m].count(connOnly) < 30) return;
+    x.strokeStyle = METHOD[m].col; x.fillStyle = METHOD[m].col; x.lineWidth = m === 'curveball' ? 2.6 : 2; x.setLineDash(m === 'swap' ? [5, 3] : []);
+    x.beginPath(); ds[i].slice(0, hi + 1).forEach((v, k) => k ? x.lineTo(bx(k), by(v)) : x.moveTo(bx(k), by(v))); x.stroke(); x.setLineDash([]);
+    ds[i].slice(0, hi + 1).forEach((v, k) => { x.beginPath(); x.arc(bx(k), by(v), 2.4, 0, 7); x.fill(); });
+  });
+  const step = hi > 40 ? 10 : hi > 20 ? 5 : 2;
+  for (let k = 0; k <= hi; k += step) axisText(x, String(k), bx(k), B + 13, '#a39a86', 'center');
+  axisText(x, 'doors (corridors) the layout shares with the template', (L + R) / 2, B + 27, '#a39a86', 'center');
+  axisText(x, (100 * ymax).toFixed(0) + '%', L - 4, T + 8, '#a39a86', 'right');
+  const lg = [['REFERENCE (fair)', '#9a9893'], ['swap', METHOD.swap.col], ['config model', METHOD.config.col], ['Curveball', METHOD.curveball.col]];
+  let lx = R - 330; lg.forEach(([s, col]) => { x.fillStyle = col; x.fillRect(lx, 34, 10, 10); axisText(x, s, lx + 13, 43, '#d9c7a5'); lx += x.measureText(s).width + 26; });
+  if (S.stats.curveball.count(connOnly) < 30) axisText(x, `Curveball curve appears after 30 layouts (${S.stats.curveball.count(connOnly)} so far)`, R, 60, METHOD.curveball.col, 'right');
+}
+function drawCost() {
+  const c = $('cost'), x = c.getContext('2d'), W = c.width, H = c.height; x.clearRect(0, 0, W, H);
+  axisText(x, 'Time per daily layout (log scale)', 4, 14, '#f0e3c4', 'left', '700 12.5px "Segoe UI", sans-serif');
+  axisText(x, 'measured live in this tab; shorter is better', 4, 28, '#a39a86');
+  const L = 8, R = W - 10, lo = -4, hi = 3, X = v => L + (Math.log10(Math.max(v, 1e-4)) - lo) / (hi - lo) * (R - L);
+  for (let e = lo; e <= hi; e++) { x.strokeStyle = e === 0 ? '#4a403a' : '#2a2528'; x.beginPath(); x.moveTo(X(10 ** e) + 0.5, 38); x.lineTo(X(10 ** e) + 0.5, H - 26); x.stroke(); axisText(x, ['', '1\u00b5s', '10\u00b5s', '0.1ms', '1ms', '10ms', '0.1s', '1s'][e + 4], X(10 ** e), H - 14, '#7d746a', 'center', '10px "Segoe UI", sans-serif'); }
+  x.strokeStyle = '#c8432f'; x.setLineDash([3, 3]); x.beginPath(); x.moveTo(X(16.7) + 0.5, 38); x.lineTo(X(16.7) + 0.5, H - 26); x.stroke(); x.setLineDash([]);
+  axisText(x, '1 frame', X(16.7) + 3, 46, '#c8432f', 'left', '10px "Segoe UI", sans-serif');
+  KEYS.forEach((m, i) => {
+    const st = S.stats[m], n = connOnly ? st.nConn : S.jobs[m].layouts, v = S.time[m] / Math.max(1, n), y = 56 + i * 44;
+    axisText(x, METHOD[m].label.replace('PRIOR BEST: ', 'PRIOR: ').replace(' + rejection', ''), L, y, METHOD[m].col, 'left', '700 11px "Segoe UI", sans-serif');
+    if (CLOCK_FROZEN || !n) { axisText(x, CLOCK_FROZEN ? 'clock frozen' : 'waiting for first layout', L, y + 18, '#a39a86'); return; }
+    x.fillStyle = METHOD[m].col; x.fillRect(L, y + 6, Math.max(2, X(v) - L), 14);
+    axisText(x, fmtMs(v), Math.min(X(v) + 4, R - 60), y + 18, '#f0e3c4', 'left', '700 11px Consolas, monospace');
+  });
+}
+let EXACT = null;
+function computeExact() {
+  const dB = [5, 4, 3, 3, 2, 2, 2, 1], X = DD.exactToy(dB, DD.havelHakimi(dB));
+  const cb = X.curve(X.Kcb, 320), sw = X.curve(X.Ksw, 320);
+  const cA = DD.exactConfigToy([2, 2, 2, 2, 2, 2]), cC = DD.exactConfigToy([4, 3, 2, 2, 2, 2, 1]);
+  EXACT = { X, cb, sw, cA, cC };
+}
+function drawExact() {
+  const c = $('exact'), x = c.getContext('2d'), W = c.width, H = c.height; x.clearRect(0, 0, W, H);
+  axisText(x, 'Exact check: 8-room dungeon, all 623 layouts', 4, 14, '#f0e3c4', 'left', '700 12.5px "Segoe UI", sans-serif');
+  if (!EXACT) { axisText(x, 'computing...', 4, 34); return; }
+  const { X, cb, sw, cA, cC } = EXACT, L = 36, R = W - 8, T = 26, B = 128, tmax = 320;
+  const px = t => L + t / tmax * (R - L), py = v => T + (-Math.log10(Math.max(v, 1e-16))) / 16 * (B - T);
+  x.strokeStyle = '#2a2528'; for (const e of [0, 4, 8, 12, 16]) { x.beginPath(); x.moveTo(L, py(10 ** -e) + 0.5); x.lineTo(R, py(10 ** -e) + 0.5); x.stroke(); axisText(x, e ? `1e-${e}` : '1', L - 3, py(10 ** -e) + 3, '#7d746a', 'right', '9.5px "Segoe UI", sans-serif'); }
+  x.strokeStyle = '#7a7873'; x.setLineDash([4, 3]); x.beginPath(); for (let t = 0; t <= tmax; t += 4) { const v = Math.min(1, X.bound(t)); t ? x.lineTo(px(t), py(v)) : x.moveTo(px(t), py(v)); } x.stroke(); x.setLineDash([]);
+  for (const [arr, col] of [[sw, METHOD.swap.col], [cb, METHOD.curveball.col]]) { x.strokeStyle = col; x.lineWidth = 2; x.beginPath(); arr.forEach((v, t) => t ? x.lineTo(px(t), py(v)) : x.moveTo(px(t), py(v))); x.stroke(); }
+  x.lineWidth = 1;
+  x.fillStyle = METHOD.swap.col; x.beginPath(); x.arc(px(X.m), py(sw[X.m]), 3.5, 0, 7); x.fill();
+  x.fillStyle = METHOD.curveball.col; x.beginPath(); x.arc(px(X.T), py(cb[X.T]), 3.5, 0, 7); x.fill();
+  axisText(x, 'off-fair distance vs shuffle steps (grey dashed: proved bound)', L, B + 12, '#a39a86', 'left', '10px "Segoe UI", sans-serif');
+  const lines = [
+    [`swap, ${X.m} swaps (1 per door): ${sw[X.m].toFixed(3)} off fair`, METHOD.swap.col],
+    [`certified Curveball, ${X.T} trades: ${cb[X.T].toExponential(1)} off fair`, METHOD.curveball.col],
+    [`config model: exactly 0. All ${cA.pairings.toLocaleString()} + ${cC.pairings.toLocaleString()} deals`, METHOD.config.col],
+    [`  of two toys enumerated: every layout hit ${cA.perGraph[0]} / ${cC.perGraph[0].toLocaleString()} times`, METHOD.config.col],
+  ];
+  lines.forEach(([s, col], i) => axisText(x, s, 4, B + 28 + i * 13.5, col, 'left', '11px "Segoe UI", sans-serif'));
+}
+
+// ---------------------------------------------------------------- simulation
+function seedFor(day, m) { return (Math.imul(day, 2654435761) ^ Math.imul(KEYS.indexOf(m) + 1, 40503) ^ Math.imul(sceneKey.length * 977 + squareDoors, 69069)) | 0; }
+function buildScene() {
+  const sc = DD.SCENES[sceneKey], tpl = sc.make(squareDoors), { jobs, T } = DD.makeJobs(tpl, 7);
+  S = { tpl, jobs, T, stats: {}, time: {}, units: { swap: 64, config: 1024, curveball: 2 }, waiting: {}, noise: {}, ref: DD.makeReference(tpl, 99), refStats: DD.makeStats(tpl.m) };
+  for (const m of KEYS) { S.stats[m] = DD.makeStats(tpl.m); S.time[m] = 0; }
+  $('sceneName').textContent = sc.title.replace(/ \(.*\)$/, '');
+  $('sceneInfo').textContent = `${tpl.n} rooms \u00b7 ${tpl.m} doors \u00b7 ${Math.min(...tpl.deg)}-${Math.max(...tpl.deg)} doors per room`;
+  $('sqWrap').style.display = sceneKey === 'square' || sceneKey === 'hubs' ? 'flex' : 'none';
+  $('sq').value = squareDoors; $('sqv').textContent = squareDoors;
+  document.querySelectorAll('#sceneBtns button').forEach(b => b.classList.toggle('on', b.dataset.k === sceneKey));
+  for (const m of KEYS) { panels[m].hasDaily = false; drawStatic(panels[m], tpl.g, METHOD[m]); }
+  startDay();
+}
+function startDay() { for (const m of KEYS) { S.jobs[m].pending = seedFor(dayNo, m); S.waiting[m] = false; } }
+function generate() {
+  for (const m of KEYS) {
+    const job = S.jobs[m], out = []; let spent = 0, it = 0;
+    const t0 = performance.now();
+    for (;;) {
+      const a = performance.now(); job.work(S.units[m], out); const b = performance.now(); spent += b - a; it++;
+      if (CLOCK_FROZEN) { if (it >= 2) break; continue; }
+      const dt = b - a;
+      if (dt === 0 && S.units[m] >= MAX_UNITS[m]) { CLOCK_FROZEN = true; S.units[m] = MAX_UNITS[m] >> 4; break; } // clock not moving (headless virtual time)
+      if (dt < 0.15 && S.units[m] < MAX_UNITS[m]) S.units[m] *= 2; else if (dt > 0.6 && S.units[m] > 1) S.units[m] >>= 1;
+      if (b - t0 >= BUDGET || it > 400) break;
+    }
+    S.time[m] += spent;
+    for (const L of out) {
+      const kept = DD.overlap(L.g, S.tpl.g), conn = DD.isConnected(L.g);
+      S.stats[m].add(kept, conn);
+      if (L.daily || S.waiting[m]) {
+        if (!connOnly || conn) { S.waiting[m] = false; panels[m].hasDaily = true; drawStatic(panels[m], L.g, METHOD[m]); }
+        else S.waiting[m] = true;
+      }
+    }
+  }
+  const t0 = performance.now(); let k = 0;
+  while (S.refStats.n < 20000 && k < 400 && (CLOCK_FROZEN ? k < 20 : performance.now() - t0 < 1)) { const g = S.ref.sample(); S.refStats.add(DD.overlap(g, S.tpl.g), DD.isConnected(g)); k++; }
+}
+function step() {
+  frameNo++;
+  if (frameNo % DAY_FRAMES === 0) { dayNo++; startDay(); }
+  if (!paused) generate();
+  if (frameNo === 20 && !EXACT) { computeExact(); drawExact(); }
+}
+function render() { for (const m of KEYS) drawPanel(panels[m]); }
+let stopped = false;
+function loop() {
+  step(); render();
+  if (frameNo % 10 === 0) updateHUD();
+  if (FRAMES && frameNo >= FRAMES) { updateHUD(); stopped = true; return; }
+  requestAnimationFrame(loop);
+}
+
+// ---------------------------------------------------------------- UI
+for (const k of Object.keys(DD.SCENES)) { const b = document.createElement('button'); b.textContent = SCENE_BTN[k]; b.dataset.k = k; b.title = `?scene=${k}`; b.onclick = () => { sceneKey = k; buildScene(); updateHUD(); }; $('sceneBtns').appendChild(b); }
+$('sq').oninput = e => { squareDoors = +e.target.value; $('sqv').textContent = squareDoors; };
+$('sq').onchange = () => { buildScene(); updateHUD(); };
+$('conn').checked = connOnly; $('conn').onchange = e => { connOnly = e.target.checked; updateHUD(); };
+$('nextDay').onclick = () => { dayNo++; startDay(); };
+$('pause').onclick = e => { paused = !paused; e.target.textContent = paused ? 'Resume' : 'Pause'; };
+buildPanels(); buildScene(); drawExact();
+if (PREWARM > 0 && !CLOCK_FROZEN) { // run the frame simulation synchronously for PREWARM ms (real clock), then draw once
+  const t0 = performance.now(); const prof = { gen: 0, other: 0, frames: 0 };
+  while (performance.now() - t0 < PREWARM) { const a = performance.now(); step(); prof.frames++; prof.gen += performance.now() - a; }
+  window.__prof = prof;
+  if (P.get('debug')) { const pre = document.createElement('pre'); pre.id = 'dbg'; const res = {};
+    for (const m of KEYS) { const j = S.jobs[m], st = S.stats[m]; res[m] = { ms_per_layout: +(S.time[m] / j.layouts).toPrecision(4), layouts: j.layouts, deals_per_layout: +(j.attempts / j.layouts).toPrecision(4), rejected: j.rejects / j.attempts, mean_kept: +st.mean(false).toFixed(3), fairness: st.n >= 30 ? +(1 - DD.histTV(st.dist(false), S.refStats.dist(false))).toFixed(3) : null }; }
+    pre.textContent = JSON.stringify({ scene: sceneKey, square: squareDoors, frames: prof.frames, ref_n: S.refStats.n, ref_mean_kept: +S.refStats.mean(false).toFixed(3), res, ua: navigator.userAgent.match(/Chrome\/[\d.]+/)[0] }); document.body.prepend(pre); }
+  if (!EXACT) computeExact(); drawExact();
+}
+let syncDone = false;
+if (FRAMES > 1 && !(PREWARM > 0)) { // automation: step the N frames synchronously, draw once, stop (headless virtual time barely runs rAF)
+  for (let k = 0; k < FRAMES; k++) step();
+  if (!EXACT) computeExact(); drawExact(); syncDone = true;
+}
+render(); updateHUD();
+if (!syncDone && !(PREWARM > 0 && FRAMES === 1)) requestAnimationFrame(loop);
+</script>
+</body>
+</html>

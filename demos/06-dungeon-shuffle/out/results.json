@@ -1,0 +1,102 @@
+{
+  "demo": "06-dungeon-shuffle",
+  "generated_utc": "2026-10-07T17:11:57Z",
+  "title_left": "double-edge swaps, ad hoc burn-in (1 per door)",
+  "title_right": "Curveball trades, certified burn-in",
+  "caption": "Family 131 — Polynomial mixing of the switch chain for every graphical degree sequence · WITH: §2 pair trade + §7 mix:H-poincare ⇒ gap ≥ 1/B ⇒ T = ceil[B(1+B/2)·ln 2] · certifies fair (uniform) layouts, not speed",
+  "frames": 1560,
+  "fps": 60,
+  "warmup_frames_excluded": 3,
+  "preview": false,
+  "video": "<repo>/demos/06-dungeon-shuffle/out/06-dungeon-shuffle.mp4",
+  "poster": "<repo>/demos/06-dungeon-shuffle/out/poster.png",
+  "stills": [],
+  "timing_note": "compute_ms_per_frame = wall time inside the panel's measure() scopes per frame (QueryPerformanceCounter); rendering, HUD, PNG and video encoding excluded. fps = 1000 / ms.",
+  "machine": {"cpu": "AMD Ryzen 9 9900X 12-Core Processor", "hw_threads": 24, "ram_gb": 30.9, "os": "Windows", "compiler": "clang 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)"},
+  "wall_seconds": 35.26,
+  "harness_ms_per_frame": 6.41,
+  "panels": [
+    {
+      "side": "left",
+      "role": "WITHOUT",
+      "method": "double-edge swaps, ad hoc burn-in (1 per door)",
+      "compute_label": "1 layout",
+      "steps_per_frame": 1,
+      "compute_ms_per_frame": {"n": 1557, "mean": 0.00478741, "median": 0.0045, "p95": 0.007, "min": 0.00239998, "max": 0.0575, "stdev": 0.00250123},
+      "ms_per_step_median": 0.0045,
+      "fps_from_median": 222222,
+      "fps_from_mean": 208881,
+      "metrics": {
+        "burn-in per layout": {"display": "28 swaps (ad hoc)"},
+        "µs / step (mean)": {"last": 0.158993, "mean": 0.157172, "min": 0.147126, "max": 0.389286, "n": 1560, "display": "0.159"},
+        "exact TV · n=6 d=2 @ 6": {"last": 0.21492, "mean": 0.21492, "min": 0.21492, "max": 0.21492, "n": 1560, "display": "2.15e-01"},
+        "exact TV · n=8 irregular @ 11": {"last": 0.458904, "mean": 0.458904, "min": 0.458904, "max": 0.458904, "n": 1560, "display": "4.59e-01"},
+        "edge autocorr. vs template (all layouts)": {"last": 0.184675, "mean": 0.181309, "min": 0.10552, "max": 0.185411, "n": 1560, "display": "+0.185"},
+        "changed doors vs template (this level)": {"last": 19, "mean": 10.4571, "min": 0, "max": 19, "n": 1560, "display": "19"}
+      },
+      "extra": {
+        "layouts_generated": 1560,
+        "mean_template_overlap": 9.76987,
+        "edge_autocorrelation_vs_template": 0.184675,
+        "connected_fraction": 0.997436,
+        "us_per_step": 0.158993,
+        "edges_toggled_per_layout": 74.4308
+      }
+    },
+    {
+      "side": "right",
+      "role": "WITH",
+      "method": "Curveball trades, certified burn-in",
+      "compute_label": "1 layout",
+      "steps_per_frame": 1,
+      "compute_ms_per_frame": {"n": 1557, "mean": 0.344101, "median": 0.3404, "p95": 0.38398, "min": 0.2851, "max": 1.1523, "stdev": 0.0426706},
+      "ms_per_step_median": 0.3404,
+      "fps_from_median": 2937.72,
+      "fps_from_mean": 2906.12,
+      "metrics": {
+        "burn-in per layout": {"display": "12644 trades (certified)"},
+        "µs / step (mean)": {"last": 0.0272084, "mean": 0.0270027, "min": 0.0262442, "max": 0.0411025, "n": 1560, "display": "0.027"},
+        "exact TV · n=6 d=2 @ 89": {"last": 4.51028e-16, "mean": 4.51028e-16, "min": 4.51028e-16, "max": 4.51028e-16, "n": 1560, "display": "4.51e-16"},
+        "exact TV · n=8 irregular @ 292": {"last": 1.8459e-14, "mean": 1.8459e-14, "min": 1.8459e-14, "max": 1.8459e-14, "n": 1560, "display": "1.85e-14"},
+        "edge autocorr. vs template (all layouts)": {"last": -0.000671262, "mean": 0.00215151, "min": -0.0137444, "max": 0.150244, "n": 1560, "display": "-0.001"},
+        "changed doors vs template (this level)": {"last": 26, "mean": 19.5551, "min": 0, "max": 27, "n": 1560, "display": "26"}
+      },
+      "extra": {
+        "layouts_generated": 1560,
+        "mean_template_overlap": 5.62564,
+        "edge_autocorrelation_vs_template": -0.000671262,
+        "connected_fraction": 0.992949,
+        "us_per_step": 0.0272084,
+        "edges_toggled_per_layout": 52135.4
+      }
+    }
+  ],
+  "speedup_median_compute": 0.0132197,
+  "extra": {
+    "rooms": 20,
+    "doors": 28,
+    "B_pairs": 190,
+    "certified_burn_in_trades": 12644,
+    "adhoc_burn_in_swaps": 28,
+    "toyA_states": 70,
+    "toyB_states": 623,
+    "toyA_certified_generic": 89,
+    "toyA_certified_with_known_Omega": 43,
+    "toyB_certified_generic": 292,
+    "toyB_certified_with_known_Omega": 110,
+    "toyA_TV_swap_at_m": 0.21492,
+    "toyA_TV_curveball_at_cert": 4.51028e-16,
+    "toyA_TV_curveball_at_m": 0.107906,
+    "toyA_worst_start_TV_swap_at_m": 0.226972,
+    "toyA_worst_start_TV_curveball_at_cert": 1.23686e-15,
+    "toyB_TV_swap_at_m": 0.458904,
+    "toyB_TV_curveball_at_cert": 1.8459e-14,
+    "toyB_TV_curveball_at_m": 0.152095,
+    "toyB_TV_swap_at_cert": 2.28973e-10,
+    "toyB_TV_swap_at_10m": 0.000140234,
+    "exact_TV_below_certified_bound_all_t": "yes",
+    "ref_template_overlap_uniform_swapchain": 5.64065,
+    "ref_template_overlap_uniform_curveball": 5.64002,
+    "ref_connected_fraction_uniform": 0.996425
+  }
+}

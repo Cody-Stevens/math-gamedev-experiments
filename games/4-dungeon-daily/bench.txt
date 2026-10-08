@@ -1,0 +1,48 @@
+Dungeon Daily bench  (AMD Ryzen 9 9900X 12-Core Processor            , node v22.16.0, >= 3000 ms per method)
+
+== normal: Crypt of the Daily (20 rooms)  n=20 doors=28 door counts 1..6  certified T=12,644  (sum d(d-1)/sum d = 2.25)
+   REFERENCE long-run swap chain: mean doors kept 5.677, connected 99.7%, split-half hist TV (noise floor) 0.023
+   method                               ms/layout   layouts  attempts/layout  rejected  connected  ms/connected  kept avg  bias   histTV  (noise)  histTV(conn)
+   PRIOR BEST: lazy double-edge swap      0.00161   1866496             1.00    0.000%      99.7%       0.00161      9.66  0.179    0.670  (0.018)        0.669
+   PRIOR BEST: configuration model        0.00187   1602040            13.75   92.727%      99.6%       0.00188      5.65 -0.001   0.0258  (0.018)       0.0253
+   NEW: certified Curveball                 0.558      5377             1.00    0.000%      99.5%         0.561      5.73  0.002   0.0336  (0.020)       0.0333
+   -> PRIOR (configuration model) is 297.9x faster than NEW and exactly fair
+
+== square: Market Town: one 16-door square (30 rooms)  n=30 doors=53 door counts 1..16  certified T=65,882  (sum d(d-1)/sum d = 4.42)
+   REFERENCE long-run swap chain: mean doors kept 14.586, connected 99.1%, split-half hist TV (noise floor) 0.028
+   method                               ms/layout   layouts  attempts/layout  rejected  connected  ms/connected  kept avg  bias   histTV  (noise)  histTV(conn)
+   PRIOR BEST: lazy double-edge swap      0.00311    963328             1.00    0.000%      99.2%       0.00314     23.09  0.221    0.894  (0.021)        0.894
+   PRIOR BEST: configuration model          0.368      8143             2893   99.965%      99.3%         0.371     14.54 -0.001   0.0229  (0.027)       0.0234
+   NEW: certified Curveball                  3.20       939             1.00    0.000%      99.7%          3.21     14.57 -0.001   0.0543  (0.044)       0.0550
+   -> PRIOR (configuration model) is 8.7x faster than NEW and exactly fair
+
+== hubs: Guild City: square + 2 guild halls (30 rooms)  n=30 doors=64 door counts 1..16  certified T=65,882  (sum d(d-1)/sum d = 5.39)
+   REFERENCE long-run swap chain: mean doors kept 20.441, connected 99.3%, split-half hist TV (noise floor) 0.042
+   method                               ms/layout   layouts  attempts/layout  rejected  connected  ms/connected  kept avg  bias   histTV  (noise)  histTV(conn)
+   PRIOR BEST: lazy double-edge swap      0.00290   1035264             1.00    0.000%      99.5%       0.00291     31.16  0.246    0.931  (0.024)        0.931
+   PRIOR BEST: configuration model          20.00       150           165041   99.999%      99.3%         20.14     20.55  0.002   0.0931  (0.130)       0.0961
+   NEW: certified Curveball                  3.54       847             1.00    0.000%      99.4%          3.56     20.40 -0.001   0.0532  (0.053)       0.0507
+   -> NEW (certified Curveball) is 5.6x faster than the exact prior
+
+== hubs:18: Guild City: square + 2 guild halls (30 rooms) [square=18]  n=30 doors=66 door counts 1..18  certified T=65,882  (sum d(d-1)/sum d = 5.82)
+   REFERENCE long-run swap chain: mean doors kept 22.739, connected 99.5%, split-half hist TV (noise floor) 0.033
+   method                               ms/layout   layouts  attempts/layout  rejected  connected  ms/connected  kept avg  bias   histTV  (noise)  histTV(conn)
+   PRIOR BEST: lazy double-edge swap      0.00342    878336             1.00    0.000%      99.6%       0.00343     34.05  0.261    0.939  (0.024)        0.939
+   PRIOR BEST: configuration model            102        30           814967  100.000%     100.0%           102     22.70 -0.001    0.295  (0.268)        0.296
+   NEW: certified Curveball                  3.18       943             1.00    0.000%      99.4%          3.20     22.84  0.002   0.0592  (0.047)       0.0589
+   -> NEW (certified Curveball) is 31.9x faster than the exact prior
+
+== big: The Deep Halls (80 rooms)  n=80 doors=127 door counts 1..6  certified T=3,462,936  (sum d(d-1)/sum d = 2.61)
+   REFERENCE long-run swap chain: mean doors kept 6.647, connected 93.7%, split-half hist TV (noise floor) 0.034
+   method                               ms/layout   layouts  attempts/layout  rejected  connected  ms/connected  kept avg  bias   histTV  (noise)  histTV(conn)
+   PRIOR BEST: lazy double-edge swap      0.00621    482816             1.00    0.000%      94.1%       0.00660     24.24  0.146    0.994  (0.023)        0.994
+   PRIOR BEST: configuration model        0.00821    365455            21.46   95.341%      93.4%       0.00879      6.73  0.001   0.0278  (0.023)       0.0246
+   NEW: certified Curveball                   304        30             1.00    0.000%      96.7%           315      6.23 -0.003    0.202  (0.254)        0.224
+   -> PRIOR (configuration model) is 37076.0x faster than NEW and exactly fair
+
+== exact TV to uniform on enumerable toys (full law propagated / every stub pairing enumerated)
+   A n=6 d=(2,...,2): 70 layouts; swap @ 6 swaps (1/door) TV 0.215;  Curveball @ 6 trades TV 0.108;  certified Curveball @ 89 trades TV 7.84e-16 (bound 0.00895)
+   B n=8 d=(5,4,3,3,2,2,2,1): 623 layouts; swap @ 11 swaps (1/door) TV 0.459;  Curveball @ 11 trades TV 0.152;  certified Curveball @ 292 trades TV 1.81e-14 (bound 0.000305)
+   configuration model d=(2,2,2,2,2,2): 10,395 pairings, 70 layouts, each hit by exactly 64 pairings -> TV 0; acceptance 43.098%
+   configuration model d=(4,3,2,2,2,2,1): 2,027,025 pairings, 136 layouts, each hit by exactly 2304 pairings -> TV 0; acceptance 15.458%
+   configuration model d=(6,5,2,2,2,1,1,1): 654,729,075 pairings, 3 layouts, each hit by exactly 691200 pairings -> TV 0; acceptance 0.317%

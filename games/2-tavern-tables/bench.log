@@ -1,0 +1,27 @@
+PRIOR full strength (6000 nodes/move, vs greedy): 5.56 ms per move, 1.25 us per node (64 decisions)
+
+TIMING: Maker AI ms per frame, every table moves every frame (k=1), greedy Breakers (untimed)
+ tables  PRIOR 6000n ms  PRIOR budget ms short%  depth    NEW ms  NEW us/move
+      1             6.6             16.7      0    6.1    0.0007        1.102
+      4            26.4             13.6     76    4.8    0.0004        0.169
+     16           111.7             14.9     82    3.7    0.0016        0.140
+     64           462.2             16.4     87    2.8    0.0061        0.116
+    256       not timed             16.7     98    1.8    0.0257        0.125
+   1024       not timed             16.8     95    0.9    0.1312        0.146
+   4096       not timed             17.1    100    0.0    0.6562        0.201
+  16384       not timed             21.1    100    0.0    3.2298        0.246
+tables whose Maker move fits one 16.7 ms frame: PRIOR full strength 3; NEW all 16384 timed (3.23 ms/frame), about 84,713 by linear estimate
+short% = moves stopped before a full-strength (6000-node) search; depth = mean completed lookahead
+
+QUALITY: Maker win rate, 60 games per cell, PRIOR move allowance = 16.7 ms / tables
+NEW (budget-independent): vs greedy 60/60, vs alpha-beta 60/60, vs random 60/60; max moves in a win 13; invariant breaks 0
+ tables  allot us  PRIOR vs greedy  avg/max win mv  PRIOR vs a-b  avg/max win mv short%    NEW
+      1   16700.0     60/60 (100%)         14.2/19  60/60 (100%)         13.9/77      0   100%
+      4    4175.0     60/60 (100%)         12.4/15  60/60 (100%)         14.9/61     78   100%
+     16    1043.8     60/60 (100%)         12.8/62   33/60 (55%)         37.9/92     97   100%
+     64     260.9     60/60 (100%)         12.2/20   25/60 (42%)         34.9/82     98   100%
+    256      65.2      53/60 (88%)         42.2/96     2/60 (3%)         40.0/40     99   100%
+   1024      16.3     60/60 (100%)         18.5/22     0/60 (0%)             -/-    100   100%
+   4096       4.1      58/60 (97%)         18.2/23    7/60 (12%)         36.9/48    100   100%
+
+wrote bench.json

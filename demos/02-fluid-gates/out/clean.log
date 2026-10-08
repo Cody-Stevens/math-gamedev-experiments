@@ -1,0 +1,18 @@
+[02-fluid-gates] 1500 frames @ 60 fps, no video -> <repo>/demos/02-fluid-gates/out/clean
+[02-fluid-gates] frame 179/1500  L 0.835 ms  R 2.59 ms  (5.0 s)
+[02-fluid-gates] frame 326/1500  L 0.871 ms  R 2.89 ms  (10.0 s)
+[02-fluid-gates] frame 470/1500  L 0.814 ms  R 2.80 ms  (15.1 s)
+[02-fluid-gates] frame 618/1500  L 0.801 ms  R 1.64 ms  (20.1 s)
+[02-fluid-gates] frame 769/1500  L 0.688 ms  R 0.842 ms  (25.1 s)
+[02-fluid-gates] frame 909/1500  L 0.889 ms  R 2.87 ms  (30.1 s)
+[02-fluid-gates] frame 1046/1500  L 1.03 ms  R 1.54 ms  (35.1 s)
+[02-fluid-gates] frame 1180/1500  L 0.879 ms  R 2.88 ms  (40.2 s)
+[02-fluid-gates] frame 1317/1500  L 0.949 ms  R 2.04 ms  (45.2 s)
+[02-fluid-gates] frame 1465/1500  L 0.003 ms  R 0.006 ms  (50.2 s)
+[02-fluid-gates] frame 1500/1500  L 0.000 ms  R 0.000 ms  (51.4 s)
+[02-fluid-gates] done: 1500 frames in 51.4 s
+  LEFT   single-plane tweens (lerp, then exp-scal median 0.834 ms/frame  p95 1.11  (1,198 fps compute-only)
+  RIGHT  seven-stage solenoidal shear flow        median 2.71 ms/frame  p95 3.21  (369 fps compute-only)
+  speedup (median compute): 0.31x
+  poster:  <repo>/demos/02-fluid-gates/out/clean/poster.png
+  results: <repo>/demos/02-fluid-gates/out/clean/results.json

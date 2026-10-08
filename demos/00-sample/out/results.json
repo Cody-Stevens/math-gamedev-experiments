@@ -1,0 +1,67 @@
+{
+  "demo": "00-sample",
+  "generated_utc": "2026-10-07T16:45:51Z",
+  "title_left": "naive all-pairs O(n²)",
+  "title_right": "uniform-grid spatial hash",
+  "caption": "00-sample · harness self-test · Particle Life, 4,000 particles, 6 species, torus · same pair forces + order-free fixed-point sums ⇒ bit-identical trajectories",
+  "frames": 300,
+  "fps": 60,
+  "warmup_frames_excluded": 3,
+  "preview": false,
+  "video": "<repo>/demos/00-sample/out/00-sample.mp4",
+  "poster": "<repo>/demos/00-sample/out/poster.png",
+  "stills": [],
+  "timing_note": "compute_ms_per_frame = wall time inside the panel's measure() scopes per frame (QueryPerformanceCounter); rendering, HUD, PNG and video encoding excluded. fps = 1000 / ms.",
+  "machine": {"cpu": "AMD Ryzen 9 9900X 12-Core Processor", "hw_threads": 24, "ram_gb": 30.9, "os": "Windows", "compiler": "clang 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)"},
+  "wall_seconds": 16.68,
+  "harness_ms_per_frame": 7.38,
+  "panels": [
+    {
+      "side": "left",
+      "role": "WITHOUT",
+      "method": "naive all-pairs O(n²)",
+      "compute_label": "sim",
+      "steps_per_frame": 1,
+      "compute_ms_per_frame": {"n": 297, "mean": 21.6589, "median": 21.4965, "p95": 24.1586, "min": 18.5833, "max": 31.4343, "stdev": 1.41729},
+      "ms_per_step_median": 21.4965,
+      "fps_from_median": 46.5192,
+      "fps_from_mean": 46.1705,
+      "budget_ms": 16.7,
+      "frames_over_budget": 297,
+      "metrics": {
+        "particles": {"last": 4000, "mean": 4000, "min": 4000, "max": 4000, "n": 300, "display": "4.00k"},
+        "distance checks / step": {"last": 1.5996e+07, "mean": 1.5996e+07, "min": 1.5996e+07, "max": 1.5996e+07, "n": 300, "display": "16.0M"},
+        "interacting pairs": {"last": 692052, "mean": 671348, "min": 554400, "max": 879716, "n": 300, "display": "692k"}
+      },
+      "extra": {}
+    },
+    {
+      "side": "right",
+      "role": "WITH",
+      "method": "uniform-grid spatial hash",
+      "compute_label": "sim",
+      "steps_per_frame": 1,
+      "compute_ms_per_frame": {"n": 297, "mean": 2.22951, "median": 2.1859, "p95": 2.77514, "min": 1.5502, "max": 3.148, "stdev": 0.313304},
+      "ms_per_step_median": 2.1859,
+      "fps_from_median": 457.477,
+      "fps_from_mean": 448.529,
+      "budget_ms": 16.7,
+      "frames_over_budget": 0,
+      "metrics": {
+        "particles": {"last": 4000, "mean": 4000, "min": 4000, "max": 4000, "n": 300, "display": "4.00k"},
+        "distance checks / step": {"last": 1.06894e+06, "mean": 1.15442e+06, "min": 939522, "max": 1.60837e+06, "n": 300, "display": "1.07M"},
+        "interacting pairs": {"last": 692052, "mean": 671348, "min": 554400, "max": 879716, "n": 300, "display": "692k"},
+        "max |Δx| vs WITHOUT": {"last": 0, "mean": 0, "min": 0, "max": 0, "n": 300, "display": "0"}
+      },
+      "extra": {}
+    }
+  ],
+  "speedup_median_compute": 9.83416,
+  "extra": {
+    "particles": 4000,
+    "species": 6,
+    "rmax": 0.06,
+    "grid_cells_per_side": 16,
+    "max_position_deviation": 0
+  }
+}

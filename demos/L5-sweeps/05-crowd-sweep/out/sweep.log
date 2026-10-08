@@ -1,0 +1,21 @@
+05-crowd-sweep: a = 0.45, one hub cycle = 125 frames, 1 thread per side; exact mis-routed 0.1125, excess 0.016875
+n=   10000  WITHOUT   0.0025 ms (p95 0.0098)  WITH   0.0096 ms  ratio 0.260  frames 25000 | mis-routed 0.11400 (exact 0.11250) excess 0.017018 (exact 0.016875)
+n=   40000  WITHOUT   0.0091 ms (p95 0.0385)  WITH   0.0383 ms  ratio 0.238  frames 25000 | mis-routed 0.11265 (exact 0.11250) excess 0.016863 (exact 0.016875)
+n=  160000  WITHOUT   0.0594 ms (p95 0.2122)  WITH   0.1697 ms  ratio 0.350  frames 19625 | mis-routed 0.11255 (exact 0.11250) excess 0.016870 (exact 0.016875)
+n=  640000  WITHOUT   0.2662 ms (p95 0.8815)  WITH   0.8319 ms  ratio 0.320  frames 4375 | mis-routed 0.11247 (exact 0.11250) excess 0.016875 (exact 0.016875)
+n= 2560000  WITHOUT   1.1918 ms (p95 3.5659)  WITH   3.3621 ms  ratio 0.354  frames 1000 | mis-routed 0.11250 (exact 0.11250) excess 0.016875 (exact 0.016875)
+n= 4000000  WITHOUT   1.8616 ms (p95 5.6731)  WITH   5.4266 ms  ratio 0.343  frames 625 | mis-routed 0.11251 (exact 0.11250) excess 0.016875 (exact 0.016875)
+n= 8410000  WITHOUT   3.9072 ms (p95 11.7579)  WITH  11.1311 ms  ratio 0.351  frames 375 | mis-routed 0.11251 (exact 0.11250) excess 0.016876 (exact 0.016875)
+n=16000000  WITHOUT   7.4430 ms (p95 21.8660)  WITH  21.1445 ms  ratio 0.352  frames 250 | mis-routed 0.11250 (exact 0.11250) excess 0.016875 (exact 0.016875)
+
+n            WITHOUT ms      WITH ms     ratio  frames(wo/w)
+10000            0.0025       0.0096      0.26  25000/25000
+40000            0.0091       0.0383     0.238  25000/25000
+160000           0.0594       0.1697      0.35  19625/19625
+640000           0.2662       0.8319      0.32  4375/4375
+2560000           1.192        3.362     0.354  1000/1000
+4000000           1.862        5.427     0.343  625/625
+8410000           3.907        11.13     0.351  375/375
+16000000          7.443        21.14     0.352  250/250
+fit exponents: without 1.102  with 1.054
+wrote <repo>\demos\L5-sweeps\05-crowd-sweep/out/ladder.json
