@@ -36,7 +36,8 @@ Each game folder's README has:
 
 ## Try it
 
-- **Play:** open [`games/index.html`](games/index.html) in a browser. There's no server or build step, and every game is a single HTML file.
+- **Play online:** https://cody-stevens.github.io/math-gamedev-experiments/games/
+- **Play locally:** open [`games/index.html`](games/index.html) in a browser. There's no server or build step, and every game is a single HTML file.
 - **Watch:** [`videos/`](videos) holds the five 25–31 s side-by-side clips.
 - **Re-measure:** in any game folder, run `node bench.js` (Node 22).
 
